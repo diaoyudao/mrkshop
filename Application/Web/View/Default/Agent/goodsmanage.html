@@ -1,0 +1,207 @@
+<extend name="Base/store_common"/>
+<block name="body">
+    <!-- 内容 -->
+    <div class="towp yh-wrap content_agency clear user_center">
+        <div class="content_left">
+            <include file="Member/member_menu"/>
+        </div>
+        <div class="content stores right-con2 order-mana my-members">
+            <div class="con-tit clear">
+                <h2 class="">商品管理</h2></div>
+            <div class="tab_box">				
+                <div class="conditions search-form">
+                    <ul class="clear">
+                        <li><label for="">商品名称</label><input class="searchinput" type="text" name="goods_name" id="" value="{:I('goods_name')}" /></li>
+                        <li>
+                            <label for="">商品分类</label>
+                            <select name="domainid" class="searchinput" style='width: 160px;background:rgba(0, 0, 0, 0) url("__IMG__/bottoms.png") no-repeat scroll 98% center'>
+                                <option value='0'>请选择</option>
+                                <volist name='domainlist' id='item'>
+                                    <option <if condition="$domainid eq $item['id']">selected='selected'</if>  value="{$item.id}">{$item.name}</option>
+                                </volist>
+                            </select>
+                        </li>
+                        <!--                        <li>
+                                                    <label for="">状态</label>
+                                                    <select name="">
+                                                        <option value="">4</option>
+                                                        <option value="">1</option>
+                                                        <option value="">4</option>
+                                                        <option value="">7</option>
+                                                    </select>					
+                                                </li>
+                                                <li><label for="">订单状态</label><input type="" name="" id="" value="" /></li>-->
+                        <li class="clear">
+                            <a class="active marl_60" id="search" url="{:U('Agent/goodsmanage')}" href="javascript:;">搜索</a>
+                            <a href="{:U('Agent/goodsmanage')}">清空</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="store_table2">
+                <div class="tables">
+                    <table width="100%">
+                        <colgroup span="8">
+                            <col width="33%" />
+                            <col width="8%" />
+                            <col width="8%" />
+                            <col width="8%" />
+                            <col width="8%" />
+                            <col width="10%" />
+                            <col width="10%" />
+                            <col width="15%" />
+                        </colgroup>
+                        <tr>
+                            <th>商品名称</th>
+                            <th>采购价格</th>
+                            <th>会员价</th>
+                            <th>销售数量</th>
+                            <th>我的库存</th>
+                            <th>最新采购时间</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </table>
+                </div>
+                <div class="tables_1">
+
+                </div>
+                <table class="cp" width="100%">
+                    <colgroup span="8">
+                        <col width="33%" />
+                        <col width="8%" />
+                        <col width="8%" />
+                        <col width="8%" />
+                        <col width="8%" />
+                        <col width="10%" />
+                        <col width="10%" />
+                        <col width="15%" />
+                        <col width="15%" />
+                    </colgroup>
+                    <volist name="list" id="goods">
+                        <tr>
+                            <td class="clear">
+                                <!--<input type="checkbox" name="" id=""/>-->
+                                <a class="im" href="jacascript:;">
+                                    <!--<img src="{$goods.goodid|get_good_img}"/>-->
+                                </a>
+                                <div class="xinx" style="height: auto;line-height: normal;">
+                                    <p><a href="javascript:;">{$goods.goods_id|get_good_name}</a></p>
+                                </div>
+                            </td>
+                            <td>{$goods.buy_price}</td>
+                            <td>{$goods.goods_marketprice}</td>
+                            <td>{$goods.sales_num|default = 0}</td>
+                        <if condition="$goods.stock elt $goods.stock_warning">
+                            <td style='color: red;'>{$goods.stock|default=0}</td>
+                            <else/>
+                            <td >{$goods.stock|default=0}</td>
+                        </if>
+                            <td>{$goods.update_time|date='Y/m/d H:i:s',###}</td>
+                            <td><if condition="$goods.storegoodsstatus eq 1">在售
+                            <else/>
+                            已下架
+                            </if></td>		
+                            <td>	
+                                <a href="{:U('Goods/detail',array('id'=>$goods['goods_id']))}">查看</a>
+                                <a href="{:U('Goods/detail',array('id'=>$goods['goods_id']))}">采购</a>
+                                <a class="link set_stock" href="javascript:;" storegoodsid="{$goods['storegoodsid']}">库存预警设置</a>
+                            </td>
+                        </tr>
+                    </volist>
+                </table>
+
+            </div>
+
+            <div class="pagelist_c">
+                {$_page}
+            </div>
+        </div>
+    </div>
+    <style>
+        .searchinput{   border: 1px solid #e5e5e5;
+                        height: 30px;
+                        line-height: 30px;
+                        margin-left: 8px;
+                        margin-top: 8px;
+                        padding: 0 5px;
+                        width: 160px;
+        }
+        #setstock .active{
+            background-color: #feb535;
+            border: 1px solid #feb535;
+            color: #fff;
+            font-size: 12px;
+            height: 30px;
+            line-height: 30px;
+            margin-left: 100px;
+            text-align: center;
+            width: 100px;
+            display: block;
+            margin-top: 20px;
+        }
+    </style>
+    <div id="setstock" class="tab_box" style='display:none;'>
+        <div  class="conditions">
+            <ul class="clear">
+                <li><label for="">商品名称</label><input class="searchinput" type="text" name="stock" id="" value="10" /></li>
+                <li>
+                    <a class="active marl_60" id="submit-stock" href="javascript:;">确定</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</block>
+<block name="script">
+    <script type="text/javascript">
+        //搜索功能
+        $("#search").click(function() {
+            var url = $(this).attr('url');
+            var query = $('.search-form').find('.searchinput').serialize();
+            query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g, '');
+            query = query.replace(/^&/g, '');
+            if (url.indexOf('?') > 0) {
+                url += '&' + query;
+            } else {
+                url += '?' + query;
+            }
+            window.location.href = url;
+        });
+        //回车搜索
+        $(".search-input").keyup(function(e) {
+            if (e.keyCode === 13) {
+                $("#search").click();
+                return false;
+            }
+        });
+       var storegoodsid =0;
+        $('.set_stock').click(function() {
+             storegoodsid = $(this).attr('storegoodsid');
+            address_layer = layer.open({
+                title: '库存预警设置',
+                type: 1,
+                skin: 'layui-layer-rim', //加上边框
+                area: ['260px', '140px'], //宽高
+                content: $('#setstock')
+            });
+        });
+        
+        $('body').on("click",'#submit-stock',function(){
+           var stock = $("input[name=stock]").val();
+           $.ajax({
+                url: "{:U('Agent/setgoodsstock')}",
+                type: "post",
+                dataType: "json",
+                data: {storegoodsid: storegoodsid,stock:stock},
+                success: function(json) {
+                    if (json.status) {
+                        window.location = "{:U('Agent/goodsmanage')}"
+                        return false;
+                    }
+                    layer.msg(json.info);
+                    return false;
+                }
+            });
+        })
+    </script>
+</block>

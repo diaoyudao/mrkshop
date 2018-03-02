@@ -1,0 +1,159 @@
+<script type="text/javascript">
+    var ThinkPHP = window.Think = {
+        "MID": "{$guid}",
+        "UID": "{$uid}",
+        "IMG": "__IMG__", //项目公共目录地址
+        "ROOT": "__ROOT__", //当前网站地址
+        "JS": "__JS__", //当前项目地址
+        "APP": "__APP__", //当前项目地址
+        "PUBLIC": "__PUBLIC__", //项目公共目录地址
+        'SITE_URL': "{:SITE_URL}",
+        "DEEP": "{:C('URL_PATHINFO_DEPR')}", //PATHINFO分割符
+        "MODEL": ["{:C('URL_MODEL')}", "{:C('URL_CASE_INSENSITIVE')}", "{:C('URL_HTML_SUFFIX')}"],
+        "VAR": ["{:C('VAR_MODULE')}", "{:C('VAR_CONTROLLER')}", "{:C('VAR_ACTION')}"],
+        "searchUrl": '{:U("Web/Goods/lists")}',
+        "commentUrl": '{:U("Web/Comment/getCommentListById")}',
+        "diggUrl": '{:U("Web/Document/digg")}',
+        "undiggUrl": '{:U("Web/Document/digg")}',
+        "collectiontUrl": '{:U("Web/MyCollection/addcollection")}',
+        "messageUrl": '{:U("Web/Message/insert")}',
+        "replyUrl": '{:U("Web/Message/reply")}',
+        "countUrl": '{:U("Web/Message/saveMessageCount")}',
+        "deleUrl": '{:U("Web/Message/deleMessage")}',
+        "unfollowUrl": '{:U("Web/Follow/unFollow")}',
+        "dofollowUrl": '{:U("Web/Follow/doFollow")}',
+        "docollectionURL": '{:U("Web/Member/doCollection")}',
+        "delcommentUrl": '{:U("Web/Comment/delcomment")}',
+        "denounceUrl": '{:U("Web/Denounce/adddenounce")}',
+        "getMoreCommentUrl": '{:U("Web/Comment/getMoreComment")}',
+        "searchUser": '{:U("Web/Member/searchUser")}',
+        "ajaxComment": '{:U("Web/Comment/ajaxComment")}',
+        "login": '{:U("Web/Member/login")}',
+        "indexUrl": '{:U("Web/Index/changestyle")}'
+    };
+    function U(url, params, rewrite) {
+        if (window.Think.MODEL[0] == 2) {
+            var website = window.Think.ROOT + '/';
+            url = url.split('/');
+            if (url[0] == '' || url[0] == '@')
+                url[0] = '';
+            if (!url[1])
+                url[1] = 'Index';
+            if (!url[2])
+                url[2] = 'index';
+            website = website + url[1] + '/' + url[2];
+
+            if (params) {
+                params = params.join('/');
+                website = website + '/' + params;
+            }
+            if (!rewrite) {
+                website = website + '.html';
+            }
+
+        } else {
+            var website = window.Think.ROOT + '/index.php';
+            url = url.split('/');
+            if (url[0] == '' || url[0] == '@')
+                url[0] = APPNAME;
+            if (!url[1])
+                url[1] = 'Index';
+            if (!url[2])
+                url[2] = 'index';
+            website = website + '?s=/' + url[0] + '/' + url[1] + '/' + url[2];
+            if (params) {
+                params = params.join('/');
+                website = website + '/' + params;
+            }
+            if (!rewrite) {
+                website = website + '.html';
+            }
+        }
+
+        if (typeof (window.Think.MODEL[1]) != 'undefined') {
+            website = website.toLowerCase();
+        }
+        return website;
+    }
+
+    function search() {
+        var keywords = $('#keywords').val();
+        var urlnew = $('#search_form').attr('action');
+        if (keywords == '' || urlnew == '') {
+            return false;
+        } else {
+            var arr = [];
+            arr[0] = keywords;
+            arr[1] = 1;
+            var urlhref = U(urlnew, arr, false);
+            window.location.href = urlhref;
+        }
+        return false;
+    }
+    function search2() {
+        var keywords = $('#keywords').val();
+        var urlnew = $('#search_form').attr('action');
+        if (keywords == '' || urlnew == '') {
+            return false;
+        } else {
+            url = urlnew.split('/');
+            var website = window.Think.ROOT + '/';
+            website = website + url[1] + '/lists/keywords/' + keywords + '.html';
+//        alert(website); return false;
+
+            window.location.href = website;
+
+        }
+        return false;
+    }
+
+    //返回顶部
+    $('.i_btntop').click(function() {
+        $('html, body').animate({scrollTop: 0}, '500');
+    });
+    var poxr = ($(window).width() - 1400) / 2;
+    var vtop_b = $(document).scrollTop();
+    if (vtop_b > 200) {
+        $('.i_btntop').show();
+    }
+    $(window).scroll(function() {
+        var vtop = $(document).scrollTop();
+        if (vtop > 200) {
+            $('.i_btntop').show();
+        } else {
+            $('.i_btntop').hide();
+        }
+    })
+
+    //结束返回
+
+</script>
+<div id="cart_message_box" style="display: none;">
+    <style>
+        .add-goods2 {
+            background: #fff none repeat scroll 0 0;
+            border: none;
+            display: block;
+            height: 100px;
+            /*margin: -75px 0 0 -220px;*/
+            /*padding: 20px;*/
+            position: relative;
+            text-align: center;
+            width: 400px;
+            /*z-index: 1001;*/
+        }
+        .layui-layer-mrk{
+            border:  4px solid #f16f71;
+        }
+        .layui-layer-mrk .layui-layer-title{display: none;}
+    </style>
+    <div class="add-goods add-goods2" >
+        <a href="javascript:javascript:layer.closeAll();" class="t_close"></a>
+        <div  class="f14 fb f3 con">您选购的商品已经添加到购物车</div>
+        <p class="tc">
+            <a class="" href="javascript:layer.closeAll();"><span class="go-shop">&lt;&lt; 继续购物</span></a>
+            <a href="{:U('Cart/index')}" class="t_btn1">立即结算</a>
+        </p>
+    </div>
+
+</div>

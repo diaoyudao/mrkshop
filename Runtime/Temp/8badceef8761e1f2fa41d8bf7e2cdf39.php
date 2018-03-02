@@ -1,0 +1,14 @@
+<?php
+//000000000000a:3:{i:2;a:21:{s:2:"id";s:1:"2";s:4:"name";s:7:"article";s:5:"title";s:6:"文章";s:6:"extend";s:1:"1";s:8:"relation";s:0:"";s:7:"need_pk";s:1:"1";s:10:"field_sort";s:146:"{"1":["70","58","71","77","54","53","52","51","3","5","12","59","24","2","67"],"2":["13","19","10","16","17","26","11","25"],"3":["73","74","75"]}";s:11:"field_group";s:23:"1:基础,2:扩展,3:SEO";s:14:"attribute_list";s:0:"";s:15:"attribute_alias";s:0:"";s:13:"template_list";s:0:"";s:12:"template_add";s:0:"";s:13:"template_edit";s:0:"";s:9:"list_grid";s:150:"id:编号
+title:标题:[EDIT] 
+update_time:最后更新
+status:状态
+view:浏览
+id:操作:[EDIT]|编辑,[DELETE]|删除,[DISPLAYARTICLE]|浏览";s:8:"list_row";s:1:"0";s:10:"search_key";s:0:"";s:11:"search_list";s:0:"";s:11:"create_time";s:10:"1383891243";s:11:"update_time";s:10:"1439801551";s:6:"status";s:1:"1";s:11:"engine_type";s:6:"MyISAM";}i:3;a:21:{s:2:"id";s:1:"3";s:4:"name";s:8:"download";s:5:"title";s:6:"下载";s:6:"extend";s:1:"1";s:8:"relation";s:0:"";s:7:"need_pk";s:1:"1";s:10:"field_sort";s:104:"{"1":["3","28","30","32","2","5","31"],"2":["13","10","27","9","12","16","17","19","11","20","14","29"]}";s:11:"field_group";s:17:"1:基础,2:扩展";s:14:"attribute_list";s:0:"";s:15:"attribute_alias";s:0:"";s:13:"template_list";s:0:"";s:12:"template_add";s:0:"";s:13:"template_edit";s:0:"";s:9:"list_grid";s:0:"";s:8:"list_row";s:1:"0";s:10:"search_key";s:0:"";s:11:"search_list";s:0:"";s:11:"create_time";s:10:"1383891252";s:11:"update_time";s:10:"1387260449";s:6:"status";s:1:"1";s:11:"engine_type";s:6:"MyISAM";}i:5;a:21:{s:2:"id";s:1:"5";s:4:"name";s:7:"product";s:5:"title";s:6:"商品";s:6:"extend";s:1:"1";s:8:"relation";s:0:"";s:7:"need_pk";s:1:"1";s:10:"field_sort";s:157:"{"1":["70","58","3","60","87","83","82","84","85","5","12","36","51","35","46","91","10","67"],"2":["49","11","13","17","39","16","38"],"3":["73","74","75"]}";s:11:"field_group";s:23:"1:基础,2:图集,3:SEO";s:14:"attribute_list";s:0:"";s:15:"attribute_alias";s:0:"";s:13:"template_list";s:0:"";s:12:"template_add";s:0:"";s:13:"template_edit";s:0:"";s:9:"list_grid";s:160:"id:编号
+title:标题:[EDIT] 
+stock:库存
+update_time:最后更新
+status:状态
+view:浏览数
+id:操作:[EDIT]|编辑,[DELETE]|删除,[COMMENT]|评论";s:8:"list_row";s:1:"0";s:10:"search_key";s:0:"";s:11:"search_list";s:0:"";s:11:"create_time";s:10:"1383891252";s:11:"update_time";s:10:"1473822856";s:6:"status";s:1:"1";s:11:"engine_type";s:6:"MyISAM";}}
+?>

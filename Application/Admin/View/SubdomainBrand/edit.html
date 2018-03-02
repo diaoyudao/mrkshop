@@ -1,0 +1,546 @@
+<extend name="Public/base"/>
+<block name="sidebar22">
+    <include file="sidemenu" />
+</block>
+<block name="body">
+    <style>
+	.upload-img-box .upload-pre-item{max-height: none;}
+    </style>
+	<script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+	<script type="text/javascript" src="__STATIC__/UploadImages.js"></script>
+	<div class="main-title">
+		<h2>
+			{$info['id']?'编辑':'新增'}品牌
+		</h2>
+	</div>
+	<div class="tab-wrap">
+	<ul class="tab-nav nav"> 
+		<li data-tab="tab1" class="current"><a href="javascript:void(0);">基础</a></li>
+		<li data-tab="tab2"><a href="javascript:void(0);">SEO</a></li>
+		<!--<li data-tab="tab3"><a href="javascript:void(0);">推荐/热门广告</a></li>-->
+		<!--<li data-tab="tab4"><a href="javascript:void(0);">条目扩展</a></li>--> 
+	</ul>
+	<div class="tab-content">
+		
+	<form action="{:U()}" method="post" class="form-horizontal">
+	    <div id="tab1" class="tab-pane in tab1">
+                <div class="form-item">
+			<label class="item-label">所属频道</label>
+			<div class="controls">
+				<select class="select" id="domainid" name="domainid"  onchange="choosebrandtype(this.options[this.options.selectedIndex].value)">
+				    <option value="">选择频道</option> 
+				    <volist name="channellist" id="channelvo">
+					<option value="{$channelvo.id}" <eq name="channelvo[id]" value="$info['domainid']">selected</eq>>{$channelvo.name}</option>
+				    </volist>
+				</select>
+			</div>
+		</div>
+                <div class="form-item" style="display:none;">
+			<label class="item-label">品牌分类</label>
+			<div class="controls">
+				<select class="select" name="category_id" id="category_id"> 
+				    <option value="0">默认分类</option> 
+					<volist name="brandcategory" id="category">
+						<option value="{$category.id}" <eq name="category[id]" value="$info['category_id']">selected</eq>>{$category.title}</option>
+					</volist>
+				</select>
+			</div>
+		</div>
+		<script>
+		    $(document).ready(function(){
+			choosebrandtype( {$info['domainid']} );
+		    });
+			function choosebrandtype(domainid){
+				var url='__URL__/getcategorybydomainandtype';
+				var cat="{$info['category_id']}";
+				var s="";
+				$.ajax({
+					type: 'POST', 
+					url: url , 
+					data:{domainid:domainid,ismenu:1}, 
+					success: function(json){
+						var data=json.info;
+						var html="<option value='0'>默认分类</option>";
+						if( data ){
+							for(i=0;i< data.length;i++){
+							    s="";
+							    if (cat && cat==data[i].id) {
+								s="selected";
+							    }
+							    html+="<option "+s+" value='"+data[i].id+"'>"+data[i].title+"</option>";
+							}
+						}
+						$("#category_id").html(html);
+						return false;
+					} 
+				});
+			} 
+		</script>
+		<div class="form-item">
+			<label class="item-label">品牌名称</label>
+			<div class="controls">
+				<input type="text" class="text input-large" name="title" value="{$info.title|default=''}">
+			</div>
+		</div>
+		<div class="form-item">
+			<label class="item-label">品牌标示<span class="check-tips">标识只能为英文字母,数字组成(1-50位)</span></label>
+			<div class="controls">
+				<input type="text" class="text input-large" name="name" value="{$info.name|default=''}">
+			</div>
+		</div>
+		<div class="form-item">
+			<label class="item-label">品牌简述</label>
+			<div class="controls"> 
+			    <label class="textarea input-large">
+				<textarea name="jianshu">{$info.jianshu|default=''}</textarea>
+			    </label> 
+			</div>
+		</div> 
+		<div class="controls">
+			<label class="item-label">品牌LOGO<span class="check-tips">建议上传115*65尺寸</span></label>
+			<input type="file" id="upload_brandpicture">
+			<input type="hidden" name="icon" id="brandicon" value="{$info['icon']|default=''}"/>
+			<div class="upload-img-box">
+			<notempty name="info['icon']">
+				<div class="upload-pre-item"><img src="__PICURL__{$info.domainid}/{$info.icon|get_cover='path'}"/></div>
+			</notempty>
+			</div>
+		</div>
+		<div class="controls">
+			<label class="item-label">品牌背景图<span class="check-tips">建议上传1920*393尺寸</span></label>
+			<input type="file" id="upload_brandbg">
+			<input type="hidden" name="bgimg" id="bgimg" value="{$info['bgimg']|default=''}"/>
+			<div class="upload-img-box">
+			<notempty name="info['bgimg']">
+				<div class="upload-pre-item"><img src="__PICURL__{$info.domainid}/{$info.bgimg|get_cover='path'}"/></div>
+			</notempty>
+			</div>
+		</div>
+		 
+		<div class="form-item">
+			<label class="item-label">品牌描述(描述内容只能是文字描述，建议内容长度不要超过500字符)</label>
+			<div class="controls">
+				<label class="textarea">
+					<textarea name="introduction">{$info.introduction|default=''}</textarea>
+					{:hook('adminArticleEdit', array('name'=>'introduction','value'=>$info[introduction]))}
+				</label>
+			</div>
+		</div>
+		
+		<div class="controls">
+		    <label class="item-label">品牌推荐位</label>
+		    <div class="controls"> 
+			<label class="checkbox">
+			    <input type="checkbox" name="position[]" value="1" <if condition="check_document_position($info['position'],1)">checked="checked"</if>>首页推荐
+			    
+			    <input type="checkbox" name="position[]" value="2" <if condition="check_document_position($info['position'],2)">checked="checked"</if>>导航推荐
+			    
+			</label>
+		    </div>
+		</div>
+		<div class="form-item">
+		    <label class="item-label">
+			    是否热门 <span class="check-tips">（默认否）</span>
+		    </label>
+		    <div class="controls">
+			<input type="radio" value="1" name="ishot" <eq name="info.ishot" value="1">checked</eq>>是
+			<input type="radio" value="0" name="ishot" <eq name="info.ishot" value="0">checked</eq>>否
+		    </div>
+		</div>
+		<script type="text/javascript">
+			//上传图片
+			/* 初始化上传插件 */
+      var domainid= $("#domainid").val();
+			$("#upload_brandpicture").uploadify({
+			    "height"          : 30,
+			    "swf"             : "__STATIC__/uploadify/uploadify.swf",
+			    "fileObjName"     : "download",
+			    "buttonText"      : "上传图片",
+			    "uploader"        : "{:U('File/uploadPicture',array('session_id'=>session_id(),'fields'=>'cover_id','pagefrom'=>'brand'))}",
+			    "width"           : 120,
+			    'removeTimeout'	  : 1,
+			    'fileTypeExts'	  : '*.jpg; *.png; *.gif;', 
+			    "onUploadSuccess" : uploadPicture,
+          'formData'      : {'domainid' :domainid,'fields':'cover_id','pagefrom':'brand'},
+			    'onSelect' : function(file) {
+				if ( $("#domainid").val() ) { 
+				}else{
+				    alert("请先选择频道");
+				    $('#upload_brandpicture').uploadify('cancel', '*'); 
+				}
+				return false;
+			    },
+			    'onUploadStart':function(file){ 
+				var domainid= $("#domainid").val();
+				$('#upload_brandpicture').uploadify('settings',"formData", { 'domainid': domainid });
+			    },
+			    'onFallback' : function() {
+				alert('未检测到兼容版本的Flash.');
+			    }
+			});
+			
+			
+			function uploadPicture(file, data){
+			    var data = $.parseJSON(data);
+			    var src = ''; 
+			    if(data.status){
+				$("#brandicon").val(data.id);
+				var domainid=$("#domainid").val();
+				src = data.url || '__PICURL__'+domainid+"/"+ data.path;
+				$("#brandicon").parent().find('.upload-img-box').html(
+				    '<div class="upload-pre-item"><img src="' + src + '"/></div>'
+				);
+			    } else { 
+				updateAlert(data.info);
+				setTimeout(function(){
+				    $('#top-alert').find('button').click();
+				    $(that).removeClass('disabled').prop('disabled',false);
+				},1500);
+			    }
+			}
+			var domainid= $("#domainid").val();
+			$("#upload_brandbg").uploadify({
+			    "height"          : 30,
+			    "swf"             : "__STATIC__/uploadify/uploadify.swf",
+			    "fileObjName"     : "download",
+			    "buttonText"      : "上传图片",
+			    "uploader"        : "{:U('File/uploadPicture',array('session_id'=>session_id(),'fields'=>'pics','pagefrom'=>'brand'))}",
+			    "width"           : 120,
+			    'removeTimeout'	  : 1,
+			    'fileTypeExts'	  : '*.jpg; *.png; *.gif;',
+			    "onUploadSuccess" : uploadBgimg,
+          'formData'      : {'domainid' :domainid,'fields':'pics','pagefrom':'brand'},
+			    'onSelect' : function(file) {
+				if ( $("#domainid").val() ) { 
+				}else{
+				    alert("请先选择频道");
+				    $('#upload_brandpicture').uploadify('cancel', '*'); 
+				}
+				return false;
+			    },
+			    'onUploadStart':function(file){ 
+				var domainid= $("#domainid").val();
+				$('#upload_brandbg').uploadify('settings',"formData", { 'domainid': domainid });
+			    },
+			    'onFallback' : function() {
+				alert('未检测到兼容版本的Flash.');
+			    }
+			});
+			function uploadBgimg(file, data){
+			    var data = $.parseJSON(data);
+			    var src = '';
+			    if(data.status){
+				$("#bgimg").val(data.id);
+				var domainid=$("#domainid").val();
+				src = data.url || '__PICURL__'+domainid+"/"+ data.path;
+				$("#bgimg").parent().find('.upload-img-box').html(
+				    '<div class="upload-pre-item"><img src="' + src + '"/></div>'
+				);
+			    } else {
+				updateAlert(data.info);
+				setTimeout(function(){
+				    $('#top-alert').find('button').click();
+				    $(that).removeClass('disabled').prop('disabled',false);
+				},1500);
+			    }
+			} 
+		</script>
+		
+	    </div>
+	    <div id="tab2" class="tab-pane tab2">
+		    <div class="form-item">
+			    <label class="item-label">网页标题</label>
+			    <div class="controls">
+				    <input type="text" name="meta_title" class="text input-large" value="{$info.meta_title|default=''}">
+			    </div>
+		    </div>
+		    <div class="form-item">
+			    <label class="item-label">网页关键字</label>
+			    <div class="controls">
+				    <label class="textarea input-large">
+					    <textarea name="keywords">{$info.keywords|default=''}</textarea>
+				    </label>
+			    </div>
+		    </div>
+		    <div class="form-item">
+			    <label class="item-label">网页描述</label>
+			    <div class="controls">
+				    <label class="textarea input-large">
+					    <textarea name="description">{$info.description|default=''}</textarea>
+				    </label>
+			    </div>
+		    </div>
+	    </div>
+	    <div id="tab3" class="tab-pane tab3">
+		<div class="form-item">
+		    <label class="item-label">顶部推荐产品图片</label>
+		    <div class="controls">
+		       <input type="file" id="upload_picture_re_pics">
+			<input type="hidden" name="re_pics" value="{$info[re_pics]}" class="icon re_pics" />
+			<php> $valArr= $info[re_pics] ? explode(',',$info[re_pics]):array(); </php>
+			<div class="upload-img-box">
+			    <notempty name="valArr">
+				<volist name="valArr" id="v">
+				    <div class="upload-pre-item">
+					<img src="__PICURL__{$info.domainid}/{$v|get_cover='path'}" data-id="{$v}"/>
+					<span class='btn-close btn-close-re-pics' title='删除图片'></span>
+					<input type="text" name="re_pics_info[{$v}][title]" value="{$info['re_pics_info'][$v][title]}" style='width: 118px;'placeholder='标题'>
+					<input type="text" name="re_pics_info[{$v}][links]" value="{$info['re_pics_info'][$v][links]}" style='width: 118px;' placeholder='链接'>
+				    </div>
+				</volist>
+			    </notempty>
+			</div>
+			<script type="text/javascript">
+			    //多图上传图片 
+			    /* 初始化上传插件*/ 
+			    $(function(){
+    var domainid= $("#domainid").val();
+				$("#upload_picture_re_pics").uploadify({
+				    "height"          : 30,
+				    "swf"             : "__STATIC__/uploadify/uploadify.swf",
+				    "fileObjName"     : "download",
+				    "buttonText"      : "上传图片",
+				    "uploader"        : "{:U('File/uploadPicture',array('session_id'=>session_id(),'fields'=>'pics','pagefrom'=>'brand'))}",
+				    "width"           : 120,
+				    'removeTimeout'	  : 1,
+				    'fileTypeExts'	  : '*.jpg; *.png; *.gif;', 
+				    "onUploadSuccess" : uploadPictureRepics,
+      'formData'      : {'domainid' :domainid,'fields':'pics','pagefrom':'brand'},
+				    'onSelect' : function(file) {
+					if ( $("#domainid").val() ) { 
+					}else{
+					    alert("请先选择频道");
+					    $('#upload_picture_re_pics').uploadify('cancel', '*'); 
+					}
+					return false;
+				    },
+				    'onUploadStart':function(file){ 
+					var domainid= $("#domainid").val();
+					$('#upload_picture_re_pics').uploadify('settings',"formData", { 'domainid': domainid });
+				    },
+				    'onFallback' : function() {
+					alert('未检测到兼容版本的Flash.');
+				    }
+				});
+				$(document).delegate('.btn-close-re-pics', 'click', function(event) { 
+				    event.preventDefault();
+				    $(this).parent().remove();
+				    picsbox = $("#upload_picture_re_pics").siblings('.upload-img-box');
+				    picArr = [];
+				    for (var i = 0; i < picsbox.children().length ; i++) {
+					picArr.push(picsbox.children('.upload-pre-item:eq('+i+')').find('img').attr('data-id'));
+				    };
+				    picStr = picArr.join(',');
+				    $('.icon.re_pics').val(picStr);
+				});
+			    });
+			    function uploadPictureRepics(file, data){
+				var data = $.parseJSON(data);
+				var src = '';
+				if(data.status){
+				    var domainid=$("#domainid").val();
+				    src = data.url || '__PICURL__'+domainid+"/"+ data.path; 
+				    upload_img = "<div class='upload-pre-item'><img src=" + src +" title='点击显示大图' data-id="+data.id+"> <span class='btn-close btn-close-re-pics' title='删除图片'></span><input type='text' name='re_pics_info["+data.id+"][title]' style='width: 118px;'placeholder='标题'><input type='text' name='re_pics_info["+data.id+"][links]' style='width: 118px;' placeholder='链接'></div>"; 
+				    picsbox = $("#upload_picture_re_pics").siblings('.upload-img-box');
+				    picsbox.append(upload_img);
+				    picArr = [];
+				    for (var i = 0; i < picsbox.children().length ; i++) {
+					picArr.push(picsbox.children('.upload-pre-item:eq('+i+')').find('img').attr('data-id'));
+				    };
+				    picStr = picArr.join(',');
+				    $('.icon.re_pics').val(picStr); 
+				} else {
+				    updateAlert(data.info);
+				    setTimeout(function(){
+					$('#top-alert').find('button').click();
+					$(that).removeClass('disabled').prop('disabled',false);
+				    },1500);
+				}
+			    }
+			</script>
+		    </div>
+		</div> 
+		
+		<div class="form-item">
+		    <label class="item-label">顶部热门产品图片</label>
+		    <div class="controls">
+		       <input type="file" id="upload_picture_hot_pics">
+			<input type="hidden" name="hot_pics" value="{$info[hot_pics]}" class="icon hot_pics" />
+			<php> $valArr= $info[hot_pics] ? explode(',',$info[hot_pics]):array(); </php>
+			<div class="upload-img-box">
+			    <notempty name="valArr">
+				<volist name="valArr" id="v">
+				    <div class="upload-pre-item">
+					<img src="__PICURL__{$info.domainid}/{$v|get_cover='path'}" data-id="{$v}"/>
+					<span class='btn-close btn-close-hot-pics' title='删除图片'></span>
+					<input type="text" name="hot_pics_info[{$v}][title]" value="{$info['hot_pics_info'][$v][title]}" style='width: 118px;'placeholder='标题'>
+					<input type="text" name="hot_pics_info[{$v}][links]" value="{$info['hot_pics_info'][$v][links]}" style='width: 118px;' placeholder='链接'>
+				    </div>
+				</volist>
+			    </notempty>
+			</div>
+			<script type="text/javascript">
+			    //多图上传图片 
+			    /* 初始化上传插件*/ 
+			    $(function(){
+	var domainid= $("#domainid").val();
+				$("#upload_picture_hot_pics").uploadify({
+				    "height"          : 30,
+				    "swf"             : "__STATIC__/uploadify/uploadify.swf",
+				    "fileObjName"     : "download",
+				    "buttonText"      : "上传图片",
+				    "uploader"        : "{:U('File/uploadPicture',array('session_id'=>session_id(),'fields'=>'pics','pagefrom'=>'brand'))}",
+				    "width"           : 120,
+				    'removeTimeout'	  : 1,
+				    'fileTypeExts'	  : '*.jpg; *.png; *.gif;', 
+				    "onUploadSuccess" : uploadPictureHotpics,
+      'formData'      : {'domainid' :domainid,'fields':'pics','pagefrom':'brand'},
+				    'onSelect' : function(file) {
+					if ( $("#domainid").val() ) { 
+					}else{
+					    alert("请先选择频道");
+					    $('#upload_picture_hot_pics').uploadify('cancel', '*'); 
+					}
+					return false;
+				    },
+				    'onUploadStart':function(file){ 
+					var domainid= $("#domainid").val();
+					$('#upload_picture_hot_pics').uploadify('settings',"formData", { 'domainid': domainid });
+				    },
+				    'onFallback' : function() {
+					alert('未检测到兼容版本的Flash.');
+				    }
+				});
+				$(document).delegate('.btn-close-hot-pics', 'click', function(event) { 
+				    event.preventDefault();
+				    $(this).parent().remove();
+				    picsbox = $("#upload_picture_hot_pics").siblings('.upload-img-box');
+				    picArr = [];
+				    for (var i = 0; i < picsbox.children().length ; i++) {
+					picArr.push(picsbox.children('.upload-pre-item:eq('+i+')').find('img').attr('data-id'));
+				    };
+				    picStr = picArr.join(',');
+				    $('.icon.hot_pics').val(picStr);
+				});
+			    });
+			    function uploadPictureHotpics(file, data){
+				var data = $.parseJSON(data);
+				var src = '';
+				if(data.status){
+				    var domainid=$("#domainid").val();
+				    src = data.url || '__PICURL__'+domainid+"/"+ data.path; 
+				    upload_img = "<div class='upload-pre-item'><img src=" + src +" title='点击显示大图' data-id="+data.id+"> <span class='btn-close btn-close-re-pics' title='删除图片'></span><input type='text' name='hot_pics_info["+data.id+"][title]' style='width: 118px;'placeholder='标题'><input type='text' name='hot_pics_info["+data.id+"][links]' style='width: 118px;' placeholder='链接'></div>"; 
+				    picsbox = $("#upload_picture_hot_pics").siblings('.upload-img-box');
+				    picsbox.append(upload_img);
+				    picArr = [];
+				    for (var i = 0; i < picsbox.children().length ; i++) {
+					picArr.push(picsbox.children('.upload-pre-item:eq('+i+')').find('img').attr('data-id'));
+				    };
+				    picStr = picArr.join(',');
+				    $('.icon.hot_pics').val(picStr); 
+				} else {
+				    updateAlert(data.info);
+				    setTimeout(function(){
+					$('#top-alert').find('button').click();
+					$(that).removeClass('disabled').prop('disabled',false);
+				    },1500);
+				}
+			    }
+			</script>
+		    </div>
+		</div>
+		
+	    </div>
+	    <div id="tab4" class="tab-pane tab4">
+		<present name="info.folderdes">
+		    <volist name="info.folderdes" id="folders">
+			<div class="form-item">
+				<label class="item-label item-label_f">目录标题</label>
+				<div class="controls">
+					<input type="text" name="folders[{$key}][title]" class="text input-large" value="{$folders.title}">
+					<a href="javascript::void()" onclick="removefolder('foldersdes{$key}');"> 删除此条目</a> 
+				</div>
+			</div> 
+			<div class="form-item">
+				<label class="item-label item-label_f">目录描述</label>
+				<div class="controls">
+					<label class="textarea">
+						<textarea name="foldersdes{$key}">{$folders.des}</textarea>
+						{:hook('adminArticleEdit', array('name'=>'foldersdes'.$key,'value'=>$folders[des]))}
+					</label>
+				</div>
+			</div>
+		    </volist>
+		<else />
+		    <div class="form-item">
+			<label class="item-label item-label_f">目录标题</label>
+			<div class="controls">
+			    <input type="text" name="folders[0][title]" class="text input-large" value="">
+			    <a href="javascript::void()" onclick="removefolder('foldersdes0');"> 删除此条目</a> 
+			</div>
+		    </div> 
+		    <div class="form-item">
+			<label class="item-label item-label_f">目录描述</label>
+			<div class="controls">
+			    <label class="textarea">
+				<textarea name="foldersdes0"></textarea>
+				{:hook('adminArticleEdit', array('name'=>'foldersdes0','value'=>''))}
+			    </label>
+			</div>
+		    </div>
+		</present>
+	    </div>
+	    <div class="form-item">
+		    <present name="info.folderdes"> 
+			<input type="hidden" id="foldernum" value="{:count($info[folderdes])}">
+		    <else /> 
+			<input type="hidden" id="foldernum" value="1">
+		    </present>
+		    <input type="hidden" name="id" value="{$info.id|default=''}"> 
+		    <button target-form="form-horizontal" type="submit" id="submit" class="btn submit-btn ajax-post">确 定</button>
+		    <button class="btn btn-return" onclick="javascript:history.back(-1);return false;">返 回</button>
+		    <a href="javascript::void()" onclick="addfolder();">添加条目</a> 
+		</button>
+	    </div>
+	</form>
+</block>
+<block name="script"> 
+<script type="text/javascript" charset="utf-8"> 
+	function addfolder(){
+	    var num = parseInt( $("#foldernum").val() );
+	    $("#foldernum").val(num+1);
+	    var k=num;
+var tpl = '<div class="form-item"><label class="item-label item-label_f">目录标题</label><div class="controls"><input type="text" name="folders['+k+'][title]" class="text input-large" value=""><a href="javascript::void()" onclick="removefolder(\'foldersdes'+k+'\');"> 删除此条目</a> </div></div> <div class="form-item"><label class="item-label item-label_f">目录描述</label><div class="controls"><label class="textarea" ><textarea name="foldersdes'+k+'"></textarea></label></div></div>';
+	    $("#tab4").append(tpl); 
+	    $.getScript('__STATIC__/kindeditor/kindeditor-min.js', function() {
+		    KindEditor.basePath = '../';
+		    KindEditor.create('textarea[name="foldersdes'+k+'"]', {
+			    allowFileManager : false,
+			    themesPath: KindEditor.basePath,
+			    width: '100%',
+			    height: '300px',
+			    resizeType: 1,
+			    pasteType : 2,
+			    urlType : 'absolute',
+			    fileManagerJson : '{:U("fileManagerJson")}', 
+			    uploadJson : '{:addons_url("EditorForAdmin://Upload/ke_upimg")}',
+			    extraFileUploadParams: {
+				    session_id : '{:session_id()}'
+			    },
+			    afterBlur:function(){
+				this.sync();
+			    },
+		    });
+	    });
+	 
+	}
+	function removefolder( name ){
+	    KindEditor.remove('textarea[name="'+name+'"]');
+	    $('textarea[name="'+name+'"]').parents(".form-item").prev(".form-item").remove();
+	    $('textarea[name="'+name+'"]').parents(".form-item").remove();
+	}
+	//导航高亮
+	highlight_subnav('{:U('index')}');
+	showTab();
+</script> 
+</block>

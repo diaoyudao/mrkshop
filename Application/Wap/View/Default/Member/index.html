@@ -1,0 +1,193 @@
+<extend name="Base/common_index"/>
+<block name="body">
+    <!--头部 S-->
+    <div class="herder">
+        <!--<a href="javascript:history.go(-1);" class="back"><i></i></a>-->
+        <h3>个人中心</h3>
+    </div>
+    <div class="t_line"></div>
+    <!--头部 E--> 
+    <!--基本信息 S--> 
+    <div class="base_info clear">
+        <a class="edit_info" href="{:U('Member/information')}">
+            <div class="head_pro">
+              <empty name='faceid'>
+                    <img src="{$head_url}" />
+                    <else />
+                    <php>
+                        $random = time();
+                    </php>
+                    <img src="__PICURLFACE__{$uid}/face.jpg?r={$random}"  />
+                </empty>
+            </div>
+            <div class="name">
+                <h2 class="myName">{$memberInfo.username}</h2>
+                <p class="gread">{$memberInfo.levelInfo.level_n}<i class="lv{$memberInfo.levelInfo.level}"></i></p>
+            </div>		
+        </a>
+    </div>
+    <div class="nav_list nav_list2" style="display: none;">
+        <ul style="margin-bottom:0">
+            <li>
+                <a href="{:U('Order/index')}">
+                    <i class="nav_l_ico nav_l_ico10">
+                        <img src="__IMG__/allOrder.png" />
+                    </i>全部订单
+                    <span style="float:right;margin-right:0.2rem;font-size: 0.18rem;">查看全部订单</span><i class="Get"></i>
+                </a>
+            </li> 
+        </ul>
+    </div>
+    <!--基本信息 E--> 
+
+    <!--会员导航 S--> 
+    <div class="user_nav2">
+        <ul class="clear">
+            <li>
+                <a href="{:U('order/index',array('state_type'=>'state_new'))}">
+                    <span class="ico ico1"></span>
+                    <strong>待付款</strong>
+                    <i class="pub_tips">{$ordernum.nopaynum}</i>
+                </a>	
+            </li>
+            <li>
+                <a href="{:U('order/index',array('state_type'=>'state_pay'))}">
+                    <span class="ico ico2"></span>
+                    <strong>待发货</strong>
+                    <i class="pub_tips">{$ordernum.paynum}</i>
+                </a>	
+            </li>
+            <li>
+                <a href="{:U('order/index',array('state_type'=>'state_send'))}">
+                    <span class="ico ico3"></span>
+                    <strong>待收货</strong>
+                    <i class="pub_tips">{$ordernum.shipnum}</i>
+                </a>	
+            </li>
+            <li>
+                <a href="{:U('order/index',array('state_type'=>'state_noeval'))}">
+                    <span class="ico ico4"></span>
+                    <strong>待评价</strong>
+                    <i class="pub_tips">{$ordernum.noevalnum}</i>
+                </a>	
+            </li>
+            <li>
+                <a href="{:U('Refund/index',array('all'=>1))}">
+                    <span class="ico ico5"></span>
+                    <strong>售后</strong>
+                    <i class="pub_tips">.</i>
+                </a>	
+            </li>
+        </ul>
+    </div>
+    <!--会员导航 E--> 
+
+    <!--导航列表 S--> 
+    <div class="nav_list nav_list2">
+        <ul>
+            <li>
+                <a href="{:U('Order/index')}">
+                    <i class="nav_l_ico nav_l_ico10">
+                        <img src="__IMG__/allOrder.png" />
+                    </i>全部订单
+                    <i class="Get"></i>
+                </a>
+            </li> 
+            <li>
+                <a href="{:U('Member/mycollection',array('all'=>1))}">
+                    <i class="nav_l_ico nav_l_ico1">
+                        <img src="__IMG__/heart.png" />
+                    </i>我的收藏
+                    <i class="Get"></i>
+                </a>
+            </li> 	
+            <li>
+                <a href="{:U('Comment/index')}">
+                    <i class="nav_l_ico nav_l_ico2">
+                        <img src="__IMG__/pingjia.png"/>
+                    </i>我的评价
+                    <i class="Get"></i>
+                </a>
+            </li> 
+            <li style='display: none;'>
+                <a href="toMycomment.html">
+                    <i class="nav_l_ico nav_l_ico9">
+                        <img src="__IMG__/juan.png"/>
+                    </i>我的优惠券
+                    <i class="Get"></i>
+                </a>
+            </li> 	
+            <li>
+                <a href="{:U('Refund/index',array('all'=>1))}">
+                    <i class="nav_l_ico nav_l_ico9">
+                        <img src="__IMG__/shouhou.png"/>
+                    </i>售后管理
+                    <i class="Get"></i>
+                </a>
+            </li> 	
+            <li>
+                <a href="{:U('Message/index',array('all'=>1))}">
+                    <i class="nav_l_ico nav_l_ico9">
+                        <img src="__IMG__/tousu.png"/>
+                    </i>建议投诉
+                    <i class="Get"></i>
+                </a>
+            </li> 	
+        </ul>
+        <ul>
+            <li>
+                <a href="{:U('Safety/safety')}">
+                    <i class="nav_l_ico nav_l_ico3">
+                        <img src="__IMG__/safe.png" />
+                    </i>安全中心
+                    <i class="Get"></i>
+                </a>
+            </li> 	
+            <li>
+                <a href="{:U('Member/address')}">
+                    <i class="nav_l_ico nav_l_ico4">
+                        <img src="__IMG__/add.png"/>
+                    </i>地址管理
+                    <i class="Get"></i>
+                </a>
+            </li> 	
+        </ul>
+        <ul class="none">
+            <li>
+                <a href="daili.html">
+                    <i class="nav_l_ico nav_l_ico5">
+                        <img src="__IMG__/sing-user.png" />
+                    </i>代理管理
+                    <i class="Get"></i>
+                </a>
+            </li> 	
+            <li>
+                <a href="kuaiJian.html">
+                    <i class="nav_l_ico nav_l_ico6">
+                        <img src="__IMG__/kuaijian.png"/>
+                    </i>快件管理
+                    <i class="Get"></i>
+                </a>
+            </li>
+            <li>
+                <a href="code.html">
+                    <i class="nav_l_ico nav_l_ico7">
+                        <img src="__IMG__/classfy.png" />
+                    </i>邀请码/二位码维护
+                    <i class="Get"></i>
+                </a>
+            </li>
+        </ul>
+        <ul> 		 	
+            <li>
+                <a href="{:U('Help/index')}">
+                    <i class="nav_l_ico nav_l_ico8">
+                        <img src="__IMG__/user.png"/>
+                    </i>关于我们
+                    <i class="Get"></i>
+                </a>
+            </li> 	
+        </ul>
+    </div>
+    <!--导航列表 E--> 
+</block>

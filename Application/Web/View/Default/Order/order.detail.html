@@ -1,0 +1,186 @@
+<extend name="Base/member_common"/>
+<block name="body">
+    <div class="wrap" style="background-color: #f5f5f5;">
+        <div class="guidance towp"><a href="javascript:;">首页</a><a href="javascript:;"> > 会员首页</a></div>
+        <div class="content_mc towp clear">
+            <div class="content_left">
+                <include file="Member/member_menu"/>
+            </div>
+            <div class="content right-con2 order-mana cG {$orderdetail.current_step}">
+                <div class="con-tit"><h2 class="">订单管理</h2></div>
+                <neq name='orderdetail.status' value='-2'>
+                <div class="steps"></div>
+                </neq>
+                <div class="contents clear">
+                    <div class="contents_left">
+                        <h3>订单信息</h3>
+                        <dl>
+                            <dt>订单编号：</dt>
+                            <dd>{$orderdetail.orderid}</dd>
+                        </dl>
+                        <dl>
+                            <dt>付款方式：</dt>
+                            <dd>{$orderdetail.paymentstring}</dd>
+                        </dl>
+                        <dl>
+                            <dt>收&nbsp;货&nbsp;人：</dt>
+                            <dd>{$orderdetail.address.realname},{$orderdetail.address.cellphone}<notempty name='orderdetail.address.phone'>/{$orderdetail.address.phone}</notempty></dd>
+                        </dl>
+                        <dl>
+                            <dt>收货地址：</dt>
+                            <dd>
+                                {$orderdetail.address.province}{$orderdetail.address.city}{$orderdetail.address.area},{$orderdetail.address.address}
+                            <notempty name='orderdetail.address.youbian'>,{$orderdetail.address.youbian}</notempty>
+                            </dd>
+                        </dl>
+                        <notempty name='orderdetail.message'>
+                            <dl>
+                                <dt>我的留言：</dt>
+                                <dd>{$orderdetail.message}</dd>
+                            </dl>
+                        </notempty>
+                        <dl>
+                            <dt>下单时间：</dt>
+                            <dd>{$orderdetail.create_time|date='Y-m-d H:i:s',###}</dd>
+                        </dl>
+                        <dl>
+                            <dt>付款时间：</dt>
+                            <dd><notempty name='orderdetail.payment_time'> {$orderdetail.payment_time|date='Y-m-d H:i:s',###} <else /> 待付款 </notempty></dd>
+                        </dl>
+                        <dl>
+                            <dt>发货时间：</dt>
+                            <dd><notempty name='orderdetail.deliverys.send_time'> {$orderdetail.deliverys.send_time|date='Y-m-d H:i:s',###} <else /> 待发货 </notempty></dd>
+                        </dl>
+
+                    </div>
+                    <div class="contents_right">
+                        <switch name="orderdetail.current_step">
+                        <case value="sP"> <!--立即付款-->
+                            <div class="ts">
+                                <p style="margin-left: 20px;">商品已拍下，请及时<i>付款</i>，3天内若未即使付款，系统将自动取消订单。 </p>
+                                <span>如有疑问，请<a href="javascript:;">联系客服</a>。</span>
+                                <em>剩余22时53分</em>
+                                <a href="{:U('payment/index',array('id'=>$orderdetail['orderid']))}">立即付款</a>
+                            </div>
+                        </case>
+                        <case value="sG"> <!--正在发货-->
+                            <div class="ts">
+                                <p>商家正在发货，请耐心等候... ... </p>
+                                <span>如有疑问，请<a href="javascript:;">联系客服</a>。</span>
+                            </div>
+                        </case>
+                        <case value="cG"> <!--确认收货-->
+                            <div class="ts">
+                                <p>请收到商品后，再确认收货，否则可能钱货两空！</p>
+                                <php>
+                                    $href1 = U('Order/order_receive', array('orderid' => $orderdetail['orderid']));
+                                    echo $handle = "<a class='pj confirm' data-msg='请收到商品后，再确认收货，否则可能钱货两空！' href='$href1'>确认收货</a>";
+                                </php>
+                            </div>
+                            <dl>
+                                <dt>物流信息</dt>
+                                <dd><span>发货方式：</span><i>{$orderdetail.shipway}</i></dd>
+                                <!-- <notempty name="orderdetail.deliverys">
+                                <volist name="orderdetail.deliverys" id="item">
+                                    <dd><span>{$item.warehouse|get_shipping}：</span> <i>{$item.shipping_name}</i> &nbsp;&nbsp;&nbsp;&nbsp; <span>快递单号：</span><i>{$item.invoice_no}</i></dd>
+                                </volist>
+                                </notempty> -->
+                                <dd><span>物流公司：</span><i>{$orderdetail.deliverys.shipping_name}</i></dd>
+                                <dd><span>运单号码：</span><i>{$orderdetail.deliverys.invoice_no}</i></dd>
+                                <dd><span>物流跟踪：</span><i>{$orderdetail.statusstring}</i></dd>
+                            </dl>
+                        </case>
+                        <case value="finished"> <!--订单已完成-->
+                            <div class="ts">
+                                <p>您已确认收货，赶紧去评价吧 ！</p>
+                                <eq name='orderdetail.iscomment' value='1'>
+                                <a class="pj" style="background-color: gray;cursor:not-allowed" href="javascript:;">已评价</a>
+                                <else/>
+                                <a href="{:U('Comment/index')}#{$orderdetail['orderid']}">立即评价</a>
+                                </eq>
+                            </div>
+                            <dl>
+                                <dt>物流信息</dt>
+                                <dd><span>发货方式：</span><i>{$orderdetail.shipway}</i></dd>
+                                <!-- <notempty name="orderdetail.deliverys">
+                                <volist name="orderdetail.deliverys" id="item">
+                                    <dd><span>{$item.warehouse|get_shipping}：</span> <i>{$item.shipping_name}</i> &nbsp;&nbsp;&nbsp;&nbsp; <span>快递单号：</span><i>{$item.invoice_no}</i></dd>
+                                </volist>
+                                </notempty> -->
+																<dd><span>物流公司：</span><i>{$orderdetail.deliverys.shipping_name}</i></dd>
+                                <dd><span>运单号码：</span><i>{$orderdetail.deliverys.invoice_no}</i></dd>
+                                <dd><span>物流跟踪：</span><i>已签收</i></dd>
+                            </dl>
+                        </case>
+                        <case value="cancel"> <!--正在发货-->
+                            <div class="ts">
+                                <p>订单已经取消</p><br><br/>
+                                <span>如有疑问，请<a href="javascript:;">联系客服</a>。</span>
+                            </div>
+                        </case>
+                        <default />default
+                        </switch>
+                    </div>
+                </div>
+                <div class="tables">
+                    <h3>订单详情</h3>
+                    <table width="100%">
+                        <colgroup span="6">
+                            <col width="30%" />
+                            <col width="12%" />
+                            <col width="12%" />
+                            <col width="12%" />
+                            <col width="12%" />
+                            <col width="12%" />
+                        </colgroup>
+                        <tr><th>商品</th><th>单价（元）</th><th>数量</th><th>合计（元）</th><th>运费（元）</th><th>状态</th></tr>
+                        <volist name='orderdetail.goodslist' id='goods' key='k'>
+                            <if condition="$k eq 1">
+                                <tr>
+                                    <td>
+                                        <a href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}"><img src="{$goods['pics_img'][$goods['cover_id']]}"/></a>
+                                        <div>
+                                            <p><a style='border:none; width: 100%'  href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}">{$goods.goodid|get_good_name}</a></p>
+                                            <notempty name='goods.parameters'><em>规格：{$goods.parameters|default="无"}</em></notempty>
+                                        </div>
+                                    </td>
+                                    <td>￥{$goods.price}</td>
+                                    <td>{$goods.num}</td>
+                                    <td>￥{$goods.total}</td>
+                                    <td rowspan="{$orderdetail.productnum}">￥{$orderdetail.shipprice}</td>
+                                    <td rowspan="{$orderdetail.productnum}">{$orderdetail.statusstring}</td>
+                                </tr>
+                                <else />
+                                <tr>
+                                    <td>
+                                        <a href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}"><img src="{$goods['pics_img'][$goods['cover_id']]}"/></a>
+                                        <div>
+                                            <p><a style='border:none; width: 100%' href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}">{$goods.goodid|get_good_name}</a></p>
+                                            <notempty name='goods.parameters'><em>规格：{$goods.parameters|default="无"}</em></notempty>
+                                        </div>
+                                    </td>
+                                    <td>￥{$goods.price}</td>
+                                    <td>{$goods.num}</td>
+                                    <td>￥{$goods.total}</td>
+                                </tr>
+                            </if>
+                        </volist>
+                    </table>
+                    <div class="jin">
+                        <notempty name="orderdetail.haiguan_rate_total">
+                            <p>税费：<span>￥{$orderdetail.haiguan_rate_total}</span></p>
+                        </notempty>
+                        <p>运费：<span>￥{$orderdetail.shipprice}</span></p>
+                        <notempty name="orderdetail.discount_amount">
+                        <p>优惠金额：<span>￥-{$orderdetail.discount_amount}</span></p>
+                        </notempty>
+                        <p>商品总金额：<span>￥{$orderdetail.total}</span></p>
+                        <div class="con">
+                            <p>订单总金额：<span><b>￥{$orderdetail.pricetotal}</b></span></p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+</block>

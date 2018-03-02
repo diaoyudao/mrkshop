@@ -1,0 +1,32 @@
+@charset "utf-8";
+.swiper-container{
+	overflow: hidden;
+}
+.pagination{
+	position: absolute;
+	bottom: 20px;
+	left: 50%;
+	z-index: 999;
+	overflow: hidden;
+}
+.banner_box{
+	position: relative;
+}
+.swiper-pagination-switch{
+	display: block;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	float: left;
+	background-color: #fff;
+	margin: 0 10px;
+	cursor: pointer;
+}
+.swiper-visible-switch{
+	border: 1px solid red;
+	box-sizing: border-box;
+}
+.swiper-active-switch{
+	border: 1px solid red;
+	box-sizing: border-box;
+}

@@ -1,0 +1,104 @@
+<extend name="Base/store_common"/>
+<block name="body">
+    <div class="wrap" style="background-color: #f5f5f5;">
+        <div class="content_agency towp clear user_center add-dd">
+            <div class="content_left">
+                <include file="Member/member_menu"/>
+            </div>
+            <div class="content_right" style="border: 0;">
+                <h2><a href="#">订单管理</a> > 添加订单</h2>
+                <div class="step step1">
+
+                </div>
+                <div class="pro_sear">
+                    <div class="sear_box clear">
+                        <form method="post" action="{:U('Agent/order_step1')}" >
+                            <div class="sear_box2">
+                                <span>会员账号：</span>
+                                <input class="txt w200" type="text" id="" name='mobile' value="{$moble}" placeholder="输入手机号查询" />
+                                <input class="s_btn" type="submit" id="" value="" />
+                            </div>
+                        </form>
+                    </div>
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        <colgroup span="5">
+                            <col width="20%" />
+                            <col width="20%" />
+                            <col width="20%" />
+                            <col width="20%" />
+                            <col width="20%" />
+                        </colgroup>
+
+                        <tr>
+                            <th>编号</th>
+                            <th>手机号</th>
+                            <th>昵称</th>
+                            <th>注册时间</th>
+                            <th></th>
+                        </tr>
+                        <notempty name='memberData'>
+                            <volist name='memberData' id='member'>
+                                <tr class="tell">
+                                    <td>000{$member.uid}</td>
+                                    <td>{$member.mobile}</td>
+                                    <td>{$member.username}</td>
+                                    <td>{$member.update_time|date="Y-m-d H:i:s",###}</td>
+                                    <td><a href="javascript:;" class="choose_uid"  uid="{$member.uid}">使用此账号</a></td>
+                                </tr>
+                            </volist>
+                            <else/>
+                            <tr>
+                                <td colspan='5'>sorry,没查询到会员信息...</td>
+                            </tr>
+                        </notempty>
+
+                    </table>
+                    <div>
+                        {$_page}
+                    </div>
+                </div>
+                <div class="cz_dd clear">
+                    <input type="hidden" name="member_id" value="0"/>
+                    <a class="next" href="javascript:;">下一步</a>
+                    <a class="cancel" href="{:U('Agent/orderlist')}">取消</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>
+<block name="script">
+    <script>
+        $(function() {
+            // 选择会员
+            $(".choose_uid").click(function() {
+                $("input[name=member_id]").val($(this).attr("uid"));
+                $('tr').addClass("tell");
+                $(this).parents('tr').removeClass("tell");
+            });
+
+            // 下一步
+            $("a[class=next]").click(function() {
+                var member_id = $("input[name=member_id]").val();
+                var url = "{:U('Agent/order_step1')}";
+                if (eval(member_id) <= 0) {
+                    layer.msg("请选择会员，进行下一步操作");
+                    return false;
+                } else {
+                    $.ajax({
+                        url: url,
+                        data: {member_id: member_id},
+                        dataType: "json",
+                        type: "post",
+                        success: function(res) {
+                            if (res.status) {
+                                window.location = "{:U('Agent/order_step2')}";
+                            } else {
+                                layer.msg("请选择会员，进行下一步操作");
+                            }
+                        }
+                    });
+                }
+            });
+        })
+    </script>
+</block>

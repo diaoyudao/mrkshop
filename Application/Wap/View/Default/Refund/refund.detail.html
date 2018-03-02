@@ -1,0 +1,158 @@
+<extend name="Base/common_index"/>
+<block name='style'>
+    <style>
+        .pj_scimg {
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .pj_scimg .sctp {
+            background: rgba(0, 0, 0, 0) url("__IMG__/evaluation/icon_eva.png") no-repeat scroll 20px -93px;
+            border: 1px dashed #ddd;
+            float: left;
+            height: 58px;
+            margin-right: 10px;
+            overflow: hidden;
+            position: relative;
+            width: 58px;
+        }
+        .pj_scimg ul li {
+            float: left;
+            height: 60px;
+            margin-right: 10px;
+            overflow: hidden;
+            position: relative;
+            width: 60px;
+        }
+        .pj_scimg .picli-mask {
+            background: rgba(0, 0, 0, 0) url("__IMG__/evaluation/icon_eva.png") no-repeat scroll -60px -270px;
+            cursor: pointer;
+            display: none;
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            z-index: 2;
+        }
+        #comments_imgs li{ margin: 0 0px; width: 0.56rem; height: 0.56rem; float: left;}
+        .footer{ display: none;}
+        .current { background-color: #000; color: #fff;}
+    </style>
+</block>
+<block name="body">
+    <!--头部 S-->
+    <div class="herder">
+        <a href="javascript:history.go(-1);" class="back"><i></i></a>
+        <h3>售后</h3>
+        <!-- <div class="herd_r"><a href="search.html" class="search"><i></i></a></div>-->
+    </div>
+    <div class="t_line"></div>
+    <!--头部 E--> 
+    <!--订单列表 S--> 
+    <form action="{:U('Refund/add')}" method="post" class='validate' name="actform" enctype="multipart/form-data" onsubmit="validateCallback(this, dialogAjaxDone);
+            return false;">
+        <div class="order_list after_sales">
+            <ul>
+                <volist name='orderdetail.goodslist' id='goods' key='k'>
+                    <li>
+
+                        <a href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}">
+                            <img src="{$goods['pics_img'][$goods['cover_id']]}"/>
+                            <div class="pro_info">
+                                <h3><a href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}">{$goods.goodid|get_good_name}</a></h3>
+                                <p class="pric">
+                                    <span>￥<span class="font36">{$goods.price}</span>
+                                    </span>
+                                    <i> X {$goods.num} </i>
+                                </p>
+                            </div>
+                        </a>
+                    </li>
+                </volist>
+            </ul>
+            <div class="tab2 item service" style="display:none;">
+                <h4>服务类型</h4>
+                <a class="active" href="javascript:;">退货</a>
+                <a  href="javascript:;">换货</a>
+            </div>
+            <div class="item_1">
+                <div class="reason">
+                    <span id="ression_info">{$orderdetail.reason_info}</span>
+                </div>
+                <div>
+                    <span>备注信息</span>
+                    <input type="text" class=' fr' name="buyer_message" value="{$orderdetail.buyer_message}" placeholder="请输入其他备注" />
+                </div>
+            </div>
+            <div class="item_2">
+                <div class="num">
+                    <span>申请数量</span>
+                    <div class="fr">
+                        <!--<a href="javascript:;" class="coun-plu"  id="minus " > - </a>-->
+                        <input type='text' name='inputnum' value='{$orderdetail.goods_num}' id="coun-num" placeholder='输入退货数量' />
+                        <!--<a href="javascript:;"  class="coun-min" id="minus" > + </a>-->
+                    </div>				
+                </div>
+                <notempty name='orderdetail.admin_message'>
+                    <div class="je" style=";">
+                        <span>平台反馈</span>
+                        <p class="pric">
+                            {$orderdetail.admin_message}
+                        </p>
+                    </div>
+                </notempty>
+                <div class="tips">
+                    (提示：退还订单金额<span class="colo18">￥{$orderdetail.refund_amount}</span>)
+                </div>
+            </div>	
+            <div class="upload">
+                <span>上传图片</span>
+                <div class="load">
+                    <ul id="comments_imgs">
+                        <notempty name='orderdetail.picss'>
+                            <volist name='orderdetail.picss' id='item'>
+                                <li><img src="__PICURL__/{$item|get_good_img}" /></li>
+                            </volist>
+                        </notempty>
+                    </ul>
+<!--                    <div class="sctp load_btn" style='margin-top:0.2rem'>
+                        <input class="g-u file-input" id="pics" type="file" >
+                        <input type="hidden" name="pics" id="pics_id" value="" class="icon" />
+                    </div> -->
+                </div>
+                <p style="clear:both;">上传凭证，最多传3张</p>
+            </div>
+            <div class="z_text"><span class="time"><if condition="$orderdetail.admin_time gt 0">{$orderdetail.admin_time|date="Y-m-d H:i",###}<else />{$orderdetail.add_time|date="Y-m-d H:i",###}</if></span>处理状态:<span class="text">{$orderdetail.statusstring}</span></div>
+        </div>
+        <div class="fix_bo fix_bo3">
+            <input type='hidden' name='goods_num' value='{$goods.num}' />
+            <input type='hidden' name='order_id' value='{$orderdetail.id}' />
+            <input type='hidden' name='goodid' value='{:I("goods_id")}' />
+            <input type='hidden' name='resion_id' value='' />
+            <!--<input type="submit" class="long_btn long_btn_ri fr yd_tc_btn" value="提交申请" />-->
+        </div>
+    </form>
+    <!--订单列表 E--> 
+    <div class="bounced">
+        <div class="opacity"></div>
+        <ul>
+            <volist name='refund_resion' id='item'>
+                <li><a href="javascript:;" resion_id="{$item.id}">{$item.resion}</a></li>
+            </volist>
+        </ul>
+    </div>
+    <div  class="yd_tc">
+        <div class="tijiao_true tijiao_true2">
+
+            <h3><i></i></h3>
+            <p>
+                提交成功
+            </p>
+        </div>
+    </div>
+
+    <!--底部 S-->
+    <div class="b_line"></div>
+    <!--底部 E-->
+
+</block>

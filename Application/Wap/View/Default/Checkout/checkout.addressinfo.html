@@ -1,0 +1,10 @@
+<div class="flow_Address_line"></div>
+<a href="javascript:;">
+    <ul class="clear">
+        <li>{$address.realname}</li>
+        <li>{$address.cellphone|set_start_phone}</li>
+        <li>{$address.card_no|set_start_card}</li>
+    </ul>
+    <p><eq name='address.isdefault' value='1'><i>默认</i></eq>{$address.province}{$address.city}{$address.area},{$address.address}</p>       
+</a>
+<div class="flow_Address_line"></div>

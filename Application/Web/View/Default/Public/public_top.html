@@ -1,0 +1,25 @@
+<div class="towp">
+    <div class="wellcom fl">
+        <span>欢迎光临！</span>
+        <if condition="is_login()">
+            <span> <a title="{:session('user_auth.username')}" href="{:U('member/index')}">{:session('user_auth.username')}</a>&nbsp;&nbsp;&nbsp;&nbsp;欢迎您!</span>
+            <span> <a title="退出" href="{:U('member/logout')}">退出</a></span>
+            <else/>
+            <span> <a href="{:U('member/login')}">请登录</a></span>
+            <span> <a href="{:U('member/register')}">免费注册</a></span>
+        </if>
+    </div>
+    <div class="topMenu fr">
+        <span class="top-myOrder"><a href="{:U('order/index')}"><i class="bg"></i>我的订单</a></span>
+        <span class="top-user"><a href="{:U('member/index')}"><i class="bg"></i>我的账号</a></span>
+        <span class="topOnlineSevic"><a href="{:U('help/index')}"><i class="bg"></i>客服中心</a></span>
+        <span class="topPhone">
+            <a href="javascript:;;"><i class="bg"></i>手机版</a>
+            <span class="app">
+                <img src="__IMG__/code.png" />
+                妙品生活WAP
+            </span>
+        </span>
+        <span class="top-qq"><a title="QQ:{:C('QQ')}" href="http://wpa.qq.com/msgrd?v=3&uin={:C('QQ')}&site=qq&menu=yes" target="_blank"><i class="bg"></i>在线客服</a></span>
+    </div>
+</div>

@@ -1,0 +1,54 @@
+<extend name="Base/common_cart"/>
+<block name='style'>
+    <style>
+        .all-naiv{display:none;}
+        .m-nav-fix{position: fixed;top:0;width: 100%;background-color:#F5F5F5;}
+    </style>
+</block>
+<block name="body">
+    <!--购物流程-->
+    <div class="towp step">    	
+    </div>
+    <!--购物流程-->
+    <!--购物流程-->
+    <div class="myShopCar quRen towp proClass1">  
+        <div class="proClassfy" style="display:none;">
+            <include file="Cart/cart.menu"/>
+        </div>
+
+        <div class="towp shopcar-none proClass1-con">
+            <img src="__IMG__/shopcar-none.jpg" />
+            <h3>购物车啥也没有哦</h3>
+            <p>喜欢的宝贝，要收到碗里来啊！</p>
+            <a href="{:U('goods/lists')}" class="c-btn"> 去逛逛 </a>
+        </div>
+    </div>
+    <!-- 猜你喜欢 -->
+    <div class="rmsp  picScroll-left  towp">
+        <div class="jx"><h4><i class="bg"></i>猜你喜欢</h4></div>
+        <div class="hd">
+            <a class="next"></a>
+            <a class="prev"></a>
+        </div>
+        <div class="bd" style="width: 1130px;overflow: hidden;margin-left: 34px;">
+            <ul class="picList">
+                <volist name="aboutproduct" id="vo" empty='没有数据'>
+                    <li>
+                        <a href="{:U('Goods/detail',array('channelname'=>$vo['channelname'],'id'=>$vo['id']))}">
+                            <img src="{$vo.id|get_cover_picture_url}" /> </a>
+                        <strong><a href="#">{$vo['title']}</a></strong>
+                        <span class="cost">￥<span class="big-font">{$vo['price']}</span>  </span>
+                    </li>
+                </volist>
+            </ul>
+        </div>
+    </div>
+</block>
+<block name='script'>
+    <script type="text/javascript" src="__JS__/jquery.SuperSlide.2.1.1.js"></script>
+    <script>
+        $(function() {
+            jQuery(".picScroll-left").slide({titCell: ".hd ul", scroll: 1, mainCell: ".bd ul", autoPage: true, effect: "leftLoop", autoPlay: true, vis: 5});
+        })
+    </script>
+</block>

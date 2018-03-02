@@ -1,0 +1,54 @@
+<extend name="Base/common_login"/>
+<block name="style">
+    <style>
+        .copy {display: none;}
+        .footer-ico {display: none;}
+    </style>
+</block>
+<!-- 头部 -->
+<block name="body">
+    <header  style="background: #fff">
+        <div class="head clear towp">
+              <php>$logo = C('SITE_LOGO')</php>
+        <style>
+
+            .head .logos {
+                background: rgba(0, 0, 0, 0) url("__PICURL__logo/{$logo|get_cover='path'}") no-repeat scroll center center;
+            }
+        </style>
+            <a href="{:U('Index/index')}" class="logos"></a>
+            <a href="javascript:;;" class="logins">注册</a>
+            <a href="{:U('Index/index')}" class="i_back">返回首页</a>
+        </div>
+    </header>
+    <!-- 内容 -->
+    <div class="wrap" style="background-color: #fafafa;">
+        <div class="completed towp">
+            <div class="steps"></div>
+            <div class="to-bgcolor" >
+                <div class="wc">
+                    <p>恭喜你，注册成功！</p>
+                    <p><span id='jumpTo'>3</span>秒自动跳转主页</p>
+                </div>
+                <a href="{:U('Member/index')}">开启秒睿可之旅<span></span></a>
+            </div>
+        </div>
+    </div>
+    <!-- 内容  END-->
+</block>
+<block name='script'>
+    <script type="text/javascript">
+        var url = "{:U('Member/index')}";
+        function countDown(secs, surl) {
+            var jumpTo = document.getElementById('jumpTo');
+            jumpTo.innerHTML = secs;
+            if (--secs > 0) {
+                setTimeout("countDown(" + secs + ",'" + surl + "')", 1000);
+            }
+            else {
+                location.href = surl;
+            }
+        }
+        countDown(3,url);
+    </script> 
+</block>

@@ -1,0 +1,232 @@
+<extend name="Base/member_common"/>
+<block name="body">
+    <!-- 内容 -->
+    <div class="towp">
+        <div class="you-posi"><p>您的位置：<a href="index.html">首页</a> >  <span class="position-now">安全验证</span></p></div>
+    </div>
+    <div class="towp yh-wrap content_agency clear">
+        <div class="content_left">
+            <include file="Member/member_menu"/>
+        </div>
+        <div class="content right-con2 right-con4">
+            <div class="con-tit"><h2 class="">账户安全</h2></div>
+            <div class="safecon mt20">
+                <div class="s-grade p010">
+                    <em>目前安全级别：</em><span class="bg2  dj_c{$num}"></span><a href="javascript:;">修改密码提升等级</a>
+                </div>
+                <div class="yz-list">
+                    <dl>
+                        <dt><i class="bg2 icon-phone "></i></dt>
+                        <dd>
+                            <strong>手机绑定</strong>
+                            <div class="info">
+                                <if condition="$userinfo.mobile_auth eq 1">
+                                    <p>您绑定的手机为{$userinfo.mobile|set_start_phone}</p>
+                                    <else />
+                                    <p>绑定手机后，您即可享受优购网丰富的手机服务，如手机登录、手机找回密码等，保证您账户更安全。</p>
+                                </if>
+
+                            </div>
+                        </dd>
+                        <a class="change-btn"  href="{:U('Safety/changeMobile')}">修改绑定</a>
+                    </dl>
+                    <!-- 添加手机 -->
+                    <div class="add-phone" <eq name="userinfo.mobile_auth" value="1">style='display:none;'</eq> >
+                        <form action="{:U('Safety/bind_mobile')}" method="get" class="mobile_auth"  onsubmit="validateCallback(this, dialogAjaxDone);
+                                return false;">
+                            <dl><dt><em>*</em> 输入手机号：</dt>
+                                <dd><input type="text" class="txt3" name="mobile" id="mobile" value='{$userinfo.mobile}' />
+                                    <span class="error"></span>
+                                </dd>
+                            </dl>
+                            <dl><dt><em>*</em> 手机验证码：</dt>
+                                <dd><input type="text" name="code" id="code" class="txt3" /><span class="error"></span></dd>
+                                <dd><input type="button" class="a-btn3" onclick="getcode(this)" value="发送验证码" />
+
+                                </dd>
+                            </dl>
+                            <div class="">
+                                <input type="submit" value="立即提交" class="a-btn" />
+                                <!--<input type="button" value="取消" class="a-btn3" />-->
+                            </div>
+                        </form>
+                    </div>
+
+                    <dl>
+                        <dt><i class="bg2 icon-lock"></i></dt>
+                        <dd>
+                            <strong>登录密码</strong>
+                            <div class="info">安全性高的密码可以使账号更安全。建议您定期更换密码，且设置一个包含数字和字母，并长度超过6位以上的密码。</div>
+                        </dd>
+                        <a class="change-btn changePw-btn" href="javascript:;;">修改</a>
+                    </dl>
+                    <!-- 修改密码 -->
+                    <div class="changePw" style="display: none;">
+                        <form action="{:U('Safety/setpassword')}" method="post" class="setpassword"  >
+                            <dl><dt><em>*</em> 输入当前密码：</dt><dd>
+                                    <input type="password" name="old" class="txt3" /></dd>
+                            </dl>
+                            <dl><dt><em>*</em> 输入新密码：</dt><dd>
+                                    <input type="password" name="password" id="password" class="txt3" />
+                            </dl>
+                            <dl><dt><em>*</em> 再次输入新密码：</dt><dd>
+                                    <input type="password" name="repassword" class="txt3" /></dd>
+                            </dl>
+                            <div class="">
+                                <input type="submit" value="立即修改" class="a-btn" />
+                                <!--<input type="button" value="取消" class="a-btn3" />-->
+                            </div>
+                        </form>
+                    </div>
+                    <dl style="display: none;">
+                        <dt><i class="bg2 icon-email"> </i><dd>
+                            <strong>账号绑定</strong>
+                            <div class="info"><a href="safeSet2.html">绑定后，可以使用第三方账号登录妙品生活购物</a></div>
+                        </dd>
+                        <a class="change-btn set-btn" href="{:U('Safety/account')}">解绑</a>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>
+<block name="script">
+ <script src="__JS__/jquery.validate.js" type="text/javascript"></script>
+    <script>
+        $(function() {
+            if ($('form.mobile_auth').length) {
+                var mobyzurl = "{:U('Member/checkMobile')}";
+                $('form.mobile_auth').validate({
+                    rules: {
+                        mobile: {
+                            required: true,
+                            remote: {
+                                url: mobyzurl,
+                                type: "post",
+                                dataType: "json",
+                                data: {
+                                    mobile: function() {
+                                        return $("#mobile").val();
+                                    },
+                                    typemobile: 1
+                                }
+                            },
+                            ismobile: true
+                        },
+                        code: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        mobile: {
+                            required: '请输入手机号',
+                            remote: '该手机号已注册'
+                        },
+                        code: {
+                            required: '请输入验证码'
+                        }
+                    },
+                    errorPlacement: function(error, element) {
+                        error.appendTo(element.parent().find("span.error"));
+                    }
+                });
+                jQuery.validator.addMethod('ismobile', function(value, element) {
+                    var length = value.length;
+                    var mobile = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0-9]|170|177)\d{8}$/;
+                    return this.optional(element) || (length == 11 && mobile.test(value));
+                }, '请正确填写手机号码');
+            }
+        });
+
+        function getcode(o) {
+            var obj = $(o).parents("form").find("#mobile");
+            var m = $(obj).val();
+            if (m == "" || $(obj).hasClass("error") > 0) {
+                return false;
+            }
+            wait = 60;
+            var h = $.ajax({
+                url: "{:U('Safety/getMobileCode')}",
+                type: "post",
+                dataType: "json",
+                data: {mobile: m},
+                success: function(json) {
+                    if (json.status) {
+                        djstime(o);
+                        layer.msg(json.info);
+                    }
+                    return false;
+                }
+            });
+            return false;
+        }
+        function djstime(o) {
+            if (wait == 0) {
+                o.removeAttribute("disabled");
+                o.value = "免费获取激活码";
+                wait = 60;
+            } else {
+                o.setAttribute("disabled", true);
+                o.value = "重新发送(" + wait + ")";
+                wait--;
+                setTimeout(function() {
+                    djstime(o)
+                }, 1000);
+            }
+        }
+
+        // 设置密码
+
+        $(".changePw-btn").click(function() {
+            $(".changePw").slideToggle();
+        });
+
+        $(function() {
+            if ($('form.setpassword').length) {
+                $('form.setpassword').validate({
+                    rules: {
+                        old: {
+                            required: true
+                        },
+                        password: {
+                            required: true,
+                            minlength: 6,
+                            rangelength: [6, 18]
+                        },
+                        repassword: {
+                            required: true,
+                            minlength: 6,
+                            rangelength: [6, 18],
+                            equalTo: '#password'
+                        }
+                    },
+                    messages: {
+                        old: {
+                            required: '请输入原始密码'
+                        },
+                        password: {
+                            required: '请输入新密码',
+                            minlength: jQuery.validator.format('密码不能小于{0}个字符'),
+                            rangelength: "密码介于{0}和{1}之间的字符串"
+                        },
+                        repassword: {
+                            required: '请确认新密码',
+                            minlength: '确认密码不能小于{0}个字符',
+                            rangelength: "密码介于{0}和{1}之间的字符串",
+                            equalTo: '两次输入密码不一致'
+                        }
+                    },
+                    errorElement: 'label',
+                    errorClass: 'text_error',
+                    highlight: function(e) {
+                        $(e).addClass('text_error');
+                    },
+                    success: function(e) {
+                        $(e).removeClass('text_error');
+                    }
+                });
+            }
+        });
+    </script>
+
+</block>

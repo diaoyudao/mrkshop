@@ -1,0 +1,34 @@
+<if condition="$recordlist">
+<table border="0" cellpadding="0" cellspacing="0" class="jy-list"  >
+    <thead>
+        <tr>
+            <th width="136">姓名</th><th width="160">成交金额</th><th width="136">数量</th><th width="240">时间</th><th class="border_none">规格</th>
+        </tr>
+        <tr  class="bb">
+            <th colspan="5"></th>
+        </tr>
+    </thead>
+    <tbody class="border-top">
+    <volist name="recordlist" id="shopinfo" empty="没有数据">
+        <tr>
+            <td> {$shopinfo['uid']|get_username}</td><td> ￥5{$shopinfo['total']}   </td><td> {$shopinfo['num']} </td><td>  {$shopinfo['create_time']|date='Y-m-d H:i',###} </td><td> {$shopinfo.parameters} </td>
+        </tr>
+    </volist>
+</tbody>
+</table>
+<div class="page_box clear">
+    {$_page}
+</div>
+<script type="text/javascript">
+    function getshoplist(p) {
+        var gid = '{$gid}';
+        $.get('{:U("Cart/ajaxlists")}', {p: p, gid: gid}, function(data) {
+            $("#recordlist").html(data.info);
+        });
+    }
+</script>
+<else />
+   <div class="empty" style="display: none;">
+	暂无成交记录
+    </div>
+</if>

@@ -1,0 +1,151 @@
+<extend name="Base/store_common"/>
+<block name="body">
+    <!-- 内容 -->
+    <div class="towp yh-wrap content_agency clear user_center">
+        <div class="content_left">
+            <include file="Member/member_menu"/>
+        </div>
+        <div class="content right-con2 order-mana my-members">
+            <div class="con-tit clear">
+                <h2 class="">订单列表</h2><a target="_blank" href="{:U('Agent/order_step1')}">添加订单</a></div>
+            <div class="tab_box">
+                <div class="tab">
+                    <ul class="clear">
+                        <li <eq name='day' value='0'>class="active"</eq>><a href="{:U('Agent/orderlist')}">全部</a></li>
+                        <li <eq name='day' value='day1'>class="active"</eq>><a href="{:U('Agent/orderlist',array('day'=>'day1'))}">今日订单</a></li>
+                        <li <eq name='day' value='day0'>class="active"</eq>><a href="{:U('Agent/orderlist',array('day'=>'day0'))}">昨日订单</a></li>
+                        <li <eq name='day' value='day3'>class="active"</eq>><a href="{:U('Agent/orderlist',array('day'=>'day3'))}">近三天订单</a></li>
+                        <li <eq name='day' value='day30'>class="active"</eq>><a href="{:U('Agent/orderlist',array('day'=>'day30'))}">近一个月订单</a></li>
+                    </ul>
+                </div>
+                <div class="conditions search-form">
+                    <ul class="clear">
+                        <li><label for="">订单编号</label><input type="text" class='searchinput' name="tag" id="" value="{:I('tag')}" /></li>
+                        <!--<li><label for="">商品名称</label><input type="" name="" id="" value="" /></li>-->
+                        <!--<li><label for="">手机号码</label><input type="" name="" id="" value="" /></li>-->
+                        <!--                        <li>
+                                                    <label for="">收货地区</label>
+                                                    <select name="">
+                                                        <option value="">省</option>
+                                                        <option value="">1</option>
+                                                        <option value="">4</option>
+                                                        <option value="">7</option>
+                                                    </select>
+                                                    <select name="">
+                                                        <option value="">市区</option>
+                                                        <option value="">2</option>
+                                                        <option value="">5</option>
+                                                        <option value="">8</option>
+                                                    </select>
+                                                    <select name="">
+                                                        <option value="">县</option>
+                                                        <option value="">3</option>
+                                                        <option value="">6</option>
+                                                        <option value="">9</option>
+                                                    </select>
+                                                </li>-->
+                        <li><label for="">订单状态</label>
+                            <select name="status" class="searchinput" style='width: 160px;background:rgba(0, 0, 0, 0) url("__IMG__/bottoms.png") no-repeat scroll 98% center'>
+                                <option value='0'>请选择</option>
+                                <volist name='orderstatus' id='item'>
+                                    <option <if condition="I('status') eq $item['status']">selected='selected'</if>  value="{$item.status}">{$item.txt}</option>
+                                </volist>
+                            </select>
+                            <!--<input type="" name="" id="" value="" />-->
+                        </li>
+                        <li class="clear"><a class="active marl_60" id='search' url="{:U('Agent/orderlist')}" href="javascript:;">搜索</a>
+                            <a href="{:U('Agent/orderlist')}">清空</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="tables">
+                <table width="100%" cellpadding="0" cellspacing="0">
+                    <colgroup span="10">
+                        <col width="11%" />
+                        <col width="6%" />
+                        <col width="15%" />
+                        <col width="10%" />
+                        <col width="13%" />
+                        <col width="9%" />
+                        <col width="9%" />
+                        <col width="9%" />
+                        <col width="9%" />
+                        <col width="9%" />
+                    </colgroup>
+                    <tr>
+                        <th>订单编号</th>
+                        <th colspan='2'>商品名称</th>
+                        <th>收货人</th>
+                        <th>收货地址</th>
+                        <th>付款方式</th>
+                        <th>商品金额</th>
+                        <th>实付金额</th>
+                        <th>交易状态</th>
+                        <th>操作</th>
+                    </tr>
+                    <volist name='orderlist' id='order' empty='没有订单'>
+                        <tr>
+                            <td>{$order.orderid}
+                                <span>{$order.create_time|date="m-d H:i:s",###}6</span>
+                            </td>
+                            <td colspan="2">
+                        <volist name='order.goodslist' id='goods' key='k'>
+                            <div class="border0"><a style='display:block;white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width: 260px;' class="im" href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}">
+                                    <!--<img src="{$goods['pics_img'][$goods['cover_id']]}"/>-->
+                                    {$goods.goodid|get_good_name}
+                                </a>
+                            </div>
+                        </volist>
+                        <!--<div class="border0">日本花王儿童牙膏（70g）</div>-->
+                        </td>
+                        <notempty name="order.address.cellphone" >
+                            <td>{$order.address.realname}
+                                <span>{$order.address.cellphone}</span>
+                            </td>
+                            <td>{$order.address.province}{$order.address.city}{$order.address.area}
+                                <span>{$order.address.address}</span>
+                            </td>
+                            <else />
+                            <td colspan="2"> 补录订单
+                            </td>
+                        </notempty>
+                        <td>{$order.backinfo}</td>
+                        <td>&yen;{$order.total}</td>
+                        <td class="sf">&yen;{$order.pricetotal}</td>
+                        <td>{$order.orderStatus.status_txt}</td>
+                        <td class="border0"><a href="{:U('Agent/orderdetail',array('order_sn'=>$order['tag']))}">编辑订单</a></td>
+                        </tr>
+                    </volist>
+                </table>
+            </div>
+            <div class="pagelist_c">
+                {$_page}
+            </div>
+        </div>
+    </div>
+</block>
+<block name="script">
+    <script type="text/javascript">
+        //搜索功能
+        $("#search").click(function() {
+            var url = $(this).attr('url');
+            var query = $('.search-form').find('.searchinput').serialize();
+            query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g, '');
+            query = query.replace(/^&/g, '');
+            if (url.indexOf('?') > 0) {
+                url += '&' + query;
+            } else {
+                url += '?' + query;
+            }
+            window.location.href = url;
+        });
+        //回车搜索
+        $(".search-input").keyup(function(e) {
+            if (e.keyCode === 13) {
+                $("#search").click();
+                return false;
+            }
+        });
+
+    </script>
+</block>

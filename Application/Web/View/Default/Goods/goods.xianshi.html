@@ -1,0 +1,296 @@
+<extend name="Base/common_index"/>
+<block name='style'>
+    <link href="__CSS__/css.css" rel="stylesheet" type="text/css" />
+    <link href="__CSS__/swiper-3.3.0.min.css" rel="stylesheet" type="text/css" />
+    <style>
+        .all-naiv{display:none;}
+        html,body{
+            background-color: #f5f5f5;
+        }
+        .content_2 h2 a,.content_1 .price_box .price em,.content_1 li a span{
+            color: #f16f71;
+        }
+        .content_1 .price_box a,.hot_right div a{
+            background-color: #f16f71;
+        }
+        .content_1 .price_box a:hover{
+            background-color: #df5d5f;
+        }
+        .content_2,.content_box{
+            margin: 0 0;
+        }
+        .warp_box{
+            padding-top: 20px;
+        }
+        .nav_up{
+            padding: 15px 0;
+            width: 1200px;
+            margin: 0 auto;
+        }
+        .nav_up li{
+            float: left;
+        }
+        .nav_up li a{
+            display: block;
+            text-align: center;
+            height: 48px;
+            line-height: 48px;
+            width: 148px;
+            font-size: 18px;
+            color: #999;
+            background-color: #fff;
+            border: 1px solid #e8e8e8;
+        }
+        .up_1 .current{
+            background-color: #F16F71;
+            color: #fff;
+            border-color: #F16F71;
+        }
+        .up_2 .current{
+            background-color: #fea952;
+            color: #fff;
+            border-color: #fea952;
+        }
+        .up_3 .current{
+            background-color: #cc94e3;
+            color: #fff;
+            border-color: #cc94e3;
+        }
+        .up_4 .current {
+            background-color: #fc9ea0;
+            color: #fff;
+            border-color: #fc9ea0;
+        }
+        .up_5 .current {
+            background-color: #acd871;
+            color: #fff;
+            border-color: #acd871;
+        }
+        .up_6 .current {
+            background-color: #ffa1c5;
+            color: #fff;
+            border-color: #ffa1c5;
+        }
+        .up_7 .current {
+            background-color: #fea952;
+            color: #fff;
+            border-color: #fea952;
+        }
+        .up_8 .current {
+            background-color: #cc94e3;
+            color: #fff;
+            border-color: #cc94e3;
+        }
+        .pos_fx{
+            position: fixed;
+            top: 0;
+            z-index: 999;
+            left: 50%;
+            margin-left: -600px;
+            padding: 0;
+        }
+    </style>
+</block>
+<block name="body">
+    <!-- 轮播 -->
+   <div class="flexslider pr">
+            {:hook('Advs',array('mark'=>'index_A1','domainid'=>'','domaintype'=>'site','show_page'=>'pc_banner'))}
+     </div>
+    <div class="banner_box" style="height: 474px; width: 100%;overflow: hidden; display: none;">
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                {:hook('Advs',array('mark'=>'xianshi_A1','domainid'=>'','domaintype'=>'site','show_page'=>'banner'))}
+            </div>
+        </div>
+        <div class="pagination"></div>
+    </div>
+    <!-- 保证 -->
+    <div class="time_box">
+        <a name="xianshi_tips"></a>
+        <div class="times">
+            <div class="time">
+                <span class="title">距本次结束：</span>
+                <span id="RemainD">{$ptime.day}</span>天
+                <span id="RemainH">{$ptime.hour}</span>时
+                <span id="RemainM">{$ptime.point}</span>分
+                <span id="RemainS">{$ptime.times}</span>秒
+            </div>
+        </div>
+    </div>
+    <!--分类-->
+    <div class="nav_up">
+        <ul class="clear">
+            <li class="up_1"><a <empty name="domainid">class="current" </empty> href="{:U('Goods/xianshi')}#xianshi_tips">全部商品</a></li>
+            <volist name="domainlist" id="domaininfo" key="key" offset="1" length='8'>
+                <li class="up_{$key}"><a <if condition="$domaininfo[id] eq $domainid"> class='current' </if> href="{:U('Goods/xianshi',array('domainid'=>$domaininfo['id'],'id'=>0,'brand'=>0,'p'=>$p ))}#xianshi_tips">{$domaininfo.name}</a></li>
+            </volist>
+        </ul>
+    </div>
+
+    <!-- 内容 -->
+    <div class="wrap" style="background-color: #f5f5f5;">
+        <div class="warp_box">
+            <div class="content_box">
+                <div class="content_1 content_2">
+                    <notempty name="xianshi_goods_list">
+                        <ul class="clear">
+                            <volist name="xianshi_goods_list" id="goods" offset="0" length='6'>
+                                <li class="product">
+                                    <div class="imgs">
+                                        <a href="{:U('Goods/detail',array('active'=>'pomotion','id'=>$goods['goods_id']))}">
+                                            <img src="__PICURL__{$goods.goods_image|get_cover='path'}" /></a><span>保税</span>
+                                    </div>
+                                    <p><a href="{:U('Goods/detail',array('active'=>'pomotion','id'=>$goods['goods_id']))}">
+                                            <span>【{$goods.xianshi_title}】</span>{$goods.goods_name}</a></p>
+                                    <div class="price_box">
+                                        <div class="price">
+                                            <em>￥{$goods.xianshi_price}</em>
+                                            <i>剩余数量：{$goods.xianshi_stock}件</i>
+                                        </div>
+                                        <a href="{:U('Goods/detail',array('active'=>'pomotion','id'=>$goods['goods_id']))}">立即抢购</a>
+                                    </div>
+                                </li>
+                            </volist>
+                        </ul>
+                        <else/>
+                        <div class="no_data">
+                            <h3>
+                                <i class=""> <img src="__IMG__/confirmGoods/ts.png"/> </i> 没有搜索到限时抢购商品！
+                            </h3>						        	
+                        </div>
+                    </notempty>
+
+                </div>
+
+
+                <div class="content_1">
+                    <!--                    <ul class="clear">
+                                            <volist name="xianshi_goods_list" id="goods" offset="0" length='6' empty="$empty">
+                                                <li class="product">
+                                                    <div class="imgs">
+                                                        <a href="{:U('Goods/detail',array('active'=>'pomotion','id'=>$goods['goods_id']))}">
+                                                            <img src="__PICURL__/{$goods.domainid}/{$goods.goods_image|get_cover='path'}" /></a><span>保税</span>
+                                                    </div>
+                                                    <p><a href="">{$goods.goods_name}</a></p>
+                                                    <div class="price_box">
+                                                        <div class="price">
+                                                            <em>￥{$goods.xianshi_price}</em>
+                                                            <i>剩余数量：{$goods.xianshi_stock}件</i>
+                                                        </div>
+                                                        <a href="{:U('Goods/detail',array('active'=>'pomotion','id'=>$goods['goods_id']))}">立即抢购</a>
+                                                    </div>
+                                                </li>
+                                            </volist>
+                                        </ul>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</block>
+<block name='script'>
+        <script type="text/javascript" src="__JS__/jquery.flexslider-min.js"></script>
+         
+    <!--<script src="__JS__/time.js" type="text/javascript" charset="utf-8"></script>-->
+    <script type="text/javascript">
+         $(function(){
+                   $('.flexslider').flexslider({
+                            directionNav: true,
+                            pauseOnAction: false
+                    }); 
+                });
+        
+        var mySwiper = new Swiper('.swiper-container', {
+            autoplay: 5000, //可选选项，自动滑动
+            pagination: '.pagination',
+            paginationClickable: true,
+            loop: true,
+        });
+
+        function FreshTime()
+        {
+            var endtime = new Date("{$xianshi.end_time|date='Y/m/d, H:i:s',###}");//结束时间
+            var nowtime = new Date();//当前时间
+            var lefttime = parseInt((endtime.getTime() - nowtime.getTime()) / 1000);
+            d = parseInt(lefttime / 3600 / 24);
+            h = parseInt((lefttime / 3600) % 24);
+            m = parseInt((lefttime / 60) % 60);
+            s = parseInt(lefttime % 60);
+
+            document.getElementById("RemainD").innerHTML = d;
+            document.getElementById("RemainH").innerHTML = h;
+            document.getElementById("RemainM").innerHTML = m;
+            document.getElementById("RemainS").innerHTML = s;
+            if (lefttime <= 0) {
+                document.getElementById("LeftTime").innerHTML = "团购已结束";
+                clearInterval(sh);
+            }
+            ;
+        }
+        ;
+        FreshTime();
+        var sh;
+        sh = setInterval(FreshTime, 1000);
+
+        /*var mySwiper = new Swiper('.swiper-container', {
+         autoplay: 2000,
+         loop: true,
+         // 如果需要分页器
+         pagination: '.swiper-pagination',
+         // 如果需要前进后退按钮
+         nextButton: '.swiper-button-next',
+         prevButton: '.swiper-button-prev',
+         });*/
+        $('.classify ul li:gt(4)').hide();
+        $('.classify_btn a').click(function() {
+            if ($(this).text() == '更多') {
+                $(this).text('收取').addClass('active');
+                $('.classify ul li:gt(4)').show();
+            } else {
+                $(this).text('更多').removeClass('active');
+                $('.classify ul li:gt(4)').hide();
+            }
+            ;
+        });
+        $('.texture ul li:gt(4)').hide();
+        $('.texture_btn a').click(function() {
+            if ($(this).text() == '更多') {
+                $(this).text('收取').addClass('active');
+                $('.texture ul li:gt(4)').show();
+            } else {
+                $(this).text('更多').removeClass('active');
+                $('.texture ul li:gt(4)').hide();
+            }
+            ;
+        });
+        $('#add').click(function() {
+            if (parseInt($('.pages em').text()) > 1) {
+                var value = parseInt($('.pages em').text()) - 1;
+                $('.pages em').text(value);
+            }
+        })
+        $('#dle').click(function() {
+            if (parseInt($('.pages em').text()) < 13) {
+                var value = parseInt($('.pages em').text()) + 1;
+                $('.pages em').text(value);
+            }
+        })
+        $('.rank_box .rank2 li a').click(function() {
+            $('.rank_box .rank2 li a').removeClass('active');
+            $(this).addClass('active');
+        })
+        /*$(function() {
+         $('.xlph-list > li').mouseenter(function() {
+         $(' .active').removeClass("active");
+         $(this).toggleClass("active");
+         });
+         var nav = $('#j_nav');
+         var navTop = nav.offset().top;
+         $(window).scroll(function(e) {
+         if ($(this).scrollTop() >= navTop) {
+         nav.addClass('m-nav-fix');
+         } else {
+         nav.removeClass('m-nav-fix');
+         }
+         });*/
+    </script>
+</block>

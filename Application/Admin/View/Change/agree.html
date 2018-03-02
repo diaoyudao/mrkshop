@@ -1,0 +1,168 @@
+<extend name="Public/base"/>
+#tab1 table{border-right:1px solid #F00;border-bottom:1px solid #F00}
+#tab1 table td{border-left:1px solid #F00;border-top:1px solid #F00}
+<block name="body">
+    <style>
+        .apply-feedback, .apply { border: 1px solid #329ed1;}
+    </style>
+    <div class="main-title">
+        <h2>同意退货</h2>
+    </div>
+    <ul class="tab-nav nav">
+        <li data-tab="tab1" class="current"><a href="javascript:void(0);">填写退货地址</a></li>
+        <li data-tab="tab2" ><a href="javascript:void(0);">商品退货动态</a>
+
+        </li></ul>
+    <div class="tab-content">						
+
+        <div id="tab1" class="tab-pane in tab1">
+            <form action="{:U()}" method="post" class="form-horizontal">
+                <div class="form-item">
+                    <label class="item-label">退货联系人<span class="check-tips">（店家联系人）</span></label>
+                    <div class="controls">
+                        <input type="text" class="text input-large" name="acceptname" value="{:C('SHOPNAME')}    ">
+                    </div>
+                </div>	
+                <div class="form-item">
+                    <label class="item-label">退货地址<span class="check-tips">（店家收货地址）</span></label>
+                    <div class="controls">
+                        <input type="text" class="text input-large" name="acceptaddress" value="{:C('SHOPNAME')}  {:C('ADDRESS')} ">
+                    </div>
+                </div>
+                <div class="form-item">
+                    <label class="item-label">联系方式<span class="check-tips">（店家联系电话）</span></label>
+                    <div class="controls">
+                        <input type="text" class="text input-large" name="acceptphone" value=" {:C('CONTACT')}">
+                    </div>
+                </div>	
+
+                <div class="form-item">
+                    <label class="item-label">备注信息<span class="check-tips">（店家退货说明）</span></label>
+                    <div class="controls">
+                        <input type="text" class="text input-large" name="admin_message" value="{$info.admin_message}">
+                    </div>
+                </div>
+
+                <div class="form-item">
+                    <label class="item-label">状态<span class="check-tips">（系统生成，不可更改）</span></label>
+                    <div class="controls">
+                    		<input type="text" class="text input-large" readonly="readonly" value="同意退货" />
+                        <input type="hidden"  name="refund_state" value="1" >
+                    </div>
+                </div>
+                <div class="form-item">
+                    <input type="hidden" name="id" value="{$info.refund_id|default=''}">
+                    <input type="hidden" name="shopid" value="{$info.order_goods_id|default=''}">
+                    <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+                    <button class="btn btn-return" onclick="javascript:history.back(-1);
+                            return false;">返 回</button>
+                </div>
+            </form></div>
+
+        <div id="tab2" class="tab-pane  tab2">
+            <div class="back-detail" >     
+                <empty name='info'>
+                    <div class="personal_info_none_goods">
+                        <p>没有该订单，<a href='{:U("index/index")}' class="red">查询错误</a></p>
+
+                    </div>
+                    <else />
+
+
+                    <div class="apply">  
+                        <h3 style="display: block;color:white;background:#329ed1">买家申请退货说明</h3>
+
+                        <div class="apply-wrap">
+                            <div class="back-detail-asc">	<p>申请时间：{$info.add_time|date='Y-m-d H:i:s',###} </p><p>名称：{$info.goods_id|get_good_name} </p>
+                                <p>金额：{$info.refund_amount} 数量：{$info.goods_num}</p>
+                                <p>标题：{$info.reason_info}</p>
+
+                                <p>原因：{$info.buyer_message}</p>
+                            </div>
+                            <div class="back-good-img">
+                                <!--<img src="{$info.goods_id|get_cover_id|get_cover='path'}"  width="170" height="170"/>--> 
+                                <img src="{$info.goods_id|get_cover_picture_url}"  width="170" height="170"/> 
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="apply-feedback">      
+                        <h3 style="display: block;color:white;background: #329ed1">卖家反馈</h3>  
+                        <p>反馈时间：{$info.admin_time|date='Y-m-d H:i:s',###}</p>  
+                        <p>动态：<span class="red">
+                                <php>
+                                    $status=$info['refund_state'];
+                                    if($status==0){ echo "待审核";}; 
+                                    if($status==1){ echo "同意退货";};
+                                    if($status==2){ echo "管理员已处理";};
+                                    if($status==3){ echo "已完成";};
+                                    if($status==-2){ echo "拒绝买家申请";};
+                                </php></span></p> 
+
+                        <if condition="$info.refund_state eq 1">
+                            <p>退货地址：<span class="red">
+                                    <i class="glyphicon glyphicon-user"></i>{$info.acceptname}  
+                                    <i class="glyphicon glyphicon-map-marker"></i>{$info.acceptaddress}  
+                                    <i class="glyphicon glyphicon-phone"></i>{$info.acceptphone}</span>
+                            </p>
+                            <p style="display: block;color:white;background: #329ed1">买家退货快递</p>
+                            <!--<form action="{:U('order/backkuaidi')}" method="post" class="form-horizontal">-->
+                            <!--<input type="hidden" class="text input-large"  name="backid"  value="{$info.id}">-->
+                            <p>快递名称：<input type="text" class="text input-large"  name="buyer_express_name" value="{$info.buyer_express_name}"  ></p>
+                            <p>快递单号：<input type="text" class="text input-large"  name="buyer_express_no" value="{$info.buyer_express_no}" ></p>
+                            <!--<p><input type="submit" class="btn_submit_pay" value="提交" /></p>-->
+
+                            <!--</form>-->
+                            <else /> 
+
+                        </if>
+                        <if condition="$info.refund_state eq -2">     
+                            <p>拒绝原因：{$info.admin_message} {$info.receive_message}</p>
+                            <else /> 
+                        </if>  
+                        <if condition="$info.refund_state eq 2">
+                            <p>退货地址：<span class="red"><i class="glyphicon glyphicon-user"></i>{$info.acceptname}  
+                                    <i class="glyphicon glyphicon-map-marker"></i>{$info.acceptaddress}<i class="glyphicon glyphicon-phone"></i>
+                                    {$info.acceptphone}</span></p>
+                            <h3 style="display: block;color:white;background: #329ed1">买家退货快递</h3>
+                            <p>快递名称：{$info.buyer_express_name}</p>
+
+                            <p>快递单号：{$info.buyer_express_no}</p>
+
+                            <else /> 
+                        </if>
+                        <if condition="$info.refund_state eq 3">
+                            <p>退货地址：<span class="red"><i class="glyphicon glyphicon-user"></i>{$info.acceptname}  
+                                    <i class="glyphicon glyphicon-map-marker"></i>{$info.acceptaddress}  <i class="glyphicon glyphicon-phone"></i>
+                                    {$info.acceptphone}</span></p>
+                            <h3 style="display: block;color:white;background: #329ed1">买家退货快递</h3>
+                            <p>快递名称：{$info.buyer_express_name}</p>
+
+                            <p>快递单号：{$info.buyer_express_no}</p>
+                            <else /> 
+                        </if>
+                </empty>
+            </div>
+
+        </div>
+    </div>
+</div>
+</block>
+<block name="script">
+    <script type="text/javascript" charset="utf-8">
+        //导航高亮
+        highlight_subnav('{:U('index')}');
+        if ($('ul.tab-nav').length) {
+            //当有tab时，返回按钮不显示
+            $('.btn-return').hide();
+        }
+        $(function() {
+            //支持tab
+            showTab();
+        })
+
+    </script>
+</block>

@@ -1,0 +1,44 @@
+<extend name="Base/store_common"/>
+<block name="body">
+    <div class="wrap" style="background-color: #f5f5f5;">	
+        <div class="content_agency towp clear user_center user_center_pay">
+            <div class="content_left">
+                <include file="Member/member_menu"/>
+            </div>
+            <div class="content_right stores" style="border: 0;">
+                <h2><a href="{:U('Agent/index')}">会员中心</a> > 门店信息</h2>
+                <table class="fl tab_left">
+                    <caption>联系信息</caption>
+                    <tr>
+                        <td class="tr">店长姓名：</td>
+                        <td>{$memberInfo.realname}</td>
+                    </tr>
+                    <tr>
+                        <td class="tr">联系手机：</td>
+                        <td>{$memberInfo.mobile}</td>
+                    </tr>	
+                    <tr>
+                        <td class="tr">门店地址：</td>
+                        <td>{$memberInfo.province}{$memberInfo.city}{$memberInfo.area}{$memberInfo.address}</td>
+                    </tr>				
+                </table>
+                <table class="fl tab_right ">
+                    <caption>银行信息</caption>
+                    <tr>
+                        <td class="tr">银行名称：</td>
+                        <td>{$bankinfo.bankname}</td>
+                    </tr>
+                    <tr>
+                        <td class="tr">银行姓名：</td>
+                        <td>{$bankinfo.bankuser}</td>
+                    </tr>	
+                    <tr>
+                        <td class="tr">银行卡号：</td>
+                        <td>{$bankinfo.bankcode}</td>
+                    </tr>	
+                </table>			
+
+            </div>
+        </div>
+    </div>
+</block>

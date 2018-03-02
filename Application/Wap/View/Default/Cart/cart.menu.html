@@ -1,0 +1,14 @@
+<ul class="herd_nav" style="display:none;">
+    <if condition="$type1_count gt 0 or 1">
+        <li <eq name='ACTION_NAME' value='index'>class="hover"</eq> ><a href="{:U('Cart/index')}">普通商品（{$type1_count}）</a></li>
+    </if>
+    <if condition="$type2_count gt 0">
+        <li <eq name='ACTION_NAME' value='bonded'>class="hover"</eq>><a href="{:U('Cart/bonded')}">保税商品（{$type2_count}）</a></li>
+    </if>
+    <if condition="$type3_count gt 0 or 1">
+        <li <eq name='ACTION_NAME' value='zhiyou'>class="hover"</eq>><a href="{:U('Cart/zhiyou')}">直邮商品（{$type3_count}）</a></li>
+    </if>
+    <if condition="$type4_count gt 0 or 1">
+        <li <eq name='ACTION_NAME' value='store'>class="hover"</eq>><a href="{:U('Cart/store')}">门店商品（{$type4_count}）</a></li>
+    </if>
+</ul>

@@ -1,0 +1,95 @@
+<div class="newBatch">
+    <form method="post" action="{:U('express/add')}"  class="express_add" onsubmit="validateCallback(this, dialogAjaxDone);
+            return false;">
+        <div class="newBatch_cnt">
+            <div class="bh clear">
+                <span><i>*</i>货架编号：</span><label>L-</label>
+                <input type="text" name="alias" id="alias" value="{$expressinfo.alias}" placeholder="请输入货架编号" style="width:178px"/>
+                <label class="error">提示信息</label>
+            </div>
+            <div class="bh clear">
+                <span><i>*</i>货架名称：</span>
+                <input type="text" name="name" id="name" value="{$expressinfo.name}" placeholder="请输入货架名称"  style="width:194px"/>
+            </div>
+            <div class="xh clear">
+                <span><i>*</i>货架型号：</span>
+                <ul class="clear express_type11">
+                    <volist name="type_list" id="type" key="k">
+                        <if condition="$expressinfo.type EGT 1 ">
+                            <if condition="$expressinfo.type eq $k ">
+                                <li><a class="active express_type" onclick="type_select(this, 'type');"  href="javascript:;" gtype="{$k}">{$type}</a></li>
+                                <input type="hidden" name="type" value="{$expressinfo.type}"/>
+                                <else />
+                                <li><a  onclick="type_select(this, 'type');" href="javascript:;"gtype="{$k}">{$type}</a></li>
+                            </if>
+                            <else/>
+                            <eq name="k" value="1">
+                            <li><a class="active express_type" onclick="type_select(this, 'type');"  href="javascript:;" gtype="{$k}">{$type}</a></li>
+                            <input type="hidden" name="type" value="{$k}"/>
+                            <else/>
+                            <li><a  class="express_type" onclick="type_select(this, 'type');" href="javascript:;"gtype="{$k}">{$type}</a></li>
+                            </eq>
+                        </if>
+                    </volist>
+                </ul>
+            </div>
+            <div class="xh clear">
+                <span><i>*</i>货架使用状态：</span>
+                <ul class="clear">
+                    <volist name="status_list" id="status" key="keyee">
+                        <if condition="$expressinfo.status EGT 0 ">
+                            <if condition="$expressinfo.status eq $status.k ">
+                                <li><a class="active" onclick="type_select(this, 'status');" href="javascript:;" gtype="{$status.k}">{$status.val}</a></li>
+                                <notempty name='expressinfo.status'>
+                                    <input type="hidden" name="status" value="{$expressinfo.status}"/>
+                                    <else/>
+                                    <input type="hidden" name="status" value="{$status.k}"/>    
+                                </notempty>
+                                <else/>
+                                <li><a onclick="type_select(this, 'status');"  href="javascript:;" gtype="{$status.k}">{$status.val}</a></li>
+                            </if>
+                            <else/>
+                            <eq name="status.k" value="1">
+                            <li><a class="active" onclick="type_select(this, 'status');" href="javascript:;" gtype="{$status.k}">{$status.val}</a></li>
+                            <input type="hidden" name="status" value="{$status.k}"/>    
+                            <else/>
+                            <li><a onclick="type_select(this, 'status');"  href="javascript:;" gtype="{$status.k}">{$status.val}</a></li>
+                            </eq>
+                        </if>
+                    </volist>
+                </ul>
+            </div>
+            <input type="hidden" name='id' value='{$expressinfo.id}'>
+            <!--<a class="confirm submit-add"  href="javascript:;">确定</a>-->
+            <input type="submit" class="confirm" value="确定"/>
+        </div>
+    </form>
+</div>
+<script>
+    $(function() {
+        if ($('form.express_add').length) {
+            $('form.express_add').validate({
+                rules: {
+                    alias: {
+                        required: true,
+                        rangelength: [2, 10]
+                    },
+                    name: {
+                        required: true,
+                        rangelength: [2, 10]
+                    }
+                },
+                messages: {
+                    alias: {
+                        required: '请输入货架编号',
+                        rangelength: "货架编号{0}和{1}之间的字符串"
+                    },
+                    name: {
+                        required: '请输入货架名称',
+                        rangelength: "货架名称{0}和{1}之间的字符串"
+                    }
+                }
+            });
+        }
+    });
+</script>

@@ -1,0 +1,445 @@
+<extend name="Base/common_index"/>
+<block name='style'>
+    <link href="__CSS__/css.css" rel="stylesheet" type="text/css" />
+    <link href="__CSS__/swiper-3.3.0.min.css" rel="stylesheet" type="text/css" />
+    <style>
+        .all-naiv{display:none;}
+				.detail-wrap h2{
+					white-space: normal;
+			    min-height: 32px;
+			    height: auto;
+			    line-height: normal;}
+					.collected i{ background: url(__IMG__/add_15.png) no-repeat -33px 2px !important;}
+    </style>
+</block>
+<block name="body">
+    <!-- 位置 -->
+    <div class="towp  position">
+        您的位置：
+        <span><a href="{:U('Index/index')}" title="">首页 </a> </span>
+        <span class="fonS"> > </span>
+        <if condition="$domaindinfo">
+            <a href="{:U('goods/lists',array('domainid'=>$domaindinfo['id']))}" title="{$domaindinfo.name}">{$domaindinfo.name}</a>
+            <span>&gt;</span>
+        </if>
+        <if condition="$info['cateinfo']['p']">
+            <a href="{:U('Goods/lists',array('domainid'=>$info['cateinfo']['p']['domainid'],'id'=>$info['cateinfo']['p']['id']))}" title="">{$info.cateinfo.p.title}</a>
+            <span>&gt;</span>
+        </if>
+        <if condition="$info['cateinfo']">
+            <a href="{:U('Goods/lists',array('domainid'=>$info['cateinfo']['domainid'],'id'=>$info['cateinfo']['id']))}" title="{$info.cateinfo.title}">{$info.cateinfo.title}</a>
+            <span>&gt;</span>
+        </if>
+        <span class="colo1"> {$info.title}</span>  
+    </div>
+    <!-- 详情 -->
+    <div class="detail towp  clear">
+        <div class="preview ">
+            <div class="smallImg">
+                <div class="scrollbutton smallImgUp disabled"></div>
+                <div id="imageMenu">
+                    <ul class="det-thumb ">
+                        <volist name="info.pics_img" id="picimg" key='k' >
+                            <eq name='k' value='1'>
+                            <li id="onlickImg">
+                                <img src="{$picimg}" midsrc="{$picimg}" bigsrc="{$picimg}" />
+                            </li>
+                            <else/>
+                            <li>
+                                <img src="{$picimg}" midsrc="{$picimg}" bigsrc="{$picimg}" />
+                            </li>
+                            </eq>
+                        </volist>
+                    </ul>
+                </div>
+                <div class="scrollbutton smallImgDown"></div>
+            </div>
+            <div id="vertical" class="booth bigImg">
+                <!--<img src="{$info['pics_img'][$info['cover_id']]}" id="midimg" alt="{$info.title}">-->
+                <volist name="info.pics_img" id="picimg" key='k' >
+                            <eq name='k' value='1'>
+                                <img src="{$picimg}" id="midimg" alt="{$info.title}" />
+                            </eq>
+                        </volist>
+                
+                <div style="display:none;" id="winSelector"></div>
+                <p class="AddFavorite">
+                    <a href="javascript:;" class="addfavortable <eq name='info.favor' value='1'>collected</eq>" data-id="{$info.id}" title="<eq name='info.favor' value='1'>取消收藏<else />收藏商品</eq>">
+		                	<i class="bg"></i><span><eq name='info.favor' value='1'>已收藏<else />收藏商品</eq>({$goodscollect})</span></a>
+                商品编号：{$info.pcode}
+                </p>
+            </div>
+            <div id="bigView" style="display:none;"><img width="800" height="800" alt="" src="" /></div>
+        </div>
+
+        <!--详情参数 start-->
+
+        <div class="detail-wrap ">
+            <div class="pro-info">
+                <h2 title="{$info.title}">{$info.title}</h2>
+                <p class="de-intr">{:strip_tags($info['description'])}</p>
+            </div>
+            <div class="de-price">
+                <p>市场价：<s><span class="fm_1">￥</span><span id="zzmarketprice">{$info.marketprice}</span></s></p>
+                <p>原价：<s class="fm_1">￥</s><span class="big-font c_line" id="zzprice">{$info.price}</span></p>
+                <!---有促销价时显示--->
+                <p class="fc3">会员价：<span class="fm_1">￥</span><span class="big-font" id="zzmemberprice">{$info.member_price}</span></p>
+                <!--结束--->
+                <!---没有促销价时显示--->
+                <!--<p class="fc3">会员价：<span class="fm_1">￥</span><span class="big-font">1500.00</span></p>-->
+                <!---结束-->
+                <!--促销价--->
+                <div class="line_2"></div>
+                <p>当前库存：<span class="sales_num">
+                <if condition="($info['stock'] gt $info['storage_alarm'])">
+                        &nbsp;有货   
+                        <else />
+                        &nbsp; {$info['stock']}
+                    </if>
+                    </span></p>
+                
+                
+            </div>
+
+            <div class="four">
+                <volist name="info.goodattr" id="attr"> 
+                    <dl class="taste" style="min-height:26px;height:auto !important;overflow:hidden;padding-left:65px"><dt>{$attr.name}：</dt>
+                        <if condition="$attr['attr_type'] eq 1">
+                            <volist name="attr.sub" id="subs">
+                                <dd style="margin-bottom:5px" class="pro_taocan <eq name='key' value='0'> active2</eq>" onclick="selecradiotattr(this);" attrid="{$subs.id}" price="{$subs.price|default=0}">{$subs.value}(+&yen;{$subs.price|default=0})</dd>
+                            </volist>
+                            <else />
+                            <volist name="attr.sub" id="subs">
+                                <dd style="margin-bottom:5px" class="pro_checkbox_taocan <eq name='key' value='0'> active2</eq>" onclick="selectcheckboxattr(this);" attrid="{$subs.id}" price="{$subs.price}">{$subs.value}(+&yen;{$subs.price})</dd>
+                            </volist>
+                        </if>
+                    </dl>
+                </volist> 
+            </div>
+            <if condition="($info['stock'] gt 0) and ($info['issales'] eq 1)">
+                <dl class="count "><dt>数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;量：</dt>
+                    <dd class="coun-min">-</dd><dd class="count-num"> 
+                        <input id="coun-num" class="goods_number"  maxlength="3" type="text" value="1" ></dd>
+                    <dd class="coun-plu">+</dd>
+<!--                    <if condition="($info['stock'] gt $info['storage_alarm'])">
+                        &nbsp;（有货）    
+                        <else />
+                        &nbsp; {$info['stock']}
+                    </if>-->
+
+                </dl>
+                <div class="pay-add">
+                    <a class="topay nowbuybutton" href="javascript:;;" >立即购买</a>
+                    <a href="javascript:;;" class="add-car addcartbutton"><i class="bg"></i>加入购物车</a>
+                </div>
+                <else />
+                <!-- 已抢光 -->
+                <div class="tips">
+                    <img src="__IMG__/sale_out.png" />
+                </div>
+            </if>
+            <form id='buynow' action="{:U('Checkout/buynow')}" method="post">
+                <input type="hidden" name="id" id="goodid" value="{$info.id}"/> 
+                <input type="hidden" name="price[]" id="inputprice" value="{$info.price}"/> 
+                <input type="hidden" name="memberprice[]" id="inputmemberprice" value="{$info.member_price}"/> 
+                <input type="hidden" name="marketprice[]" id="inputmarketprice" value="{$info.marketprice}"/> 
+                <input type="hidden" name="sort[]"  value="{$info.id}"/>
+                <input type="hidden" name="parameters[]" id="parametersid" /> 
+                <input type="hidden" name="store_id" id="store_id" value="0" /> 
+                <input type="hidden" name="proid" id="proid" value="0" /> 
+                <input type="hidden" name="number" id="number" value="1" /> 
+            </form>
+
+        </div>
+
+        <!--详情参数 end-->
+
+        <notempty name='history_list'>
+            <php> $count = count($history_list);</php>
+            <if condition="$count gt 3">
+                <div class="warp-fr">
+                    <p><span>看了又看</span></p>
+                    <div class="btn_box">
+                        <div class="swiper-container">
+                            <div class="swiper-wrapper">
+                                <volist name="history_list" id="tj" key="key" empty="没有数据">
+                                    <div  id="btn{$key}" class="swiper-slide">
+                                        <a href="{:U('Goods/detail',array('channelname'=>$tj['channelname'],'id'=>$tj['id']))}" title="">
+                                            <img style="width:160px; height: 160px;" src="{$tj['pics_img'][$tj['cover_id']]}" alt="{$tj.title|msubstr=0,27}" title="{$tj.title|msubstr=0,27}"></a>
+                                        <span>￥{$tj.price}</span>
+                                    </div>
+                                </volist>
+                            </div>
+                            <!-- Add Arrows -->
+                        </div>
+                        <div class="swiper_btn">
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
+                        </div>
+                    </div>
+                </div>
+                <else/>
+                <div class="warp-fr klike" style="height:445px">
+                    <p><span>看了又看</span></p>
+                    <volist name="history_list" id="tj" key="key" empty="没有数据">
+                        <div id="btn1" class="swiper-slide" style="height:103.3333px">
+                            <a href="{:U('Goods/detail',array('channelname'=>$tj['channelname'],'id'=>$tj['id']))}">
+                                <img src="{$tj['pics_img'][$tj['cover_id']]}"/></a><span>￥{$tj.price}</span>
+                        </div>
+                    </volist>
+                    <!--                    <div id="btn1" class="swiper-slide" style="height:103.3333px">
+                                            <a href="javascript:;"><img src="include/img/cp.png"/></a><span>￥109.00</span></div>-->
+                </div>
+            </if>
+        </notempty>
+    </div>
+</div>
+<!--<div class="mask-black"></div>
+<div class="add-goods">
+    <span class="close fr"><input class="yd-colse" name="" value="X" type="button" ></span>
+    <p class="f14 fb f3">您选购的商品已经添加到购物车</p>
+    <p>
+        <span class="fl"><a class="" href="#"><span class="go-shop">&lt;&lt; 继续购物</span></a></span>
+        <span class="btncheck"><a href="#">立即结算</a></span>
+    </p>
+</div>-->
+<!-- 详情列表 S -->
+<!-- 详情内容 S -->
+<div class="container towp  clear">
+    <div class="left-bar fl">
+        <notempty name='hotgoodlist'>
+            <div class="hot">
+                <h2><i class="bg"></i>热销推荐</h2>
+                <div class="hot-tj" >
+                    <ul>
+                        <volist name="hotgoodlist" id="hotgood" empty="没有热销推荐">
+                            <li><a href="{:U('Goods/detail',array('channelname'=>$hotgood['channelname'],'id'=>$hotgood['id']))}" title="{$hotgood.title}">
+                                    <img src="{$hotgood['pics_img'][$hotgood['cover_id']]}" alt="{$hotgood.title}">
+                                    <strong>
+                                        {:getsubstrutf8($hotgood['title'],0,15)}
+                                    </strong></a>
+                                <span class="price">&yen;{$hotgood.price}</span>
+                            </li>
+                        </volist>
+                    </ul>
+                </div>
+            </div>
+        </notempty>
+        <div class="rank">
+            <h2><i class="bg"></i>销量排行</h2>
+            <div class="rank-tj" >
+                <ul>
+                    <volist name="salesgoodlist" id="salesgood" empty="没有销量排行">
+                        <li><a href="{:U('Goods/detail',array('channelname'=>$salesgood['channelname'],'id'=>$salesgood['id']))}" title="{$salesgood.title}">
+                                <img src="{$salesgood['pics_img'][$salesgood['cover_id']]}" alt="{$salesgood.title}">
+                                <strong>
+                                    {:getsubstrutf8($salesgood['title'],0,15)}
+                                </strong></a>
+                            <span class="price">&yen;{$salesgood.price}</span>
+                        </li>
+                    </volist>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="de-content ">
+        <div class="cont-tit" id="j_nav2">
+            <a  class="active4" href="#spxq">商品详情</a>
+            <a href="#pjxq">评价详情({$info.comment})</a>
+            <a href="#jyjl">交易记录({$recordcount})</a>
+            <a class="add-car addcartbutton">加入购物车</a></div>
+        <div class="pro-intr"  id="spxq">
+            <ul class="cp_clist">
+                <volist name="contentgoodattr" id="attrs">
+                    <li><span>{$attrs.name}：</span>{$attrs.value}</li>
+                </volist>
+            </ul>
+        </div>
+        <!--商品详情 S-->
+        <div class="rcon_edit" >
+            <div class="detail-img">
+                {$info.content}
+            </div>
+        </div>
+        <!--  评价详情S -->
+        <div id="pjxq">
+            <!--<div class="pro-intr clear ">-->
+            <!--<div class="title clear fl" ><span class="tit">好评率</span><br /><span class="fon60 fl c5">100%</span></div>-->
+            <!--<div class="fl   com">-->
+            <!--<p>好评 <span class="c5">(80)</span><i class="good"><span></span></i></p>-->
+            <!--<p>中评 <span class="c5">(20)</span><i class="soso"><span></span></i></p>-->
+            <!--<p>差评 <span class="c5">(10)</span><i class="bad"><span></span></i></p>-->
+            <!--</div>-->
+            <!--</div>-->
+
+            <!--  评价列表 S -->
+            <div class="dh" id="aboutcommentlist">
+                {$aboutcommentlist}
+            </div>
+            <!--  评价列表 E -->
+            <!--交易记录 S-->
+            <div id="jyjl" id="recordlist">
+                {$recordlist}
+            </div> 
+            <!--交易记录 E-->
+        </div>
+    </div>
+</div>
+
+</block>
+<block name='script'>
+<script type="text/javascript" src="__JS__/zoom.1.0.1.js" ></script>
+<script type="text/javascript" src="__JS__/swiper.jquery.min.js"></script>
+<script>
+var delcollect_url = '{:U("Favortable/delcollect")}';
+$(function() {
+    // 加入购物车
+    $(".addcartbutton").click(function() {
+        // 检查库存
+        var stock = "{$info.stock}";
+        var goods_number = parseInt($("#coun-num").val());
+        if (goods_number > stock) {
+            layer.msg("商品库存不足 ！");
+            return false;
+        }
+        var parameters = $("#parametersid").val();//参数
+        addcart('{$info.id}', goods_number, '{$info.member_price}', parameters, 0, 0, 0);
+        return false;
+    });
+
+    // 立即购买
+    $(".nowbuybutton").click(function() {
+        var is_login = "{:is_login()}";
+        if (is_login <= 0) {
+            layer.msg('请先登录');
+            location.href = "{:U('Member/login')}";
+            return false;
+        }
+        $("input[name=number]").val(parseInt($("#coun-num").val()));
+        $("#buynow").submit();
+        return false;
+    });
+    
+    // 增加商品数量
+    $('.coun-plu').on('click', function() {
+        var _temp_num = 0;
+        if (isNaN(parseInt($('#coun-num').val()))) {
+            _temp_num = 0;
+        } else {
+            _temp_num = parseInt($('#coun-num').val());
+        }
+        if (_temp_num + 1 > "{$info.stock}") {
+            layer.msg('商品库存不足');
+            return false;
+        }
+        $('#coun-num').val(_temp_num + 1);
+    });
+    // 减少商品数量
+    $('.coun-min').on('click', function() {
+        if ($('#coun-num').val() > 1) {
+            $('#coun-num').val(parseInt($('#coun-num').val()) - 1);
+        } else {
+            $('#coun-num').val(1);
+        }
+    });
+    resetproductprice();
+});
+</script>
+<script>
+var ajaxcomment = 0, ajaxaboutask = 0;
+function selecradiotattr(obj) {
+    $(obj).parent().find(".pro_taocan").removeClass("active2");
+    $(obj).addClass('active2');
+    picArr = [];
+    var objo = $("div.four");
+    for (var i = 0; i < objo.find("dd.active2").length; i++) {
+        picArr.push(objo.find('.active2:eq(' + i + ')').attr('attrid'));
+    }
+    picStr = picArr.join(',');
+    $("#parametersid").val(picStr);
+    resetproductprice();
+}
+
+function resetproductprice() {
+    var attrprice = 0;
+    var objo = $("div.four");
+    var pi = 0;
+    picArr = [];
+    for (var i = 0; i < objo.find("dd.active2").length; i++) {
+        pi = objo.find('.active2:eq(' + i + ')').attr('price');
+        picArr.push(objo.find('.active2:eq(' + i + ')').attr('attrid'));
+        attrprice += parseFloat(pi);
+    }
+    picStr = picArr.join(',');
+    $("#parametersid").val(picStr);
+    var gprice = $("#inputprice").val();//价格
+    var sprice = parseFloat(attrprice) + parseFloat(gprice);
+    var sump = sprice.toFixed(2);
+    $('#zzprice').html(sump);   // 销售价
+
+    var memberpirce = parseFloat($("#inputmemberprice").val()) + parseFloat(attrprice);
+    var marketprice = parseFloat($("#inputmarketprice").val()) + parseFloat(attrprice);
+    $('#zzmemberprice').html(memberpirce.toFixed(2)); //会员价
+    $('#zzmarketprice').html(marketprice.toFixed(2));// 市场价
+}
+
+function selectcheckboxattr(obj) {
+    console.log(obj);
+    if ($(obj).hasClass('active2')) {
+        $(obj).removeClass('active2');
+    } else {
+        $(obj).addClass('active2');
+    }
+    picArr = [];
+    var objt = $("div.four");
+    for (var i = 0; i < objt.find("dd.active2").length; i++) {
+        picArr.push(objt.find('.active2:eq(' + i + ')').attr('attrid'));
+    }
+    ;
+    picStr = picArr.join(',');
+    $("#parametersid").val(picStr);
+    resetproductprice();
+}
+</script>
+
+<script>
+//        <!-- 看了又看 -->         
+var mySwiper = new Swiper('.btn_box .swiper-container', {
+    pagination: '.btn_box .swiper-pagination',
+    nextButton: '.btn_box .swiper-button-next',
+    prevButton: '.btn_box .swiper-button-prev',
+    slidesPerView: 2,
+    paginationClickable: true,
+    spaceBetween: 10, direction: 'vertical', autoplay: 3000, loop: true,
+});
+
+//        <!-- 全部分类 -->
+$(function() {
+	$('.allClass').mouseenter(function() {
+		$('.leftNaiv2').show();
+	});
+	$('.allClass').mouseleave(function() {
+		$('.leftNaiv2').hide();
+	});
+});
+
+//          停留在顶部
+$(function() {
+var nav = $('#j_nav2');
+var navTop = nav.offset().top;
+ $(window).scroll(function(e) {
+	 if ($(this).scrollTop() >= navTop) {
+	 		nav.addClass('m-nav-fix');
+	   	nav.find('.add-car').show();
+	 } else {
+	 		nav.removeClass('m-nav-fix');
+	    nav.find('.add-car').hide();
+	 }
+	 
+	 $("#j_nav2 a").click(function(){
+	     $(this).addClass("active4").siblings().removeClass("active4");
+	 });
+	});
+})
+</script>
+</block>

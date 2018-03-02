@@ -1,0 +1,146 @@
+<extend name="Public/base"/>
+<!-- 子导航 -->
+<block name="sidebar22">
+    <include file="sidemenu" />
+</block>
+<block name="body">
+	<script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+	<div class="main-title">
+		<h2>{:isset($info['id'])?'编辑':'新增'}商品属性</h2>
+	</div> 
+		 
+		    <form action="{:U()}" method="post" class="form-horizontal">
+			    <!-- 基础 --> 
+				<div class="form-item">
+					 <label class="item-label">
+						    所属<span class="check-tips"></span>
+					    </label>
+					<php>
+					    $domainid=isset($info['domainid'])?$info['domainid']:$domainid;
+					    $brandid=isset($info['brandid'])?$info['brandid']:$brandid;
+					    if(!$domainid){
+						$channellist[$domainid]="所有频道";
+					    }
+					    if(!$brandid){
+						$channelbrandlist[$brandid]="所有品牌";
+					    }
+					</php>
+					<input type="text" class="text input-large" disabled="disabled" value="{$channellist[$domainid]}——>{$channelbrandlist[$brandid]}"/>
+					<input type="hidden" name="domainid" value="{$domainid}">
+					<input type="hidden" name="brandid" value="{$brandid}"> 
+				</div> 
+				     
+				    <div class="form-item">
+					    <label class="item-label">
+						    属性名称<span class="check-tips">（名称不能为空）</span>
+					    </label>
+					    <div class="controls">
+						    <input type="text" name="name" class="text input-large" value="{$info.name|default=''}">
+					    </div>
+				    </div>
+				    
+				    <if condition="$info[id]">
+					<div class="form-item">
+					    <label class="item-label">
+						    类型<span class="check-tips">（目前提供文本和选项类型）</span>
+					    </label>
+					    <div class="controls"> 
+						<label class="inline radio"><input disabled name="types" type="radio" value="0" <eq name="info.types" value="0">checked</eq>>文本</label>
+						<label class="inline radio"><input disabled name="types" type="radio" value="1" <eq name="info.types" value="1">checked</eq>>单选项</label>
+						<label class="inline radio"><input disabled  name="types" type="radio" value="2" <eq name="info.types" value="2">checked</eq>>复选项</label>
+					    </div>
+					</div>
+					<div class="form-item">
+						<label class="item-label">
+							该属性值的录入方式
+						</label> 
+						<div class="controls"> 
+						    <label class="inline radio"><input onclick="radioClicked(0);" name="inputtypes" type="radio" value="0" <eq name="info.inputtypes" value="0">checked</eq>>单行文本</label>
+						    <label class="inline radio"><input onclick="radioClicked(1);" name="inputtypes" type="radio" value="1" <eq name="info.inputtypes" value="1">checked</eq>> 从下面的列表中选择（一行代表一个可选值）</label>
+						    <label class="inline radio"><input onclick="radioClicked(2);" name="inputtypes" type="radio" value="2" <eq name="info.inputtypes" value="2">checked</eq>>多行文本</label>
+						</div>
+					</div>
+					 
+					<div class="form-item" id="attributesub"> 
+					    <label class="item-label">
+						    可选值列表<span class="check-tips">（删除直接清空对应选值）<a href="javascript:void()" onclick="addattributesub()">添加</a></span>
+					    </label> 
+					    <volist name="sublist" id="sub">
+						<div class="controls"> 
+						<input name="sub[{$sub.id}]" type="text" class="text" value="{$sub.name}" /><br>
+						</div>
+					    </volist>
+					    <input name="oldsub" id="oldsub" type="hidden" value="">
+					    <script>
+						function addattributesub() {
+						    var html = "<div class=\"controls\"><input type=\"text\" value=\"\" class=\"text\" name=\"newsub[]\"><br></div>";
+						    $("#attributesub").append(html);
+						    return false;
+						}
+					    </script>
+					</div>
+					 
+				    <else />
+					<div class="form-item">
+						<label class="item-label">
+							属性是否可选
+						</label>
+						<span class="check-tips">（选择"单选/复选属性"时，可以对商品该属性设置多个值，同时还能对不同属性值指定不同的价格，用户购买商品时需选定具体的属性值。选择"唯一属性"时，商品的该属性值只能设置一个值。）</span>
+						<div class="controls"> 
+						    <label class="inline radio"><input name="types" type="radio" value="0" <eq name="info.types" value="0">checked</eq>>文本</label>
+						    <label class="inline radio"><input name="types" type="radio" value="1" <eq name="info.types" value="1">checked</eq>>单选属性</label>
+						    <label class="inline radio"><input name="types" type="radio" value="2" <eq name="info.types" value="2">checked</eq>>复选属性</label>
+						</div>
+					</div>
+					<div class="form-item">
+						<label class="item-label">
+							该属性值的录入方式
+						</label> 
+						<div class="controls"> 
+						    <label class="inline radio"><input onclick="radioClicked(0);" name="inputtypes" type="radio" value="0" <eq name="info.types" value="0">checked</eq>>单行文本</label>
+						    <label class="inline radio"><input onclick="radioClicked(1);" name="inputtypes" type="radio" value="1" <eq name="info.types" value="1">checked</eq>> 从下面的列表中选择（一行代表一个可选值）</label>
+						    <label class="inline radio"><input onclick="radioClicked(2);" name="inputtypes" type="radio" value="2" <eq name="info.types" value="2">checked</eq>>多行文本</label>
+						</div>
+					</div>
+					
+				    	<div class="form-item">
+					    <label class="item-label">
+						    可选值列表<span class="check-tips">（仅对类型为选项时起作用，一行代表一个可选值）</span>
+					    </label>
+					    <div class="controls"> 
+						<textarea id="subval" class="textarea input-large" name="sub"></textarea>
+					    </div>
+					</div>
+				    </if>
+				    <div class="form-item">
+					<label class="item-label">
+						是否前台筛选<span class="check-tips">（仅对类型为选项时起作用）</span>
+					</label>
+					<div class="controls"> 
+					    <label class="inline radio"><input name="issearch" type="radio" value="1" <eq name="info.issearch" value="1">checked</eq>>是</label>
+					    <label class="inline radio"><input name="issearch" type="radio" value="0" <eq name="info.issearch" value="0">checked</eq>>否</label> 
+					</div>
+				    </div>
+			    <div class="form-item">
+				    <input type="hidden" name="id" value="{$info.id|default=''}"> 
+				    <button type="submit" id="submit" class="btn submit-btn ajax-post" target-form="form-horizontal">确 定</button>
+				    <button class="btn btn-return" onclick="javascript:history.back(-1);return false;">返 回</button>
+			    </div>
+		    </form>
+		 
+	 
+</block>
+
+<block name="script">
+	<script type="text/javascript"> 
+		//导航高亮
+		highlight_subnav('{:U('index')}');
+		function radioClicked(v) {
+			if (v!=1) {
+				$("#subval").attr("disabled","disabled");
+			}else{
+				$("#subval").removeAttr("disabled");
+			}
+		}
+	</script>
+</block>

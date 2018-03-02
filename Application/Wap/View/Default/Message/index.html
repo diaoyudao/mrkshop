@@ -1,0 +1,88 @@
+<extend name="Base/common_index"/>
+<block name="body">
+    <!--头部 S-->
+    <div class="herder ">
+        <a href="{:U('Member/index')}" class="back"><i></i></a>
+        <h3>建议投诉</h3>   
+
+    </div>
+    <div class="t_line"></div>
+    <!--地址列表 S--> 
+    <ul class="add_list" id='conten_id'>
+        <notempty name="lists">
+        <volist name='lists' id='item'>
+            <li>
+                <div class="info" style="padding:0.05rem 0.1rem">
+                    <if condition="$item.message_type eq 1" >投诉<else/>建议</if>
+                    {$item.title}
+                    {$item.content}
+
+                    {$item.create_time|date='Y-m-d H:i:s',###}
+                </div>
+                <div class="setD bg_fa clear">
+                    <div class="fr ">
+                        <a class="mr-0 edi" href="{:U('Message/detail',array('id'=>$item['id']))}" >查看详情</a>
+                        <eq name="item.status" value="1">
+                        <a class="mr-0 edi" href="{:U('Message/update',array('id'=>$item['id']))}" >修改</a>
+                        </eq>
+                    </div>
+                </div>
+            </li>
+        </volist>
+         <else/>
+                <li class="no_data">
+                    <h3>
+                        <i class=""> <img src="__IMG__/ts.png"/> </i> 没有建议投诉记录哦
+                    </h3>						        	
+                </li>
+            </notempty>
+    </ul>
+    <!--地址列表 E-->  
+    <!--底部 S-->
+    <div class="fix_bo" style="margin-bottom: 0.6rem;">
+        <a href="{:U('Message/add')}" class="long_btn">我要留言</a>
+    </div>
+    <div id="loding_ajax" style=" text-align:center;height:.88rem;line-height:.88rem;font-size: .44rem;font-weight: bold;color: #000; display: none;">加载中····</div>
+    <!--订单列表 E--> 
+</block>
+<block name='script'>
+    <script src="__JS__/ajaxpage.js" ></script>
+    <script>
+        $(function() {
+            AjaxPage.pageCount = "{$totalPages|default=0}";
+            AjaxPage.append = 1;
+            AjaxPage.method = 'GET';
+            AjaxPage.dataType = "html";
+            AjaxPage.Conten = $('#conten_id');
+            AjaxPage.alert = $('#loding_ajax');
+            AjaxPage.filter.ajax = 1;
+            AjaxPage.filter.state_type = "{$state_type}";
+            $(window).scroll(function() {
+                if ($(window).height() + 200 + $(window).scrollTop() > $('body').outerHeight() && AjaxPage.canpage) {
+                    AjaxPage.canpage = false;
+                    AjaxPage.gotoPageNext();
+                }
+            });
+        });
+    </script>
+    <script>
+
+        $(function() {
+            $("a.confirm").click(function() {
+                var msg = $(this).attr("data-msg");
+                var href = $(this).attr('href');
+                layer.confirm(msg, {icon: 3, title: '提示信息'}, function(index) {
+                    if (index) {
+                        layer.close(index);
+                        window.location.href = href;
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
+                return false;
+            });
+        });
+
+    </script>
+</block>

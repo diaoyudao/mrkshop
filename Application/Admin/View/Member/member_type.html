@@ -1,0 +1,84 @@
+<extend name="Public/base"/> 
+<block name="body"> 
+    	<div class="main-title"> 
+		<h2>{$meta_title}</h2> 
+	</div>
+	<!-- 表格列表 -->
+	<div class="tb-unit posr"> 
+		<div class="category">
+			<div class="hd cf">
+				<div class="fold">折叠</div>
+				<div class="order"> </div> 
+				<div class="name">会员类型</div>
+				<div class="name" style="margin-left: 100px;">等级名称</div>
+				<div class="name" style="margin-left: 80px;">会员等级</div>
+				<div class="name" style="margin-left: 90px;">购买折扣</div>
+				<div class="name" style="margin-left: 90px;">所需积分</div>
+				<!--<div class="name" style="margin-left: 90px;">提成比例</div>-->
+			</div>
+			{:R('Member/tree', array($tree))}
+		</div>
+	</div>
+	<!-- /表格列表 -->
+</block>
+
+<block name="script">
+	<script type="text/javascript">
+		(function($){
+			/* 分类展开收起 */
+			$(".category dd").prev().find(".fold i").addClass("icon-unfold")
+				.click(function(){
+					var self = $(this);
+					if(self.hasClass("icon-unfold")){
+						self.closest("dt").next().slideUp("fast", function(){
+							self.removeClass("icon-unfold").addClass("icon-fold");
+						});
+					} else {
+						self.closest("dt").next().slideDown("fast", function(){
+							self.removeClass("icon-fold").addClass("icon-unfold");
+						});
+					}
+				});
+
+			/* 三级分类删除新增按钮 */
+			$(".category dd dd .add-sub").remove();
+
+			/* 实时更新分类信息 */
+			$(".category")
+				.on("submit", "form", function(){
+					var self = $(this);
+					$.post(
+						self.attr("action"),
+						self.serialize(),
+						function(data){
+							/* 提示信息 */
+							var name = data.status ? "success" : "error", msg;
+							msg = self.find(".msg").addClass(name).text(data.info)
+									  .css("display", "inline-block");
+							setTimeout(function(){
+								msg.fadeOut(function(){
+									msg.text("").removeClass(name);
+								});
+							}, 1000);
+						},
+						"json"
+					);
+					return false;
+				})
+                .on("focus","input",function(){
+                    $(this).data('param',$(this).closest("form").serialize());
+
+                })
+                .on("blur", "input", function(){
+                    if($(this).data('param')!=$(this).closest("form").serialize()){
+                        $(this).closest("form").submit();
+                    }
+                }).on("change", "select", function(){
+                    if($(this).data('param')!=$(this).closest("form").serialize()){
+                        $(this).closest("form").submit();
+                    }
+                });
+		highlight_subnav('{:U('Member/member_type')}');
+		})(jQuery);
+	</script>
+</block>

@@ -1,0 +1,131 @@
+<extend name="Public/base"/>
+
+<block name="body">
+	<script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+	<div class="main-title">
+		<h2>
+			{$info['id']?'编辑':'新增'}支付方式
+			<notempty name="pid">
+				[&nbsp;父导航：<a href="{:U('index','pid='.$pid)}">{$parent.title}</a>&nbsp;]
+			</notempty>
+		</h2>
+	</div>
+	<form action="{:U()}" method="post" class="form-horizontal">
+		<input type="hidden" name="pid" value="{$pid}">
+		<div class="form-item">
+			<label class="item-label">所属频道</label>
+			<div class="controls">
+				<select class="select" id="domainid" name="domainid"> 
+				    <volist name="paymentlist" id="paymentvo">
+					    <option value="{$paymentvo.id}" <eq name="paymentvo[id]" value="$info['domainid']">selected</eq>>{$paymentvo.name}</option>
+				    </volist>
+				</select>
+			</div>
+		</div>
+		<div class="form-item">
+			<label class="item-label">支付名称<span class="check-tips">（用于显示的文字）</span></label>
+			<div class="controls">
+				<input type="text" class="text input-large" name="payname" value="{$info.payname|default=''}">
+			</div>
+		</div>
+		<div class="form-item">
+			<label class="item-label">支付标识<span class="check-tips"></span></label>
+			<div class="controls">
+				<input type="text" class="text input-large" name="paycode" value="{$info.paycode|default=''}">
+			</div>
+		</div>
+        <div class="form-item">
+        <label class="item-label">封面</label>
+		    <div class="controls">
+			    <input type="file" id="upload_specialicon">
+			    <input type="hidden" name="cover_id" id="specialicon" value="{$info['cover_id']|default=''}"/>
+			    <div class="upload-img-box">
+			    <notempty name="info['cover_id']">
+				    <div class="upload-pre-item"><img src="__PICURL__{$info.domainid}/{$info.cover_id|get_cover='path'}"/></div>
+			    </notempty>
+			    </div>
+		    </div>
+        </div>
+		    <script type="text/javascript">
+				    //上传图片
+				/* 初始化上传插件 */
+			    var domainid=$("#domainid").val();
+			    $("#upload_specialicon").uploadify({
+				    "height"          : 30,
+				    "swf"             : "__STATIC__/uploadify/uploadify.swf",
+				    "fileObjName"     : "download",
+				    "buttonText"      : "上传图片",
+				    "uploader"        : "{:U('File/uploadPicture',array('session_id'=>session_id(),'fields'=>'cover_id','pagefrom'=>'payment'))}",
+				    "width"           : 120,
+				    'removeTimeout'	  : 1,
+				    'fileTypeExts'	  : '*.jpg; *.png; *.gif;',
+				    "onUploadSuccess" : uploadPicture,
+				    'formData'      : {'domainid' :domainid,'fields':'cover_id','pagefrom':'payment'},
+				    'onFallback' : function() {
+					alert('未检测到兼容版本的Flash.');
+				    }
+				});
+			    function uploadPicture(file, data){
+				    var data = $.parseJSON(data);
+				    var src = '';
+				    if(data.status){
+					    $("#specialicon").val(data.id);
+					    src = data.url || '__PICURL__'+domainid+'/'+ data.path;
+					    $("#specialicon").parent().find('.upload-img-box').html(
+						    '<div class="upload-pre-item"><img src="' + src + '"/></div>'
+					    );
+				    } else {
+					    updateAlert(data.info);
+					    setTimeout(function(){
+					    $('#top-alert').find('button').click();
+					    $(that).removeClass('disabled').prop('disabled',false);
+					},1500);
+				    }
+				}
+		    </script>
+		    <div class="form-item">
+            <label class="item-label">支付方式描述</label>
+            <div class="controls">
+                <label class="textarea ">
+              <textarea name="paydec">{$info.paydec|default=''}</textarea>
+              {:hook('adminArticleEdit', array('name'=>'paydec','value'=>$info[paydec]))}
+                </label>
+            </div>
+		    </div>
+
+
+    <div class="form-item">
+				<label class="item-label">是否在线支付</label>
+					    <div class="controls">
+						    <label class="inline radio"><input type="radio" <eq name="info.isonline" value="0">checked=""</eq> value="0" name="isonline">否</label>
+						    <label class="inline radio"><input type="radio"  <eq name="info.isonline" value="1">checked=""</eq>value="1" name="isonline">是</label>
+					    </div>
+		</div>
+
+    <div class="form-item">
+				<label class="item-label">非在线支付订单是否审核</label>
+					    <div class="controls">
+						    <label class="inline radio"><input type="radio" <eq name="info.orderiscod" value="0">checked=""</eq> value="0" name="orderiscod">否</label>
+						    <label class="inline radio"><input type="radio"  <eq name="info.orderiscod" value="1">checked=""</eq>value="1" name="orderiscod">是</label>
+					    </div>
+		</div>
+
+		<div class="form-item">
+			<label class="item-label">优先级<span class="check-tips">（导航显示顺序）</span></label>
+			<div class="controls">
+				<input type="text" class="text input-small" name="weight" value="{$info.weight|default='0'}">
+			</div>
+		</div>
+		<div class="form-item">
+			<input type="hidden" name="id" value="{$info.id|default=''}">
+			<button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+			<button class="btn btn-return" onclick="javascript:history.back(-1);return false;">返 回</button>
+		</div>
+	</form>
+</block>
+<block name="script">
+<script type="text/javascript" charset="utf-8">
+	//导航高亮
+	highlight_subnav('{:U('index')}');
+</script>
+</block>

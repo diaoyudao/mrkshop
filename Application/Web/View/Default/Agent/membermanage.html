@@ -1,0 +1,165 @@
+<extend name="Base/store_common"/>
+<block name="body">
+    <!-- 内容 -->
+    <div class="wrap" style="background-color: #f5f5f5;">
+        <div class="guidance towp"><a href="javascript:;">首页</a><a href="javascript:;"> > 会员首页</a></div>
+        <div class="content_agency towp clear">
+            <div class="content_left">
+                <include file="Member/member_menu"/>
+            </div>
+            <div class="content right-con2 order-mana">
+                <div class="con-tit"><h2 class="">会员管理</h2>
+                    <div class="sear  fr search-form" style="display: ;">
+                        <input type="text" class="bor3 searchinput" value="{:I('mobile')}" name='mobile' placeholder="输入会员手机号">
+                        <input type="button" class="bg" id="search" url="{:U('Agent/membermanage')}"  />
+                        <!--<div class="sear-date fr">-->
+                        <!--日期：<span><input type="text" class="bor2"  /><i class="bg"></i></span><em class="big-font">_</em><span><input type="text" class="bor2"  /><i class="bg"></i></span>-->
+                        <!--</div>-->
+                    </div>
+                </div>
+
+                <!--导航 E-->
+                <!--列表 S-->
+                <div class="order-table">
+                    <div class="order-tit">
+                        <div class="tables tables3">
+                            <table width="100%">
+                                <colgroup span="8">
+                                    <col width="20%" />
+                                    <col width="18%" />
+                                    <col width="16%" />
+                                    <col width="18%" />
+                                    <col width="14%" />			
+                                    <col width="20%" />			
+                                </colgroup>
+
+                                <tr>
+                                    <th>编号</th>
+                                    <th>会员名称</th>
+                                    <th>性别</th>
+                                    <th>手机号</th>
+                                    <th>会员等级</th>
+                                    <th>注册时间</th>
+                                </tr>
+
+                                <volist name='memberData.memberlist' id='member'>
+                                    <tr>
+                                        <td>{$member["uid"]}</td>
+                                        <td style='text-align: left;' > <php>
+                                        $impath = get_face($member["uid"]);
+                                        $random = time();
+                                    </php>
+<!--                                    <notempty name="impath">
+                                        <a class="tou" href="jacascript:;"><img src="__PICURLFACE__{$member.uid}/face.jpg?r={$random}"/></a>
+                                        <else/>
+                                        <a class="tou" href="jacascript:;"><img src="__IMG__/agencyManage/tou.jpg" alt="{$member.username}"></a>
+                                    </notempty>-->
+                                    <a class="name" href="javascript:;">{$member.username}</a>
+                                    </td>
+                                    <td>
+                                    <if condition="$member.sex eq 1">
+                                        男
+                                        <elseif condition="$member.sex eq 2"/>
+                                        女
+                                        <else/>
+                                        保密
+                                    </if>
+                                    </td>
+                                    <td>{$member.mobile}</td>
+                                    <td>{$member.levelInfo.level_n|default='无等级'}</td>
+                                    <td>{$member.reg_time|date='Y-m-d H:i:s',###}</td>
+
+                                    </tr>
+                                </volist>
+                            </table>
+                        </div>
+                    </div>     
+                    <div class="paging_box clear">
+                        {$_page}
+                    </div>
+                </div> <!--列表 E-->
+            </div>
+        </div>
+
+        <div class="content_right" style="border: 0; display: none;">
+            <include file="Agent/agent_center" />
+            <div class="options_box">
+                <div class="tab">
+                    <include file="Agent/agent_menu" />
+                </div>
+                <div class="options">
+                    <div class="member">
+                        <div class="search clear">
+                            <input class="ss" type="button" name="" id=""/>
+                            <input class="hy" type="text" name="" id="" placeholder="会员" />
+                        </div>
+                        <div class="data clear">
+                            <div class="data_left" >
+                                <div class="quantity">
+                                </div>
+                            </div>
+                            <div class="data_right">
+                                <p>会员数量：</p>
+                                <p><em>{$memberData.count}</em></p>
+                            </div>
+                        </div>
+                        <div class="xx">
+                            <h3>会员信息</h3>
+                            <table>
+                                <tr><th>会员信息</th><th>联系方式</th><th>订单数量</th><th>会员等级</th></tr>
+                                <volist name='memberData.memberlist' id='member'>
+                                    <tr>
+                                        <td class="clear">
+                                    <php>
+                                        $impath = get_face($member["uid"]);
+                                        $random = time();
+                                    </php>
+                                    <notempty name="impath">
+                                        <a class="tou" href="jacascript:;"><img src="__PICURLFACE__{$member.uid}/face.jpg?r={$random}"/></a>
+                                        <else/>
+                                        <a class="tou" href="jacascript:;"><img src="__IMG__/agencyManage/tou.jpg" alt="{$member.username}"></a>
+                                    </notempty>
+                                    <a class="name" href="javascript:;">{$member.username}</a>
+                                    </td>
+                                    <td>{$member.mobile}</td>
+                                    <td>{$member.order_num|default='0'}</td>
+                                    <td>{$member.levelInfo.level_n|default='无等级'}</td>
+                                    </tr>
+                                </volist>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="page_box clear">
+                        {$_page}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</block>
+<block name="script">
+    <script type="text/javascript">
+        //搜索功能
+        $("#search").click(function() {
+            var url = $(this).attr('url');
+            var query = $('.search-form').find('.searchinput').serialize();
+            query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g, '');
+            query = query.replace(/^&/g, '');
+            if (url.indexOf('?') > 0) {
+                url += '&' + query;
+            } else {
+                url += '?' + query;
+            }
+            window.location.href = url;
+        });
+        //回车搜索
+        $(".searchinput").keyup(function(e) {
+            if (e.keyCode === 13) {
+                $("#search").click();
+                return false;
+            }
+        });
+
+    </script>
+</block>

@@ -1,0 +1,360 @@
+<extend name="Base/common_cart"/>
+<block name='style'>
+    <style>
+        body{
+            background-color: #fff;
+        }
+        .m-nav-fix{position: fixed;top:0;width: 100%;background-color:#F5F5F5;}
+
+        .peis{
+            margin: 40px 0;
+        }
+        .peis div{
+            border: none;
+        }
+        .buyer .buyer_box{
+            height: auto;
+            padding: 0;
+            border: none;
+        }
+        .buyer_box input{
+            width: 218px; 
+            height: 28px;
+            padding: 0 5px;
+            line-height: 28px;
+            border: 1px solid #dcdcdc;
+            font-size: 12px;       
+            font-family: '宋体';
+            color: #333;
+        }
+        .buyer_box div{
+            margin: 10px 0;
+            border: none;
+            padding-left: 20px;
+        }
+        .buyer_box label{
+            font-family: '宋体';
+            font-size: 12px;
+            color: #1d1d1d;
+        }
+        .peis h2{
+            background-color: transparent;
+        }
+        .step{
+            background-position: center -104px; 
+        }
+        .btns input{
+            height: 30px;
+            line-height: 30px;
+            width: 90px;
+            border-radius: 5px;
+            color: #fff;
+            font-family: '宋体';
+            font-size: 12px;
+            background-color: #f16f71;
+            border: none;
+            margin-left: 60px;
+        }
+        .peis .sect_box{
+            display: inline-block;
+            *display:inline;
+            *zoom:1;
+            position: relative;
+            padding: 0;
+            margin-left: 40px;
+        }
+        .sect_box div{
+            height: 28px;
+            width: 130px;
+            border: 1px solid #ccc;
+            line-height: 28px;
+            padding: 0 10px;
+            font-size: 12px;
+            color: #666;
+            background: url(__IMG__/bottoms.png) no-repeat 120px center;
+        }
+        .sect_box ul{
+            position: absolute;
+            top: 30px;
+            left: 0;
+            display: none;
+            background-color: #f0f0f0;
+        }
+        .sect_box ul li{
+            border: 1px solid #ccc;
+            height: 28px;
+            line-height: 28px;
+            width: 130px;
+            padding: 0 10px;
+            border-top: none;
+            font-size: 12px;
+            color: #666;
+        }
+        .sect_box ul .active{
+            background-color: #fff;
+        }
+        .peis p{
+            margin-bottom: 10px;
+        }
+        .mes .count .xx_ts{
+            color: #863177;
+            padding-left: 20px;
+            background: url(__IMG__/xx_ts.png) no-repeat 0 center;
+            float: right;
+        }
+        .all-naiv{display:none;}
+        .m-nav-fix{position: fixed;top:0;width: 100%;background-color:#F5F5F5;}
+        .input-disabled{ cursor: not-allowed;background: #ccc;}
+        .position {display: none;}
+    </style>
+</block>
+<block name="body">
+    <!-- 位置 -->
+    <div class="towp  position">
+        您的位置：<span><a href="#">商品分类</a></span><span class="fonS"> > </span><span class="colo1">商品详情</span>
+    </div>
+    <!-- 内容 -->
+    <div class="towp step2"></div>
+    <div class="towp fillOrder" >
+        <form action='{:U("Checkout/createorder")}' method="post" name="createorderform" id="createorderform" onsubmit=" return checkaddress();"> 
+            <div class="add" id="myaddresslist">
+                我的地址列表
+            </div>
+
+            <div class="peis" id="shippinglist">
+                配送方式列表
+            </div>
+            <div class=" quRen">
+                <h2>订单信息 <span class="fr back-shopcar"><a href="{:U('cart/index')}"><i class="bg"></i>返回购物车修改</a></span> </h2>
+                <table width="100%" border="0" cellpadding="0" style="border-collapse:collapse;">
+                    <thead>
+                    <th colspan="2" style="text-align: center;padding-left: 20px;">商品名称</th>
+                    <th width="140">单价</th><th width="140">数量 </th><th width="140">小计 </th>
+                    </thead>
+                    <tbody>
+                    <volist name="shoplist" id="vo">
+                        <if condition="$vo['type'] eq 0">
+                            <tr>
+                                <td width="80px"><img style="width:80px;height: 80px;" src="{$vo.goodid|get_cover_picture_url}" /> </td>
+                                <td width="440" class="pro-intr4">
+                                    <a href="{:U('Goods/detail',array('channelname'=>$vo['channelname'],'id'=>$vo['goodid']))}" target="_blank" >{$vo.goodid|get_good_name} </a>
+                                    <div class="attr"><span>{$vo.parameters}</span>
+                                        <span style="color:red;">{$vo.promsg}</span>
+                                    </div>
+                                </td>
+                                <td>¥{$vo.price}</td> 
+                                <td> {$vo.num} </td>
+                                <td class="red">¥<span id="total{$vo.sort}">{$vo.total}</span></td> 
+                            </tr>
+                            <elseif condition="$vo['type'] eq 1"/>
+                            <tr>
+                                <td width="80px"><img src="{$vo.goodid|get_cover_picture_url}" /> </td>
+                                <td width="440" class="pro-intr4">
+                                    <a href="{:U('Goods/detail',array('channelname'=>$vo['channelname'],'id'=>$vo['goodid']))}" target="_blank" >{$vo.goodid|get_good_name}</a>
+                                    <div class="attr"><span>{$vo.parameters}</span>
+                                        <span style="color:red">{$vo.promsg}</span>
+                                    </div>
+                                </td>
+                                <td>¥{$vo.price}</td> 
+                                <td> {$vo.num} </td>
+                                <td class="red">¥<span id="total{$vo.sort}">{$vo.total}</span></td> 
+                            </tr>
+                        </if>
+                    </volist>
+                    </tbody>
+                </table>
+            </div>
+    </div>
+    <div class="towp mes">
+        <p>给商家留言：<input type="text" name='order_message' class="txt1 txt2" /></p>
+        <div class="count">
+            <p>商品总重量：<span><i id="goods_weight">{$goodsTotalWeight}</i>千克</span>   </p>
+            <p> {$sum}件商品，商品总金额：<span>￥<i id="allproduct">{$total}</i> </span></p>
+            <if condition="$orderType EQ 2  or $orderType  eq 3">
+                <p>税费：<span>￥<i id="haiguan_rate_total">{$haiguan_rate_total}</i></span>     </p>
+            </if>
+            
+            <p>运费：<span>￥<i id="pricedis">{$shipping_fee}</i> </span>    </p>        
+            
+            <div class='con'><p> 应付总额：<span><i>￥<b id="allprice">{$all}</b></i></span>   </p>    </div>    
+            <!--<p class=""> 应付总额（不含运费）：￥<span id="allprice">{$all}</span></p>--> 
+        </div>
+        <div class="fff" >
+            <!--<span>应付总额：<strong id="allprice">￥{$all}</strong></span>-->
+            <input type="hidden" name="senderid" id="senderid" >
+            <input type="hidden" name="tag" value="{$tag}"> 
+            <input type="hidden" name="orderType" value="{$orderType}"> 
+            <input type="hidden" name="iscart" value="{$iscart}"> 
+            <input type="hidden" name="shipping_fee" value="{$shipping_fee}">
+            <input type="submit" value="提交订单" />
+        </div>
+    </div>
+</form>
+</block>
+<block name='script'>
+    <script>
+        var address_layer = '';
+        //地址编辑
+        function open_address(address_id) {
+            $.ajax({
+                url: "{:U('Checkout/ajaxaddress')}",
+                type: "post",
+                dataType: "json",
+                data: {id: address_id},
+                success: function(json) {
+                    address_layer = layer.open({
+                        title: '编辑地址',
+                        type: 1,
+                        skin: 'layui-layer-rim', //加上边框
+                        area: ['660px', '440px'], //宽高
+                        content: json.info
+                    });
+                    return false;
+                }
+            });
+        }
+
+        /**
+         * 异步获取配送方式
+         * @returns {undefined}
+         */
+        function shippinglist(address_id) {
+            var orderType = "{$orderType}";
+            $.ajax({
+                url: "{:U('Checkout/ajaxshipping')}",
+                type: "post",
+                dataType: "json",
+                data: {address_id: address_id, orderType: orderType},
+                success: function(json) {
+                    if (json.status) {
+                        $("#shippinglist").html(json.info);
+                        $('#pricedis').text(json.money);   // 运费
+                        $("input[name=shipping_fee]").val(json.money);
+                        if (json.disable == false) {
+                            $("input[type=submit]").attr('disabled', 'disabled').css({'background': '#ccc', 'cursor': 'not-allowed'});
+                        } else {
+                            $("input[type=submit]").removeAttr("disabled").css({'background': '', 'cursor': 'pointer'});
+                        }
+                        clacOrderFee(); // 计算订单金额
+                        return false;
+                    }
+
+                    layer.msg('加载地址错误');
+                    return false;
+                }
+            });
+        }
+
+        /**
+         * 获取我的地址列表
+         * @returns {undefined}
+         */
+        function myaddresslist() {
+            $.ajax({
+                url: "{:U('Checkout/ajaxaddresslist')}",
+                type: "post",
+                dataType: "json",
+//                data: {id: address_id},
+                success: function(json) {
+                    if (json.status) {
+                        $("#myaddresslist").html(json.info);
+                        return false;
+                    }
+                    layer.msg('加载地址错误');
+                    return false;
+                }
+            });
+        }
+        function delAddress(aid) {
+            //判断新地址是否选中,获取地址id
+            var con_index = layer.confirm('确定要删除该地址吗？', {icon: 3, title: '提示'}, function(index) {
+                if (index) {
+                    if (aid == null) {
+                          alert("选择地址无效!");
+                        return false;
+                    } else {
+                        $.ajax({
+                            type: 'post', //传送的方式,get/post
+                            url: '{:U("Member/deleteAddress")}', //发送数据的地址
+                            data: {id: aid},
+                            dataType: "json",
+                            success: function(data)
+                            {
+                                layer.msg(data.msg);
+                                myaddresslist();
+                                shippinglist(0);
+                            },
+                            error: function(event, XMLHttpRequest, ajaxOptions, thrownError) {
+                                alert(XMLHttpRequest + thrownError);
+                            }
+                        });      
+                     }
+                    layer.close(con_index);
+                }
+            });
+
+        }
+
+
+        $(function() {
+            myaddresslist();    // 加载我的地址列表
+            shippinglist(0);     // 加载配送方式
+            /*重新计算运费及总金额*/
+            $("#shippinglist").delegate(".radiodistribution", "click", function() {
+                var yunfei = parseFloat($(this).attr('money'));
+//                yunfei =  isNaN(yunfei) ? yunfei : 0;
+                var yfsump = yunfei.toFixed(2);
+                $('#pricedis').text(yfsump);   // 运费
+                clacOrderFee();
+            });
+
+        });
+
+        /**
+         * 计算订单价格
+         * @returns {undefined}
+         */
+        function clacOrderFee() {
+
+            var yunfei = parseFloat($('#pricedis').text());  // 运费
+            yunfei = yunfei.toFixed(2);
+            var allproduct = parseFloat($('#allproduct').text());  // 商品价格
+            var haiguan_rate_total = parseFloat($('#haiguan_rate_total').text());  // 海关费
+            if (isNaN(haiguan_rate_total)) {
+                haiguan_rate_total = 0;
+            }
+            var allprice = parseFloat(eval(allproduct) + eval(yunfei) + eval(haiguan_rate_total));       // 订单总价
+            var sump = allprice.toFixed(2);
+
+            $('#allprice').text(sump);
+        }
+//        选择地址
+        function  chooseaddress(obj) {
+            var address_id = $(obj).attr("addressid");
+            shippinglist(address_id);
+            $("#senderid").val(address_id);
+            $(obj).parents('li').siblings().addClass('active6').removeClass('active6')
+            $(obj).parents('li').addClass('active6');
+//            $(obj).parents('li').toggleClass('active6');
+        }
+
+        /*
+         *检查地址是否选择 
+         */
+        function checkaddress() {
+            //判断默认地址是否选中,获取地址id
+            var addressid = $(".active6").find("a.setDef").attr('addressid');
+            $("#senderid").val(addressid);
+//            alert(addressid);
+            if (typeof (addressid) == "undefined") {
+                document.getElementById('myaddresslist').scrollIntoView();
+                layer.msg("请选择一个收货地址");
+                return false;
+            } else {
+                return true;
+            }
+            return false;
+        }
+
+    </script>
+</block>

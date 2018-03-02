@@ -1,0 +1,178 @@
+<extend name="Base/common_index"/>
+<block name='style'>
+    <style>
+        .newtj_nav .img img{
+            width: 3.0rem;
+            height: 3.0rem;
+        }
+        .recommend_nav .img img{
+            width: 3.03rem;
+            height: 3.03rem;
+        }
+        .xsqg_nav .img img{
+            height: auto;
+        }
+        .product_nav .img img{
+            height: auto;
+        }
+    </style>    
+</block>
+<block name="body">
+    <!--头部 S-->
+    <div class="index_ss"> <a href="{:U('Goods/search')}">搜索您喜欢的商品</a> </div>
+    <!--首页幻灯 S-->
+<div class="swiper-container sy_hdps" >
+  <div class="swiper-wrapper sy_hdp">
+    {:hook('Advs',array('mark'=>'wap_index_A1','domainid'=>'','domaintype'=>'site','show_page'=>'banner'))}
+  </div>
+  <!-- Add Pagination -->
+  <div class="swiper-pagination"></div>
+  <div class="banner_zz"></div>
+</div>
+<!--首页幻灯 E--> 
+     
+    <!--栏目分类 S-->
+    <div class="column_nav">
+        <ul>
+            <volist name="menulist" id="menu">
+                <li> <a href="{$menu.url}" title="{$menu.icon}"> 
+                        <img src="__PICURL__/{$menu.domainid}/{$menu.icon|get_cover='path'}" alt="{$menu.icon}">
+                        <h3>{$menu.title}</h3>
+                    </a> 
+                </li>
+            </volist>
+            <if condition="session('memberinfo.member_type') eq 2 || session('memberinfo.member_type') eq 1">
+                <li> <a href="{:U('Goods/lists',array('type'=>1))}"> <img src="__IMG__/nav_6.png" alt="日常商品">
+                        <h3>日常商品</h3>
+                    </a>
+                </li>
+            </if>
+            <!-- <if condition="session('memberinfo.member_type') eq 3 && session('memberinfo.member_agent_id') neq 0">
+                <li> <a href="{:U('Goods/storegoods',array('store_id'=>session('memberinfo.member_agent_id')))}"> 
+                        <img src="__IMG__/nav_7.png">
+                        <h3>店铺精选</h3>
+                    </a> 
+                </li>
+            </if> -->
+            <li> <a href="{:U('Category/index')}"> <img src="__IMG__/nav_8.png">
+                    <h3>全部分类</h3>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!--栏目分类 E-->
+    <div class="xsqg_nav" >
+        {:hook('Advs',array('mark'=>'wap_index_A3','domainid'=>'','domaintype'=>'site'))}
+        <!--            <li>
+                        <div class="img"> <img src="__IMG__/xsqg_banner.png"> </div>
+                        <div class="xsqg_time">
+                            <em>剩余<span>0</span><span>0</span>时<span>0</span><span>0</span>分<span>0</span><span>0</span>秒结束</em>
+                        </div>
+                    </li>-->
+    </div>
+    <!--最热推荐 S-->
+    <div class="nav_nr hot_recommend">
+        <div class="h3_bt">
+            <a href="#">
+                <h3><span>最热推荐</span></h3>
+                <p>为您选择第一性价比的商品</p>
+            </a>
+        </div>
+        <div class="recommend_nav">
+            <ul>
+                <volist name="hotgoodslist" id="hotgood">
+                    <li>
+                        <a href="{:U('Goods/detail',array('channelname'=>$hotgood['channelname'],'id'=>$hotgood['id']))}" title="{$hotgood.title}">
+                            <div class="img">
+                                <img src="{$hotgood['pics_img'][$hotgood['cover_id']]}" alt="{$hotgood.title}"/>
+                            </div>
+                            <div class="price"><b>&yen;<em>{$hotgood.show_price}</em></b><strike>&yen;{$hotgood.marketprice}</strike></div>
+                            <h3>{:getsubstrutf8($hotgood['title'],0,30)}</h3>
+
+                        </a>
+                        <a href="{:U('Goods/detail',array('channelname'=>$hotgood['channelname'],'id'=>$hotgood['id']))}" class="btn_btn">立即购买</a>
+                    </li>
+                </volist>
+            </ul>
+        </div>
+    </div>
+    <!--最热推荐 E-->
+
+    <!--每日新品 S-->
+    <div class="nav_nr new_product">
+        <div class="h3_bt">
+            <a href="#">
+                <h3><span>每日新品</span></h3>
+                <p>我们每日为您推荐最好的</p>
+            </a>
+        </div>
+        <div class="product_nav">
+            {:hook('Advs',array('mark'=>'wap_index_A2','domainid'=>'','domaintype'=>'site'))}
+            <!--            <ul>    
+                            <li>
+                                <a href="#">
+                                    <div class="img">
+                                        <img src="__IMG__/banner_new1.jpg">
+                                    </div>       
+                                </a>
+                            </li>
+                        </ul>-->
+        </div>
+    </div>
+    <!--每日新品 E-->
+
+    <!--最新推荐 S-->
+    <div class="nav_nr new_recommend">
+        <div class="h3_bt">
+            <a href="#">
+                <h3><span>最新推荐</span></h3>
+                <p>为您选择第一性价比的商品</p>
+            </a>
+        </div>
+        <div class="newtj_nav">
+            <ul>  
+                <volist name="newgoodslist" id="newgood">
+                    <li>
+                        <a href="{:U('Goods/detail',array('channelname'=>$newgood['channelname'],'id'=>$newgood['id']))}" title="{$newgood.title}">
+                            <div class="img">
+                                <img src="{$newgood['pics_img'][$newgood['cover_id']]}" alt="{$newgood.title}"/>
+                            </div>
+                            <h3>{:getsubstrutf8($newgood['title'],0,30)}</h3>
+                            <div class="price"><b>&yen;<em>{$newgood.show_price}</em></b><strike>&yen;{$newgood.marketprice}</strike></div>
+
+                        </a>
+                        <a href="javascript: addcart('{$newgood.id}',1,'{$newgood.show_price}','0',0,0);" class="btn_gwc"></a>
+                    </li>
+                </volist>
+            </ul>
+        </div>
+    </div>
+    <!--最新推荐 E-->
+</block>
+<block name="script">
+    <link rel="stylesheet" href="__CSS__/swiper.min.css">
+    <script type="text/javascript" src="__JS__/swiper.jquery.min.js"></script>
+    <script>
+        $(function() {
+            $('html').css('fontSize', $('body').width() / 640 * 100);
+            var swiper = new Swiper('.swiper-container', {
+                pagination: '.swiper-pagination',
+                paginationClickable: true,
+                speed: 300,
+                watchSlidesProgress: true,
+                slideToClickedSlide: true,
+                autoplay: 3000
+            });
+
+//            $(window).scroll(function() {
+//                if ($(window).scrollTop() > 200) {
+//                    $(".index_ss").addClass("home_bg");
+//                }
+//                ;
+//                if ($(window).scrollTop() < 200) {
+//                    $(".index_ss").removeClass("home_bg");
+//                }
+//            });
+        });
+    </script>
+</block>

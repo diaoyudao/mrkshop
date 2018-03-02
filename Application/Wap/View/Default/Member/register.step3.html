@@ -1,0 +1,41 @@
+<extend name="Base/common"/>
+<block name="style">
+    <style type="text/css">
+        html{
+            background-color: #fff;
+        }
+    </style>
+</block>
+<!-- 头部 -->
+<block name="body">
+    <!--头部 S-->
+    <div class="login-3">
+        <div class="herder">
+            <a href="javascript:history.go(-1);" class="back"><i></i></a>
+            <h3>注册成功</h3>
+        </div>
+        <div class="main">
+            <div class="win">
+                <img src="__IMG__/login/win.png"/>
+                <p>恭喜你，注册成功！</p>
+            </div>
+            <a href="{:U('Index/index')}">开启妙品生活之旅</a>
+        </div>
+    </div>
+</block>
+<block name='script'>
+    <script type="text/javascript">
+        var url = "{:U('Member/index')}";
+        function countDown(secs, surl) {
+            var jumpTo = document.getElementById('jumpTo');
+            jumpTo.innerHTML = secs;
+            if (--secs > 0) {
+                setTimeout("countDown(" + secs + ",'" + surl + "')", 1000);
+            }
+            else {
+                location.href = surl;
+            }
+        }
+        countDown(3, url);
+    </script> 
+</block>

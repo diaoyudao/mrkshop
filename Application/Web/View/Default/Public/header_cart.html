@@ -1,0 +1,17 @@
+<!-- 头部 -->
+<header style="background-color: #fff;">
+    <div class="top">
+        <include file="Public/public_top"/>
+    </div>
+    <div class="head clear towp">
+        <php>$logo = C('SITE_LOGO')</php>
+        <style>
+
+            .head .logos {
+                background: rgba(0, 0, 0, 0) url("__PICURL__logo/{$logo|get_cover='path'}") no-repeat scroll center center;
+            }
+        </style>
+        <a class="logos" href="{:U('Index/index')}"></a>
+        <a class="logins" href="javascript:;;">购物车</a>
+    </div>
+</header>

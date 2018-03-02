@@ -1,0 +1,72 @@
+<extend name="Public/base"/>
+
+<block name="body">
+    <div class="main-title">
+        <h2>
+            {$info['id']?'编辑':'新增'}配送方式
+            <notempty name="pid">
+                [&nbsp;父导航：<a href="{:U('index','pid='.$pid)}">{$parent.title}</a>&nbsp;]
+            </notempty>
+        </h2>
+    </div>
+    <form action="{:U()}" method="post" class="form-horizontal">
+        <input type="hidden" name="pid" value="{$pid}">
+        <div class="form-item" style="display: none;">
+            <label class="item-label">所属频道</label>
+            <div class="controls">
+                <select class="select" id="domainid" name="domainid"> 
+                    <volist name="distributionlist" id="distributionvo">
+                        <option value="{$distributionvo.id}" <eq name="distributionvo[id]" value="$info['domainid']">selected</eq>>{$distributionvo.name}</option>
+                    </volist>
+                </select>
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="item-label">配送标题<span class="check-tips">（用于显示的文字）</span></label>
+            <div class="controls">
+                <input type="text" class="text input-large" name="title" value="{$info.title|default=''}">
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="item-label">配送金额<span class="check-tips"></span></label>
+            <div class="controls">
+                <input type="text" class="text input-large" name="price" value="{$info.price|default=''}">
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="item-label">配送描述<span class="check-tips"></span></label>
+            <div class="controls">
+                <input type="text" class="text input-large" name="description" value="{$info.description|default=''}">
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="item-label">优先级<span class="check-tips">（导航显示顺序）</span></label>
+            <div class="controls">
+                <input type="text" class="text input-small" name="weight" value="{$info.weight|default='0'}">
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="item-label">配送方式类型<span class="check-tips">（配送方式类型 0：线上配送;1:门店配送）</span></label>
+            <div class="controls">
+                <select name='type'>
+                    <option value="">配送类型</option>
+                    <option value='0' <eq name="info.type" value="0">selected="selected"</eq> >线上配送</option>
+                    <option value='1' <eq name="info.type" value="1">selected="selected"</eq> >门店配送</option>
+                </select>
+                <!--<input type="text" class="text input-small" name="type" value="{$info.type|default='0'}">-->
+            </div>
+        </div>
+        <div class="form-item">
+            <input type="hidden" name="id" value="{$info.id|default=''}">
+            <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+            <button class="btn btn-return" onclick="javascript:history.back(-1);
+                    return false;">返 回</button>
+        </div>
+    </form>
+</block>
+<block name="script">
+    <script type="text/javascript" charset="utf-8">
+        //导航高亮
+        highlight_subnav('{:U('index')}');
+    </script>
+</block>

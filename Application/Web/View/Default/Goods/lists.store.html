@@ -1,0 +1,373 @@
+<extend name="Base/common_index"/>
+<block name='style'>
+    <style>
+        .all-naiv{display:none;}
+    </style>
+</block>
+<block name="body">
+    <!-- 内容 -->
+    <div class="towp  position">
+        位置： 
+        <span><a href="{:U('index/index')}">首页</a></span>
+        <span class="fonS"> > </span>
+        <a href="{:U('Goods/storegoods')}" title="所有商品">店铺精选</a>
+        <span class="fonS"> > </span>
+        <a href="{:U('Goods/storegoods',array('domainid'=>$domainid))}">{$subdomain.name}</a>
+        <if condition="$pcategory">
+            <span class="fonS"> > </span>
+            <a href="{:U('Goods/storegoods',array('domainid'=>$domainid,'id'=>$pcategory['id'],'brand'=>$brandid))}" title="">{$pcategory.title}</a>
+        </if> 
+        <if condition="$currentcategory['id']">
+            <span class="fonS" >&gt;</span>
+            <a href="{:U('Goods/lists',array('domainid'=>$domainid,'id'=>$currentcategory['id'],'brand'=>$brandid))}" title="{$currentcategory.title}">{$currentcategory.title}</a>
+            <!--<span class="fonS">&gt;</span>-->
+        </if>
+    </div>
+    <div class="wrap">
+        <div class="towp">
+            <div class="left-bar fl">
+                <div class="classfyNav">
+                    <h2><i class="bg"></i>分类导航</h2>
+                    
+                    <div class="l_tree">
+                    <ul>
+                        <volist name='category_list' id='categoryinfo'>
+                            <li <if condition="$categoryinfo['id'] eq $domainid">class="current"</if> >
+                            <p  class="tree_tit"><i></i><a href="{:U('goods/storegoods',array('domainid'=>$categoryinfo['id']))}">{$categoryinfo.name}</a></p>
+                            <ul class="c_sub" >
+                                <volist name='categoryinfo.catelist' id='catelist'>
+                                    <li><p  class="tree_ctit"><i></i><a href="{:U('Goods/storegoods',array('domainid'=>$catelist['domainid'],'id'=>$catelist['id']))}" >{$catelist.title}</a></p>  
+                                        <ul class="s_sub" <if condition="($catelist['id'] eq $categoryid) or ($catelist['id'] eq $pid)" > style="display:block"</if>>
+                                            <volist name='catelist.child' id='child'>
+                                                <li><a href="{:U('Goods/storegoods',array('domainid'=>$child['domainid'],'id'=>$child['id'],'pid'=>$child['pid']))}">{$child.title}</a></li>
+                                            </volist>
+                                        </ul>
+                                    </li>
+                                </volist>
+                            </ul>
+                        </li>
+                        </volist>
+                    </ul>
+                </div>
+                    
+                    
+                </div>
+                <div class="hot">
+                    <h2><i class="bg"></i>热销推荐</h2>
+                    <div class="hot-tj" >
+                        <ul>
+                            <volist name="hotgoodlist" id="hotgood">
+                                <li><a href="{:U('Goods/detail',array('channelname'=>$hotgood['channelname'],'id'=>$hotgood['id']))}" title="{$hotgood.title}">
+                                        <img style="width:178px; height: 178px;" src="{$hotgood['pics_img'][$hotgood['cover_id']]}" alt="{$hotgood.title}"/>
+                                        <strong>{:getsubstrutf8($hotgood['title'],0,30)}</strong></a>
+                                    <span class="price">&yen;{$hotgood.show_price}</span>
+                                    <span class="price"><strike>&yen;{$hotgood.marketprice}</strike></span>
+                                </li>
+                            </volist>
+                        </ul>
+                    </div>
+                </div>
+                <div class="rank">
+                    <h2><i class="bg"></i>销量排行</h2>
+                    <div class="rank-tj" >
+                        <ul>
+                            <volist name="salesgoodlist" id="salesgood" empty="没有数据">
+                                <li><a href="{:U('Goods/detail',array('channelname'=>$salesgood['channelname'],'id'=>$salesgood['id']))}" title="{$salesgood.title}">
+                                        <img style="width:178px; height: 178px;" src="{$salesgood['pics_img'][$salesgood['cover_id']]}" alt="{$salesgood.title}"/>
+                                        <strong>{:getsubstrutf8($salesgood['title'],0,30)}</strong></a>
+                                    <span class="price">&yen;{$salesgood.show_price}</span>
+                                    <span class="price"><strike>&yen;{$salesgood.marketprice}</strike></span>
+                                </li>
+                            </volist>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="right-con content_right fr ">
+                <div class="filter" style="display:none;">
+                    <!--已选条件 S-->
+                    <div class="chosed-fil">
+                        <dl class="chose-con s_value">
+                            <dt style="line-height: 46px;padding-left: 10px;padding-right: 10px;">已选条件</dt>
+                            <dd class="fi-con ">
+                                <a href="{:U('goods/storegoods')}" class="del_r">重置筛选条件</a>
+                            <volist name="domainlist" id="domaininfo">
+                                <if condition="$domaininfo[id] eq $domainid">
+                                    <a href="{:U('Goods/storegoods',array('domainid'=>0,'id'=>0,'brand'=>0,'p'=>$p ))}">栏目：<span>{$domaininfo.name}</span><i class="del_c"></i></a>
+                                </if>
+                            </volist>
+
+                            <volist name="categorysub" id="cate">
+                                <eq name="cate.pid" value="0">
+                                <eq name="categorypid" value="$cate['id']">
+                                <a href="{:U('Goods/storegoods',array('domainid'=>$cate['domainid'],'id'=>0,'brand'=>$brandid))}">分类：<span>{$cate.title}</span><i class="del_c"></i></a>
+                                </eq>
+                                </eq>
+                            </volist>
+
+                            <volist name="categorysub" id="categoryinfo">
+                                <eq name="categorypid" value="$categoryinfo['id']">
+                                <volist name="categoryinfo.child" id="childrencateinfo">
+                                    <eq name="currentcategory.id" value="$childrencateinfo['id']">
+                                    <a href="{:U('Goods/storegoods',array('domainid'=>$domainid,'id'=>0,'brand'=>$brandid))}">类别：<span>{$childrencateinfo.title}</span><i class="del_c"></i></a>
+                                    </eq>
+                                </volist>
+                                </eq>
+                            </volist>
+
+                            <volist name="brandlist" id="brand">
+                                <if condition="$brand[id] eq $brandid"> 
+                                    <a href="{:U('Goods/storegoods',array('domainid'=>0,'id'=>$currentcategory['id'],'brand'=>0,'p'=>$p ))}">品牌：<span>{$brand.title}</span><i class="del_c"></i></a>
+                                </if>
+                            </volist>
+                            </dd>                       
+                        </dl>
+                    </div>
+                    <!--已选条件 E-->
+                    <!--选择品牌 S-->
+                    <ul class="fil-list clear search_lock">
+                        <li class="brand clear ">
+                            <dl><dt class="colo7">栏目：</dt>
+                                <dd class="f-list">
+                                    <a href="{:U('goods/storegoods')}" class="current cur any">不限</a>
+                                    <a href="javascript:;" class="b_up">收起</a> <!---b_up---->
+                                <volist name="domainlist" id="domaininfo">
+                                    <a <if condition="$domaininfo[id] eq $domainid"> class='current' </if> href="{:U('Goods/storegoods',array('domainid'=>$domaininfo['id'],'id'=>0,'brand'=>0,'p'=>$p ))}" title="{$domaininfo.name}">{$domaininfo.name}</a>
+                                </volist>
+                                </dd>
+                            </dl>
+                        </li>
+                        <li class="brand clear " style="display:none;">
+                            <dl><dt class="colo7">分类：</dt>
+                                <dd class="f-list">
+                                    <a href="{:U('goods/storegoods')}" class="current cur any">不限</a>
+                                    <a href="javascript:;" class="b_up">收起</a> <!---b_up---->
+                                <volist name="categorysub" id="cate">
+                                    <eq name="cate.pid" value="0">
+                                    <a <eq name="categorypid" value="$cate['id']">class="current"</eq> href="{:U('Goods/storegoods',array('domainid'=>$cate['domainid'],'id'=>$cate['id'],'brand'=>$brandid))}" title="{$cate.title}">{$cate.title}</a><i class="colo7"></i>
+                                    </eq>
+                                </volist>
+                                </dd>
+                            </dl>
+                        </li>
+                        <if condition="$currentcategory['id']">
+                            <li class="brand clear ">
+                                <dl><dt class="colo7">类别：</dt>
+                                    <dd class="f-list">
+                                        <!--<a href="{:U('goods/storegoods')}" class="current cur any">不限</a>-->
+                                        <a href="javascript:;" class="b_up">收起</a> <!---b_up---->
+                                    <volist name="categorysub" id="categoryinfo">
+                                        <eq name="categorypid" value="$categoryinfo['id']">
+                                        <a href="{:U('Goods/storegoods',array('domainid'=>$domainid,'id'=>$categoryinfo['id'],'brand'=>$brandid))}" title="{$categoryinfo.title}" <eq name="categoryinfo.id" value="$currentcategory['id']">class="current cur any"</eq> >不限</a>
+                                        <volist name="categoryinfo.child" id="childrencateinfo">
+                                            <a <eq name="currentcategory.id" value="$childrencateinfo['id']">class="current"</eq> href="{:U('Goods/storegoods',array('domainid'=>$childrencateinfo['domainid'],'id'=>$childrencateinfo['id'],'brand'=>$brandid))}" title="{$childrencateinfo.title}">{$childrencateinfo.title}</a><i class="colo7"></i>
+                                        </volist>
+                                        </eq>
+                                    </volist>
+                                    </dd>
+                                </dl>
+                            </li>
+                        </if>
+                        <li class="brand clear " style="display:none">
+                            <dl class=""><dt class="colo7">价格：</dt>                            
+                                <dd class="f-list" style="width:600px">
+                                    <a href="" class="current cur any">不限</a>
+                                    <a href="javascript:;">0-50</a> 
+                                    <a href="javascript:;">50-500</a> 
+                                    <a href="javascript:;">501-1500</a> 
+                                    <a href="javascript:;">1501-3500</a> 
+                                    <a href="javascript:;">3501-6000</a> 
+                                    <a href="javascript:;">6001-10000</a> 
+                                    <a href="javascript:;">10001-20000</a> 
+                                </dd>
+                                <dd class="searBox searBox2  ">
+                                    <input type="text" class="text" />-<input type="text" class="text" > <input type="button" class="a-btn3" value="确定" />
+                                </dd>
+                            </dl>
+                        </li>
+                        <if condition="$brandlist">
+                            <li class="brand clear ">
+                                <dl><dt class="colo7">品牌：</dt>
+                                    <dd class="f-list">
+                                        <a href="{:U('goods/storegoods')}" class="current cur any">不限</a>
+                                        <a href="javascript:;" class="b_up">收起</a> <!---b_up---->
+                                    <volist name="brandlist" id="brand">
+                                        <a <if condition="$brand[id] eq $brandid"> class='current' </if> href="{:U('Goods/storegoods',array('domainid'=>$brand[domainid],'id'=>$currentcategory['id'],'brand'=>$brand['id'],'p'=>$p ))}" title="{$brand.title}">{$brand.title}</a><i class="colo7"></i>
+                                    </volist>
+                                    </dd>
+                                </dl>
+                            </li>
+                        </if>
+                    </ul>
+                    <!--选择品牌 E-->
+                </div>
+                <div class="range">
+                    <div class="l_sort">
+                        <a  href="{:U('Goods/storegoods',$stringcx.'&order=1'.'&sort='.$see )}" class="<if condition='$order eq 1 and $see eq 0'>i_down<elseif condition='$order eq 1 and $see eq 1'/>i_top</if>">默认排序</a>
+                        <a  href="{:U('Goods/storegoods',$stringcx.'&order=2'.'&sort='.$see)}" class="<if condition='$order eq 2 and $see eq 0'>i_down<elseif condition='$order eq 2 and $see eq 1'/>i_top</if>">销量</a>
+                        <a  href="{:U('Goods/storegoods',$stringcx.'&order=4'.'&sort='.$see)}" class="<if condition='$order eq 4 and $see eq 0'>i_down<elseif condition='$order eq 4 and $see eq 1'/>i_top</if>">价格</a>
+                    </div>
+                    <div class="c_pagenum">
+                        <span>默认显示：</span>
+                        <a <eq name='pagesizes' value='20'> class="current" </eq>  href="{:U('Goods/storegoods',array('domainid'=>$domainid,'id'=>$categoryid,'brand'=>$brandid,'p'=>$page,'r'=>20 ))}">20条</a>
+                        <a <eq name='pagesizes' value='40'> class="current" </eq>  href="{:U('Goods/storegoods',array('domainid'=>$domainid,'id'=>$categoryid,'brand'=>$brandid,'p'=>$page,'r'=>40 ))}">40条</a>
+                        <a <eq name='pagesizes' value='60'> class="current" </eq>  href="{:U('Goods/storegoods',array('domainid'=>$domainid,'id'=>$categoryid,'brand'=>$brandid,'p'=>$page,'r'=>60 ))}">60条</a>
+                    </div>
+                    <div class="c_xylist">
+                        <a href="javascript:;" class="xlist_current">缩略图显示</a>
+                        <a href="javascript:;" class="ylist">列表显示</a>
+                    </div><!----xlist_current  ylist_current xlist ylist---->
+                    <div>
+                        {$_minpage}
+                    </div>
+                </div>
+                <div class="pro-list2">
+                    <if condition="$lists">
+                        <ul>
+                            <volist name="lists" id="ginfo" empty='没有数据' >
+                                <li>
+                                    <a href="{:U('Goods/storedetail',array('channelname'=>$ginfo['channelname'],'store_id'=>$ginfo['store_id'],'id'=>$ginfo['id']))}" title="{$ginfo.title}">
+                                        <img  src="{$ginfo['pics_img'][$ginfo['cover_id']]}" alt="{$ginfo.title}"/><strong>{$ginfo.title}</strong></a>
+                                    <div class="pric"><span class="price">&yen;<span class="bigFont">{$ginfo.show_price}</span></span><strike>&yen;{$ginfo.marketprice}</strike></div>
+                                    
+                                    <switch name="ginfo.product_type">
+                                    <case value="2">
+                                        <div class="intr"><span class="baoshui">保</span></div>
+                                    </case>
+                                    <case value="3">
+                                        <div class="intr"><span class="baoshui">直</span></div>
+                                    </case>
+                                    <default />
+                                    </switch>
+                                    <div class="sc_cart clear">
+                                        <a href="javascript: addfavortable(this ,{$ginfo.id});" class="addfavortable" title="收藏"></a>
+                                        <a href="javascript: addcart('{$ginfo.id}',1,'{$ginfo.show_price}','0',0,0,{$ginfo.store_id});" class="addcartbutton"  title="加入购物车"></a>
+                                    </div>
+                                    <div class="">
+                                        <span class="peo">{$ginfo.comment|default=0}人评价</span>
+                                        <span class="peo">{$ginfo.sales|default=0}人购买</span>                        		
+                                    </div>
+                                </li>
+                            </volist>
+                        </ul>
+                        <else />
+                         <div class="no_data">
+                            <h3>
+                                <i class=""> <img src="__IMG__/confirmGoods/ts.png"/> </i> 没有搜索到商品！
+                            </h3>						        	
+                        </div>
+                    </if>
+                </div>
+                <div class="page_box clear">
+                    {$_page}
+                </div>
+                <!-- 猜你喜欢 -->  
+                <div class="rmsp  picScroll-left  picScroll-left2 clear  ">
+                    <div class="jx"><h4><i class="bg"></i>猜你喜欢</h4></div>
+                    <div class="hd">
+                        <a class="next"></a>
+                        <a class="prev"></a>
+                    </div>		
+                    <div class="bd hot" style="width: 928px;overflow: hidden;margin-left: 34px;">
+                        <ul class="picList clear">
+                            <volist name="aboutproduct" id="vo" empty='没有数据'>
+                                <li>
+                                <a href="{:U('Goods/detail',array('channelname'=>$vo['channelname'],'id'=>$vo['id']))}">
+                                    <img src="{$vo.id|get_cover_picture_url}"/><span>{$vo['title']}</span></a>
+                                <p><em>￥<span>{$vo['price']}</span></em><i>￥{$vo['marketprice']}</i></p>
+                                <p class="dy">交易量：<span>{$vo['sales']}</span>件</p>
+                            </li>
+                            </volist>
+                        </ul>
+                    </div>
+                </div>
+                <!--猜你喜欢-->
+            </div>
+        </div>
+    </div>
+</block>
+<block name='script'>
+    <script type="text/javascript" src="__JS__/jquery.SuperSlide.2.1.1.js"></script>
+    <script>
+        $(function() {
+            jQuery(".picScroll-left").slide({titCell: ".hd ul", scroll: 1, mainCell: ".bd ul", autoPage: true, effect: "leftLoop", autoPlay: true, vis: 5});
+        })
+
+        $(function() {
+            $('.xlph-list > li').mouseenter(function() {
+                $(' .active').removeClass("active");
+                $(this).toggleClass("active");
+            });
+            $(".search_lock li").each(function(i) {
+                var dth = $(this).find("dd").height();
+                if (dth > 34) {
+                    $(this).find(".b_up").css({"display": "block"})
+                } else {
+                    $(this).find(".b_up").css({"display": "none"})
+                }
+
+            })
+            $(".b_up").click(function() {
+                var cnamez = $(this).attr("class");
+                if (cnamez == "b_up") {
+                    $(this).attr("class", "b_down");
+                    dth = $(this).parents("dd").height();
+                    $(this).parents("dl").animate({"height": dth}, 600);
+                } else {
+
+                    $(this).attr("class", "b_up");
+                    $(this).parents("dl").animate({"height": "32px"}, 600);
+                }
+            });
+        });
+        $(function() {
+            var nav = $('#j_nav');
+            var bnav = $('.nav');
+            var navTop = bnav.offset().top;
+            $(window).scroll(function(e) {
+                if ($(this).scrollTop() >= navTop) {
+                    nav.css('display', 'block');
+                    nav.addClass('m-nav-fix');
+                } else {
+                    nav.css('display', 'none');
+                    nav.removeClass('m-nav-fix');
+                }
+            });
+        });
+        $(function() {
+            $('.leve1 > a').click(function() {
+                $(this).css('color', '#f89e00')
+                        .find('b').text('-')
+                        .parent('a').next().show()
+                        .parent().siblings().children('a')
+                        .css('color', '#333')
+                        .find('b').text('+')
+                        .parent('a').next().hide();
+            })
+        });
+
+        $('.range .thum').on('click', function() {
+            $(".range .thum i").removeClass('active14')
+            $('.range .li i').addClass('active14')
+            $('.pro-list2').removeClass('pros-list2')
+        })
+        $('.range .li').on('click', function() {
+            $(".range .li i").removeClass('active14')
+            $('.range .thum i').addClass('active14')
+            $('.pro-list2').addClass('pros-list2')
+        })
+
+        $(".c_xylist a").on('click', function() {
+            var cname = $(this).attr("class");
+            if (cname == "ylist") {
+                $(this).addClass('ylist_current').removeClass('ylist');
+                $(this).siblings().addClass('xlist').removeClass('xlist_current');
+                $(".pro-list2").addClass('pros-list2');
+            } else if (cname == "xlist") {
+                $(this).addClass('xlist_current').removeClass('xlist');
+                $(this).siblings().addClass('ylist').removeClass('ylist_current');
+                $(".pro-list2").removeClass('pros-list2');
+            }
+        })
+    </script>
+</block>

@@ -1,0 +1,79 @@
+<extend name="Base/common_index"/>
+
+<block name="body">
+
+    <!--头部 S-->
+    <div class="herder">
+        <a href="{:U('Order/index')}" class="back"><i></i></a>
+        <h3>快捷支付</h3>
+    </div>
+    <div class="t_line"></div>
+    <form action='{:U("Payment/pay")}' id="payform" method="post"  name="myform"  class="payform" target="_blank">
+        <input type="hidden" name="orderid" value="{$codeid}" />
+        <input type="hidden" name="order_total" value="{$order_total}">
+        <div  class="cart-pay">
+            <div class="money clear"><span>选择支付方式</span><em>￥{$order_total}</em></div>
+            <ul class="pay paymentlist">
+
+                <volist name="paymentlist" id="payment" key="key" >
+                    <eq name="key" value="1">
+                    <li class="clear active pay_way" title='{$payment.payname}' payname="{$payment.payname}" paycode='{$payment.paycode}' payid='{$payment.id}' >
+                        <input type="hidden" name="paycode" value="{$payment.paycode}" />
+                        <input type="hidden" name="payid" value="{$payment.id}">
+                        <img src="__IMG__/payment/{$payment.paycode}.png"/>
+                        <div>
+                            <h3>{$payment.payname}</h3>
+                            <p>{$payment.payname}快捷支付方式</p>
+                        </div>
+                    </li>
+                    <else/>
+                    <li class="clear pay_way" title='{$payment.payname}' payname="{$payment.payname}" paycode='{$payment.paycode}' payid='{$payment.id}' >
+                        <img src="__IMG__/payment/{$payment.paycode}.png"/>
+                        <div>
+                            <h3>{$payment.payname}</h3>
+                            <p>{$payment.payname}快捷支付方式</p>
+                        </div>
+                    </li>
+                    </eq>
+                </volist>
+            </ul>
+            <a class="zf" href="javascript:;"  onclick="submitpay();">立即支付</a>
+        </div>
+    </form>
+</block>
+
+<block name='script'>
+<!--    <script type="text/javascript">
+        $('.pay li').on('click', function() {
+            $('.pay li').removeClass('active');
+            $(this).addClass('active');
+        })
+        $("li.clear:nth-child(1)").click(function() {
+            $(".zf").attr('href', 'pay-success.html');
+        });
+        $("li.clear:nth-child(2)").click(function() {
+            $(".zf").attr('href', 'pay-failure.html');
+        });
+    </script>-->
+    <script>
+        $(function() {
+            $(".paymentlist .pay_way").click(function() {
+                $(".paymentlist").find(".pay_way").removeClass("active");
+                $(this).addClass("active");
+                $("input[name=payid]").val($(this).attr('payid'));
+                $("input[name=paycode]").val($(this).attr('paycode'));
+            });
+
+        });
+
+        function submitpay() {
+            var codeid = $("input[name=payid]").val();
+            var orderid = $("input[name=orderid]").val();
+            if (codeid.length <= 0 || orderid.length <= 0) {
+                layer.msg('请选择支付方式！');
+                return false;
+            }
+            $("#payform").submit();
+        }
+    </script>
+</block>

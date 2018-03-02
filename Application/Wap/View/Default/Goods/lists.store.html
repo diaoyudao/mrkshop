@@ -1,0 +1,240 @@
+<extend name="Base/common_index"/>
+
+<block name="body">
+    <!--头部 S-->
+    <div class="herder clist_search">
+        <div id="j_listCtrl" class="btnWrap"> <a href="javascript:;" class="col crt"></a> </div>
+        <a href="javascript:history.go(-1);" class="back"><i></i></a>
+        <a href="{:U('Goods/search')}" class="search"><i></i>{$keywords}</a>
+
+    </div>
+    <div class="t_line"></div>
+    <!--头部 E--> 
+    <!--商品筛选 S--> 
+    <div class="inner  goodsFilter" >
+
+
+        <ul>
+            <li <eq name='order' value='1'> class="cur" </eq> ><a href="{:U('Goods/storegoods',$stringcx.'&order=1'.'&sort='.$see )}">新品</a>
+            </li>
+            <li <eq name='order' value='2'> class="cur" </eq> ><a href="{:U('Goods/storegoods',$stringcx.'&order=2'.'&sort='.$see)}">销量
+                    <i class="f-ico-triangle-mt <if condition='$order eq 2 and $see eq 1'> tcur </if>"></i>
+                    <i class="f-ico-triangle-mb <if condition='$order eq 2 and $see eq 0'> bcur </if>"></i>
+                </a></li>
+            <li <eq name='order' value='4'> class="cur" </eq>><a href="{:U('Goods/storegoods',$stringcx.'&order=4'.'&sort='.$see)}">价格
+                    <i class="f-ico-triangle-mt <if condition='$order eq 4 and $see eq 1'> tcur </if>"></i>
+                    <i class="f-ico-triangle-mb <if condition='$order eq 4 and $see eq 0'> bcur </if>"></i>
+                </a></li>
+            <li><a href="javascript:;" class="gnav-item">筛选<i class="sx_ioc"></i></a></li>
+        </ul>
+    </div>
+    <div class="t_line"></div>
+    <!--商品筛选 E--> 
+    <!--商品分类 S--> 
+    <div class="goods-list goodsList-row"  id="j_goodsList" >
+        <if condition="$lists">
+            <ul id="conten_id">
+                <volist name="lists" id="ginfo" empty='没有数据' >
+                    <li> 
+                        <a href="{:U('Goods/storedetail',array('channelname'=>$ginfo['channelname'],'store_id'=>$ginfo['store_id'],'id'=>$ginfo['id']))}" title="{$ginfo.title}">
+                            <div class="img">
+                                <div class="nr_ioc">
+                                    <eq name="$ginfo.product_type" value="2" >
+                                    <span class="baoshui">保</span>
+                                    </eq>
+                                </div>
+                                <img src="{$ginfo['pics_img'][$ginfo['cover_id']]}" alt="{$ginfo.title}" />
+                            </div>
+                            <div class="product_nr">
+                                <h3 class="title">{$ginfo.title}</h3>
+                                <p>{$ginfo.title}</p>
+                                <div class="price"><b>￥<em>{$ginfo.show_price}</em></b><strike>￥{$ginfo.marketprice}</strike></div>
+                            </div>
+                        </a>
+                        <a href="javascript:addcart('{$ginfo.id}',1,'{$ginfo.show_price}','',0,0,0);" title="加入购物车" class="collect"><i></i></a>
+                    </li>
+                </volist>
+            </ul>
+            <else/>
+            <li class="no_data">
+                    <h3>
+                        <i class=""> <img src="__IMG__/ts.png"/> </i> 没查询到商品
+                    </h3>						        	
+                </li>
+        </if>
+    </div>
+    <!--商品分类 E--> 
+    <!-- 筛选 S-->
+    <div class="screen_zz" style="display: none; ">
+        <div class="screen_nr one_nav">
+            <div class="screen_tit"> <a href="javascript:;" class="screen_no">取消</a> <a href="javascript:;" id="query_search" class="screen_ok">确定</a>
+                <h4>筛选</h4>
+            </div>
+            <div class="screen_overflow">
+                <div class="distribution">
+                    <ul>
+                        <li dealid="cat"><a href="javascript:;">分类<span><span class="domainid_name">{$subdomain.name|default='全部'}</span><i></i></span></a></li>
+                    </ul>
+                </div>
+                <div class="distribution">
+                    <ul>
+                        <li dealid="brand"><a href="javascript:;">品牌<span><span class="brand_name">{$brand.name|default='全部'}</span><i></i></span></a></li>
+                    </ul>
+                </div>
+                <div class="classify_ul ">
+                    <ul>
+                        <li dealid="price_grade"><a href="javascript:;">价格<span><span class="goods_price">{$_filter.pz|default='全部'}</span><i></i></span></a></li>
+                    </ul>
+                </div>
+                <div class="qcxx"><a href="{:U('Goods/storegoods',array('store_id'=>$store_id))}">清除选项</a></div>
+            </div>
+        </div>
+
+        <div class="screen_nr two_nav cat_ct" style="display:none;">
+            <div class="screen_tit"> <a href="javascript:;" class="back"><i></i>　</a> <a href="javascript:;" class="screen_ok">确定</a>
+                <h4>分类</h4>
+            </div>
+            <div class="screen_overflow">
+                <div class="classify_ul domainid_no">
+                    <ul>
+                        <volist name='domainlist' id='vo'>
+                            <li data-domainid="{$vo.id}" <eq name="_filter.domainid" value="$vo['id']">class="classify_hover"</eq> ><a href="javascript:;;">{$vo.name}<i></i></a></li>
+                        </volist>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="screen_nr two_nav brand_ct" style="display:none;">
+            <div class="screen_tit"> <a href="javascript:;" class="back"><i></i>　</a> <a href="javascript:;" class="screen_ok">确定</a>
+                <h4>品牌</h4>
+            </div>
+            <div class="screen_overflow">
+                <div class="classify_ul brand_no">
+                    <ul>
+                        <volist name='brandlist' id='vo'>
+                            <li data-brandid="{$vo.id}" <eq name="_filter.domainid" value="$vo['id']">class="classify_hover"</eq> ><a href="javascript:;;">{$vo.name}<i></i></a></li>
+                        </volist>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="screen_nr two_nav price_grade_ct" style="display:none;">
+            <div class="screen_tit"> <a href="javascript:;" class="back"><i></i>　</a> <a href="javascript:;" class="screen_ok">确定</a>
+                <h4>价格</h4>
+            </div>
+            <div class="screen_overflow">
+                <div class="classify_ul price_no">
+                    <ul>
+
+                        <volist name="price_list" id="prices">
+                            <li <eq name="_filter.pz" value="$prices">class="classify_hover"</eq>  data-pz="{$prices}" ><a href="javascript:;;">{$prices}<i></i></a></li>
+                        </volist>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 筛选 E--> 
+    <div id="loding_ajax" style=" text-align:center;height:.88rem;line-height:.88rem;font-size: .44rem;font-weight: bold;color: #000; display: none;">加载中····</div>
+</block>
+<block name='script'>
+    <script src="__JS__/ajaxpage.js" ></script>
+    <script>
+                $(function() {
+                AjaxPage.pageCount = "{$totalPages|default=0}";
+                        AjaxPage.append = 1;
+                        AjaxPage.method = 'GET';
+                        AjaxPage.dataType = "html";
+                        AjaxPage.Conten = $('#conten_id');
+                        AjaxPage.alert = $('#loding_ajax');
+                        AjaxPage.filter.ajax = 1;
+                        < foreach name = "_filter" item = "fitler" key = "k" >
+                        AjaxPage.filter.{$k} = "{$fitler}";
+                        < /foreach>
+
+                        $(window).scroll(function() {
+                if ($(window).height() + 200 + $(window).scrollTop() > $('body').outerHeight() && AjaxPage.canpage) {
+                AjaxPage.canpage = false;
+                        AjaxPage.gotoPageNext();
+                }
+                });
+                });    </script>
+    <script>
+
+                var brandid = '{$_filter.brandid}'; // 品牌ID
+                var pz = "{$_filter.pz}"; // 价格区间
+                var type = "{$_filter.type}"; // 商品类型
+                var domainid = "{$_filter.domainid}"; // 频道ID
+                $(function() {
+
+                // 搜索商品
+                $("#query_search").click(function() {
+                url = "{:U('Goods/storegoods')}";
+                        url += '&pz=' + pz;
+                        url += '&brandid=' + brandid;
+                        url += '&domainid=' + domainid;
+                        url += '&store_id=' + "{$store_id}";
+                        location = url;
+                });
+                        $("body").on('click', '.price_no ul li', function() {
+                var goods_price = $(this).text();
+//                alert($(this).data("pz"));
+                        $(".price_no ul li").removeClass('classify_hover');
+                        $(this).addClass("classify_hover");
+                        $(".goods_price").html(goods_price);
+                        pz = goods_price;
+                }).on('click', ".domainid_no ul li", function() {
+                var domainid_name = $(this).text();
+                        $(".domainid_no ul li").removeClass('classify_hover');
+                        $(this).addClass("classify_hover");
+                        $(".domainid_name").html(domainid_name);
+                        domainid = $(this).data("domainid");
+                }).on('click', ".brand_no ul li ", function() {
+                var brand_name = $(this).text();
+                        $(".brand_no ul li").removeClass('classify_hover');
+                        $(this).addClass("classify_hover");
+                        $(".brand_name").html(brand_name);
+                        brandid = $(this).data("brandid");
+                });
+                        // 产品列表排列方式
+                        var goodsList = $('#j_goodsList');
+                        $('#j_listCtrl a').click(function() {
+                if ($(this).hasClass('crt')) {
+                $(this).removeClass('crt');
+                        goodsList.removeClass('goodsList-row');
+                }
+                else {
+                $(this).addClass('crt');
+                        goodsList.addClass('goodsList-row');
+                }
+                });
+                        //点击页面筛选
+                        $(".gnav-item").click(function() {
+
+                $(".screen_zz").finish().show();
+                        $(".screen_zz .screen_nr").finish().css("right", '-6rem').eq(0).animate({right: '0px', });
+                        $(".screen_zz .screen_nr").click(function() {
+                $(".two_nav").show();
+                });
+                });
+                        //一级筛选也没点击去掉和确定
+                        $(".screen_zz .one_nav .screen_tit a.screen_no,.screen_zz .one_nav .screen_tit a.screen_ok").click(function() {
+                $(".screen_zz .screen_nr").finish().animate({right: '-6rem'}, function() {
+                $(".screen_zz").finish().hide();
+                });
+                });
+                        //二级页面点击返回和确定 搜索
+                        $(".screen_zz .two_nav .screen_tit a.back,.screen_zz .two_nav .screen_tit a.screen_ok").click(function() {
+                $(".screen_zz .two_nav").finish().animate({right: '-6rem'}, function() {
+                $(".screen_zz .two_nav").finish().hide();
+                });
+                });
+                        //点击一级筛选弹出二级筛选也没
+                        $(".screen_zz .one_nav ul li").click(function() {
+                console.log($(this).attr('dealID') + '_ct');
+                        var dealID = $(this).attr('dealID') + '_ct';
+                        $(".screen_zz ." + dealID).finish().css("right", '-6rem').eq(0).animate({right: '0px'});
+                });
+                });
+    </script>
+</block>

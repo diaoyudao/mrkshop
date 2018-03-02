@@ -1,0 +1,18 @@
+
+<div class="psxx">
+    <dl><dt>配送方式</dt>
+        <dd>
+        <notempty name="distribution">
+            <select name="distribution" class="peisong">
+                <volist name="distribution" id="dvo" key='k'>
+                    <option money="{$dvo.money}" value="{$dvo['id']}">{$dvo['title']}  运费￥{$dvo.money}</option>
+                </volist>
+            </select>
+            <else/>
+            <p>所在地区没有配送方式，不能下单</p>
+        </notempty>
+
+        </dd>
+        <i class="Get"></i></dl>
+</div>
+

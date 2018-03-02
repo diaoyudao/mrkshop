@@ -1,0 +1,54 @@
+<extend name="Public/base"/>
+<block name="style">
+    <link rel="stylesheet" type="text/css" href="__JS__/web_code/base.css" media="all">
+    <link rel="stylesheet" type="text/css" href="__JS__/web_code/index-admin.css" media="all">
+
+</block>
+<block name="body">
+    	<script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script> 
+    <div class="web_code">
+        <div class="main-title">
+            <h2>{$meta_title} <a href="javascript:;;">{$info.name}</a></h2>
+    <div class="towp hot-sale clear">
+        <div class="hot-sale1  fl">
+            <div class=" hot1">
+                <h3>热卖推荐/<span>HOT SALE</span></h3>
+                <div class="swiper-container ">
+                    <ul class="swiper-wrapper">
+                        {:hook('Advs',array('mark'=>'hot_A1','domainid'=>'','domaintype'=>'site'))}
+                    </ul>
+                </div>
+            </div>
+            <div class="hot2">
+                 {:hook('Advs',array('mark'=>'hot_A2','domainid'=>'','domaintype'=>'site'))}
+            </div>
+            <i class="bg right-top"></i>
+        </div>
+        <div class="hot-sale2  fl">
+            <div class="sale-wrap ">
+                <ul class="hot-sale2-1 ">
+                     {:hook('Advs',array('mark'=>'hot_A3','domainid'=>'','domaintype'=>'site'))}
+                </ul>
+            </div>
+            <ul class="hot-sale2-2 ">
+                {:hook('Advs',array('mark'=>'hot_A4','domainid'=>'','domaintype'=>'site'))}
+            </ul>
+        </div>
+        <div class="air-line2"></div>
+    </div>
+        </div>
+        <div class="form-item cf" style='margin-top:20px;'>
+            <a class="btn btn-return" href="{:U('Websetting/index')}">返 回</a>
+            <a class="btn btn-next" href="{:U('AdvertisingPage/imgdetail',array('domainid'=>1,'id'=>14))}">编辑热卖</a>
+            <input type="hidden" name="subdomain_id" value="2">
+        </div>
+    </div>
+ 
+    <include file="Websetting/module_code"/>
+</block>
+<block name="script">
+    <script>
+            //导航高亮
+        highlight_subnav('{:U("Websetting/hot")}');
+    </script>
+</block>

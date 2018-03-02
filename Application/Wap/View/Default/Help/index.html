@@ -1,0 +1,25 @@
+<extend name="Base/common_index"/>
+<block name="body">
+    <!--头部 S-->
+    <div class="herder">
+        <a href="javascript:history.go(-1);" class="back"><i></i></a>
+        <h3>关于我们</h3>
+        <!-- <div class="herd_r"><a href="search.html" class="search"><i></i></a></div>-->
+    </div>
+    <div class="t_line"></div>
+    <!--头部 E--> 
+    <!-- 内容 -->
+    <div class="wrap" style="background-color: #fafafa;">
+        <div class="content_ge towp clear">
+            <div class="content_left">
+                <include file="Help/help_menu"/>
+            </div>
+            <div class="content_right">
+                <h2>{$article.title}</h2>
+                <div class="r_guide">
+                    {$article.content}
+                </div>
+            </div>
+        </div>
+    </div>
+</block>

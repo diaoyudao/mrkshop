@@ -1,0 +1,52 @@
+<div class="nav">
+    <div class="towp">
+        <ul>
+            <li class="allClassfy"><a href="javascript:;"><i class="bg"></i>全部分类</a>
+                <div class="all-naiv">
+                    <ul>
+                        <volist name='category_list' id='categoryinfo'>
+                            <li class="ls"><a href="{:U('goods/lists',array('domainid'=>$categoryinfo['id']))}"><i>{$categoryinfo.icon}</i>{$categoryinfo.name}</a>
+                            <div class="showbox">
+                                <volist name='categoryinfo.catelist' id='catelist'>
+                                <dl>
+                                    <dt><a href="{$catelist.id}">{$catelist.title}</a></dt>
+                                    <dd class="clear">
+                                    <volist name='catelist.child' id='child'>
+                                        <a href="{$title.id}"><span>{$child.title}</span></a>
+                                        </volist>
+                                    </dd>
+                                </dl>
+                                    </volist>
+                                <div class="index_fl clear">
+                                    	<a href="#">
+                                                <span>葡萄柚薄荷<em>阿萨姆水果红茶</em></span>
+                                                <strong>blendy tea stick</strong>
+                                        </a>
+                                        <a class="cp" href="#"><img src="__IMG__/all-class/pro-ico.png" /></a>
+                                </div>
+                                <div class="index_fl clear">
+                                    	<a href="#">
+                                                <span>葡萄柚薄荷<em>阿萨姆水果红茶</em></span>
+                                                <strong>blendy tea stick</strong>
+                                        </a>
+                                        <a class="cp" href="#"><img src="__IMG__/all-class/pro-ico.png" /></a>
+                                </div>
+                            </div>
+                        </li>
+                        </volist>
+                    </ul>
+                </div>
+            </li>
+            <li class="otherClassfy">
+                <ul>
+                    <volist name="_menus" id="nav" > 
+		    <if condition="($nav.types eq 0) and ($menunum lt 7)">
+                    <assign name="menunum" value="$menunum+1" />
+                    <li <eq name="nav.title" value="首页" > class="active1"</eq> ><a href="{$nav.url|get_nav_url}" target="<eq name='nav.target' value='1'>_blank<else/>_self</eq>">{$nav.title}</a></li>
+		    </if>
+		</volist>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>

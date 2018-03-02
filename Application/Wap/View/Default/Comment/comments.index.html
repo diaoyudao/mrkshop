@@ -1,0 +1,90 @@
+<extend name="Base/common_index"/>
+<block name='style'>
+    <style>
+        .pinjia li{ width: 33.3%;}
+    </style>
+</block>
+<block name="body">
+    <!--头部 S-->
+    <div class="herder">
+        <a href="{:U('Member/index')}" class="back"><i></i></a>
+        <h3>评价管理</h3>
+        <!-- <div class="herd_r"><a href="search.html" class="search"><i></i></a></div>-->
+    </div>
+    <div class="t_line"></div>
+    <!--头部 E--> 
+    <!--订单列表 S--> 
+    <ul class="tab pinjia">
+        <li <eq name='state_type' value='all'> class="active" </eq> ><a href="{:U('Comment/index')}">全部订单<span class="colo6">（{$ordernum}）</span></a></li>
+        <li <eq name='state_type' value='state_noeval'> class="active" </eq> ><a href="{:U('Comment/index',array('state_type'=>'state_noeval'))}">待评价<span class="colo6">（{$noevalnum}）</span></a></li>
+        <li <eq name='state_type' value='state_eval'> class="active" </eq> ><a href="{:U('Comment/index',array('state_type'=>'state_eval'))}">已评价<span class="colo6">（{$evalnum}）</span></a></li>
+
+    </ul>
+    <notempty name="orderlist">
+        
+        <div class="order_list js_tab has_com order_lists">
+            <ul>
+                <volist name='orderlist' id='order'>
+                    <volist name='order.goodslist' id='goods' key='k'>
+                        <li>
+                            <a class="order_a" href="{$order.detail_url}">
+                                <img src="{$goods['pics_img'][$goods['cover_id']]}" />
+                                <div class="pro_info">
+                                    <h3><a href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}">{$goods.goodid|get_good_name}</a></h3>
+                                    <p class="pric">
+                                        <span>￥<span class="font36">{$goods.price}</span></span>
+                                        <i> X {$goods.num} </i>
+                                    </p>						
+                                </div>
+                                <if condition="$goods.iscomment GT 0">
+                                    <!--<a href="javascript:;" style="background-color: gray;cursor:not-allowed" class="pj">已评价</a>-->
+                                    <div class="commodityss">
+                                        <p>{$goods.comment.content}</p>
+                                        <div class="imgs clear">
+                                            <volist name='goods.comment.picss' id='pic'>
+                                                <a href="javascript:;"><img src="{$pic}" alt="{$goods.goodid|get_good_name}" /></a>
+                                            </volist>
+                                        </div>
+                                        <span>{$goods.create_time|date='Y-m-d H:i:s',###} </span>
+                                    </div>
+                                    <else/>
+                                    <!--{$goods.goodid}-->
+                                    <a href="{:U('Comment/evaluation',array('orderid'=>$order['id'],'goodsid'=>$goods['goodid']))}" class="long_btn long_btn_short fr">去评价</a>
+                                </if>
+                            </a>
+                        </li>
+                    </volist>
+            </ul>
+        </div>
+        </volist>
+        <else/>
+        <div class="no_data">
+            <h3>
+                <i class=""> <img src="__IMG__/ts.png"/> </i> 没有订单记录哦
+            </h3>						        	
+        </div>
+    </notempty>
+
+</block>
+<block name='script'>
+    <script>
+
+        $(function() {
+            $("a.confirm").click(function() {
+                var msg = $(this).attr("data-msg");
+                var href = $(this).attr('href');
+                layer.confirm(msg, {icon: 3, title: '提示信息'}, function(index) {
+                    if (index) {
+                        layer.close(index);
+                        window.location.href = href;
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
+                return false;
+            });
+        });
+
+    </script>
+</block>

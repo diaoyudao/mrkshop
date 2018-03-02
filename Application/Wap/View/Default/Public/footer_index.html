@@ -1,0 +1,19 @@
+<!--底部 S-->
+<div class="footer">
+  <ul>
+    <li <eq name='CONTROLLER_NAME' value='Index'> class="nav_hover"</eq>><a href="{:U('Index/index')}"><i class="footer_nav_a"></i>
+      <p>首页</p>
+      </a></li>
+    <li <eq name='CONTROLLER_NAME' value='Category'> class="nav_hover"</eq> ><a href="{:U('Category/index')}"><i class="footer_nav_b"></i>
+      <p>全部分类</p>
+      </a></li>
+    <li <eq name='CONTROLLER_NAME' value='Cart'> class="nav_hover"</eq> ><a href="{:U('Cart/index')}"><i class="footer_nav_c"></i>
+      <p>购物车</p>
+      <em class="cart_sum">{$cart_list.goods_count}</em> </a></li>
+    <li <eq name='CONTROLLER_NAME' value='Member'> class="nav_hover"</eq> ><a href="{:U('Member/index')}"><i class="footer_nav_d"></i>
+      <p>个人中心</p>
+      </a></li>
+  </ul>
+</div>
+<div class="b_line"></div>
+<!--底部 E-->

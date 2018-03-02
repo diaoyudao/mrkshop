@@ -1,0 +1,200 @@
+<!-- 楼层模块 S-->
+       <volist name="web_code" id="moduleinfo" empty="" key="k">
+       <div class="classfy1  clear towp">
+           <div class="sideNaiv">
+               <div class="sN-tit">
+                   <p class="floor">{$moduleinfo.tit.code_info.floor}</p>
+                   <div  class="img "><img alt="{$moduleinfo.tit.code_info.name}" src="__PICURL__/1/{$moduleinfo.tit.code_info.icon|get_cover='path'}" /> </div>
+                   <p>{$moduleinfo.tit.code_info.en_name} </p>
+                   <h4><span>{$moduleinfo.tit.code_info.name}</span></h4>
+               </div>
+               <div>
+                   <a href="{$moduleinfo.left_ad.code_info.ad_url}"><img style="width:214px;height: 228px;" alt="{$moduleinfo.left_ad.code_info.ad_name}" src="__PICURL__/1/{$moduleinfo.left_ad.code_info.icon|get_cover='path'}" > </a>
+               </div>
+               <div class="w100">
+                   <div class="li-naiv">
+                       <ul class="li-naiv-list">
+                           <volist name="moduleinfo.cate_list.code_info.goods_class" id="class" offset="0" length='6'>
+                           <li><span><a href="{:U('Goods/lists',array('domainid'=>$class['domainid'],'id'=>$class['id']))}">{$class.gc_name}</a></span></li>
+                           </volist>
+                       </ul>
+                   </div>
+               </div>
+           </div>
+           <div class="swiper-container cla-swi">
+               <ul class="swiper-wrapper">
+                   <empty name="moduleinfo.mid_ad.code_info.icon">
+                       没有广告
+                   <else />
+                       <li class="swiper-slide"><a title="{$moduleinfo.mid_ad.code_info.ad_name}" href="{$moduleinfo.mid_ad.code_info.ad_url}">
+                               <img style="width:270px;height: 432px;" alt="{$moduleinfo.mid_ad.code_info.ad_name}" src="__PICURL__/1/{$moduleinfo.mid_ad.code_info.icon|get_cover='path'}" /> </a></li>
+                   </empty>
+               </ul>
+           </div>
+           <div class="cla-pro fl">
+               <ul class="pro-list ">
+                   <volist name="moduleinfo.mid_goods.code_info.goods_list" id="goods" offset="0" length='6' empty="暂时没有数据">
+                   <li>
+                       <a href="{:U('Goods/detail',array('id'=>$goods['id']))}">
+                           <img style="width:136px; height: 123px;" src="__PICURL__/{$goods.cover_id|get_cover='path'}" />
+                           <strong>{$goods.title}</strong>
+                       </a>
+                       <div class="pric"><span class="price">￥<span class="bigFont">{$goods.show_price}</span></span><a href="javascript: addcart('{$goods.id}',1,'{$goods.show_price}','');"><i class="bg "></i></a></div>
+                   </li>
+                   </volist>
+               </ul>
+           </div>
+           <div class="xlph fl">
+               <h3><i class="bg"></i>一周热卖TOP5</h3>
+               <ul class="xlph-list xlph-list{$k}">
+                    <volist name="moduleinfo.hot_goods.code_info.goods_list" id="goods" key="k" offset="0" length='5'  empty="暂时没有数据">
+                    <eq name="k" value="1">
+                    <li class="active">
+                       <span><i class="bg num{$k}">{$k}</i></span>
+                       <a class="img" href="{:U('Goods/detail',array('id'=>$goods['id']))}">
+                           <img width="100" src="__PICURL__/{$goods.cover_id|get_cover='path'}"/>
+                           <strong>{$goods.title}</strong>
+                       </a>
+                       <div class="pric"><span class="price">￥<span class="bigFont">{$goods.show_price}</span></span></div>
+                   </li>
+                    <else/>
+                    <li class="">
+                       <span><i class="bg num{$k}">{$k}</i></span>
+                       <a class="img" href="{:U('Goods/detail',array('id'=>$goods['id']))}">
+                           <img width="100" src="__PICURL__/{$goods.cover_id|get_cover='path'}"/>
+                           <strong>{$goods.title}</strong>
+                       </a>
+                       <div class="pric"><span class="price">￥<span class="bigFont">{$goods.show_price}</span></span></div>
+                   </li>
+                   </eq>
+                   </volist>
+               </ul>
+           </div>
+       </div>
+           </volist>
+       <!-- 楼层模块 E-->
+      <div class="classfy1 classfy2 clear towp" style="display:none;">
+            <div class="sideNaiv">
+                <div class="sN-tit">
+                    <p class="floor">F2</p>
+                    <div  class="img "><img src="__IMG__/cal-2.png" /> </div>
+                    <p>INFANT & MOM </p>
+                    <h4><span>进口日化</span></h4>
+                </div>
+                <div>
+                    <a href="#"><img src="__IMG__/cal1.jpg" > </a>
+                </div>
+                <div class="w100">
+                    <div class="li-naiv">
+                        <ul class="li-naiv-list">
+                            <li><span><a href="#">孕期营养</a></span></li>
+                            <li><span><a href="#">安全湿巾</a></span></li>
+                            <li><span><a href="#">驱蚊防蚊</a></span></li>
+                            <li><span><a href="#">孕期营养</a></span></li>
+                            <li><span><a href="#">安全湿巾</a></span></li>
+                            <li><span><a href="#">驱蚊防蚊</a></span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-container cla-swi">
+                <ul class="swiper-wrapper">
+                    <li class="swiper-slide"><a href="#"><img src="__IMG__/cla/cla1.jpg" /> </a></li>
+                    <li class="swiper-slide"><a href="#"><img src="__IMG__/cla/cla1.jpg" /> </a></li>
+                    <li class="swiper-slide"><a href="#"><img src="__IMG__/cla/cla1.jpg" /> </a></li>
+                </ul>
+            </div>
+            <div class="cla-pro fl">
+                <ul class="pro-list ">
+                    <li>
+                        <a href="#">
+                            <img src="__IMG__/cla/pro1.jpg" />
+                            <strong>韩国进口纸尿裤100个装</strong>
+                        </a>
+                        <div class="pric"><span class="price">￥<span class="bigFont">78</span>.00</span><a href="#"><i class="bg "></i></a></div>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="__IMG__/cla/pro1.jpg" />
+                            <strong>韩国进口纸尿裤100个装</strong>
+                        </a>
+                        <div class="pric"><span class="price">￥<span class="bigFont">78</span>.00</span><a href="#"><i class="bg "></i></a></div>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="__IMG__/cla/pro1.jpg" />
+                            <strong>韩国进口纸尿裤100个装</strong>
+                        </a>
+                        <div class="pric"><span class="price">￥<span class="bigFont">78</span>.00</span><a href="#"><i class="bg "></i></a></div>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="__IMG__/cla/pro1.jpg" />
+                            <strong>韩国进口纸尿裤100个装</strong>
+                        </a>
+                        <div class="pric"><span class="price">￥<span class="bigFont">78</span>.00</span><a href="#"><i class="bg "></i></a></div>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="__IMG__/cla/pro1.jpg" />
+                            <strong>韩国进口纸尿裤100个装</strong>
+                        </a>
+                        <div class="pric"><span class="price">￥<span class="bigFont">78</span>.00</span><a href="#"><i class="bg "></i></a></div>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="__IMG__/cla/pro1.jpg" />
+                            <strong>韩国进口纸尿裤100个装</strong>
+                        </a>
+                        <div class="pric"><span class="price">￥<span class="bigFont">78</span>.00</span><a href="#"><i class="bg "></i></a></div>
+                    </li>
+                </ul>
+            </div>
+            <div class="xlph fl">
+                <h3><i class="bg"></i>一周热卖TOP6</h3>
+                <ul class="xlph-list">
+                    <li class="active">
+                        <span><i class="bg num1">1</i></span>
+                        <a class="img" href="#">
+                            <img src="__IMG__/week-top/pro1.jpg"/>
+                            <strong>现货贝因美奶粉顺丰包邮</strong>
+                        </a>
+                        <div class="pric"><span class="price">￥<span class="bigFont">78</span>.00</span></div>
+                    </li>
+                    <li class="">
+                        <span><i class="bg num2">2</i></span>
+                        <a class="img" href="#">
+                            <img src="__IMG__/week-top/pro1.jpg"/>
+                            <strong>现货贝因美奶粉顺丰包邮</strong>
+                        </a>
+                        <div class="pric"><span class="price">￥<span class="bigFont">78</span>.00</span></div>
+                    </li>
+                    <li class="">
+                        <span><i class="bg num3">3</i></span>
+                        <a class="img" href="#">
+                            <img src="__IMG__/week-top/pro1.jpg"/>
+                            <strong>现货贝因美奶粉顺丰包邮</strong>
+                        </a>
+                        <div class="pric"><span class="price">￥<span class="bigFont">78</span>.00</span></div>
+                    </li>
+                    <li class="">
+                        <span><i class="bg num4">4</i></span>
+                        <a class="img" href="#">
+                            <img src="__IMG__/week-top/pro1.jpg"/>
+                            <strong>现货贝因美奶粉顺丰包邮</strong>
+                        </a>
+                        <div class="pric"><span class="price">￥<span class="bigFont">78</span>.00</span></div>
+                    </li>
+                    <li class="">
+                        <span class=""><i class="bg num4">4</i></span>
+                        <a class="img" href="#">
+                            <img src="__IMG__/week-top/pro1.jpg"/>
+                            <strong>现货贝因美奶粉顺丰包邮现货贝因美奶粉顺丰包邮</strong>
+                        </a>
+                        <div class="pric"><span class="price">￥<span class="bigFont">78</span>.00</span></div>
+                    </li>
+                </ul>
+            </div>
+            <div class="air-line3"></div>
+        </div>
+      

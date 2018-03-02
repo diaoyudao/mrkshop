@@ -1,0 +1,24 @@
+<h4>最新加入的商品</h4>
+<notempty name="cart_list.cart_list">
+    <ul id='head_cart'>
+        <volist name='cart_list.cart_list' id='cart' empty='购物车空空如也'>
+            <li >
+                <div style="width: 20%"><img src="{$cart.goodid|get_cover_picture_url}" alt="{$cart.goodid|get_good_name}" /></div>
+                <div style="width: 54%" class="intr ">{$cart.goodid|get_good_name}</div>
+                <div style=" width:18%" class="price"><p>￥{$cart[price]} * {$cart.num}</p> 
+                    <a href="javascript:;" onclick="delcart2(this);" class="delcart2" rel="{$cart.sort}">&nbsp;&nbsp;删除</a></div>
+            </li>
+        </volist>
+    </ul>
+    <else/>
+    <div class="g_emty"><img src="__IMG__/add_8.jpg"></div>
+</notempty>
+
+<div class="count">共<span class="cart_sum">{$cart_list.goods_count}</span>件商品</span> 
+<b>共计￥<span id='total' >{$cart_list.goods_total}</span></b> 
+<notempty name="cart_list.cart_list">
+    <a class="topay " href="{:U('cart/index')}">去购物车结算<i class="bg"></i></a>
+    <else/>
+    <a class="topay_empty" href="javascript:;">去购物车结算<i class="bg"></i></a>
+</notempty>
+</div>

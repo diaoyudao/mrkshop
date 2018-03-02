@@ -1,0 +1,195 @@
+<extend name="Public/base"/>
+<block name="body">
+    <style>
+	#pro_comments_list td{padding: 5px;}
+    </style>
+	<div class="main-title">
+	    <h2>
+		 新增评论
+	    </h2>
+	</div>
+	<div class="tab-wrap">
+	<ul class="tab-nav nav"> 
+	    <li data-tab="tab1" class="current" ><a href="javascript:void(0);">基础</a></li> 
+	</ul>
+	<div class="tab-content"> 
+	<form action="{:U()}" method="post" class="form-horizontal"> 
+	    <div id="tab1" class="tab-pane tab1 in">
+		<div class="form-item" style="display:none;">
+		    <label class="item-label item-label_f">采集地址</label>
+		    <div class="controls"> 
+			<input type="text" value="" name="getdatabyurl" id="getdatabyurl" class="text input-large">
+			分页 <input type="text" value="" name="getdatabypage" id="getdatabypage" class="text" style="width: 50px;">
+			<a class="btn" href="javascript:;" onclick="getcommentinfobyurl()">采集</a> 
+		    </div>
+		</div>
+		<div class="form-item">
+		    <label class="item-label item-label_f">评论</label>
+		    <div class="controls">
+			<table width="100%">
+			<tbody id="pro_comments_list">
+			    <tr>
+				<td align="right" width="100" class="caption">评分_1</td>
+				<td align="left">
+				    <select name="start[]" id="c_points_1">
+					<option value="5">5星</option>
+					<option value="4">4星</option>
+					<option value="3">3星</option>
+					<option value="2">2星</option>
+					<option value="1">1星</option>
+				    </select>
+				</td>
+				<td align="right" class="caption">购买日期_1</td>
+				<td align="left">
+				    <input type="text" name="commenttime[]" class="text time" value="" placeholder="请选择日期" />
+				</td>
+			    </tr>
+			    <tr>
+				<td align="right" class="caption">内容_1</td>
+				<td align="left" colspan="3">
+				    <label class="textarea"><textarea style="height: 50px;"  placeholder="留空则不添加" name="content[]"></textarea></label></td>
+			    </tr> 
+			</tbody>
+			</table> 
+		    </div>
+		</div>  
+		</present>
+	    </div>
+	    <div class="form-item"> 
+		<input type="hidden" name="gid" value="{$gid}"> 
+		<button target-form="form-horizontal" type="submit" id="submit" class="btn submit-btn ajax-post">确 定</button>
+		<button class="btn btn-return" onclick="javascript:history.back(-1);return false;">返 回</button> 
+		</button>
+	    </div>
+	</form>
+</block>
+<block name="script">
+<link href="__STATIC__/datetimepicker/css/datetimepicker.css" rel="stylesheet" type="text/css">
+<php>if(C('COLOR_STYLE')=='blue_color') echo '<link href="__STATIC__/datetimepicker/css/datetimepicker_blue.css" rel="stylesheet" type="text/css">';</php>
+<link href="__STATIC__/datetimepicker/css/dropdown.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script type="text/javascript" charset="utf-8">
+$(function(){
+    $('.time').datetimepicker({
+        format: 'yyyy-mm-dd hh:ii',
+        language:"zh-CN",
+        minView:2,
+        autoclose:true
+    });
+});
+//导航高亮
+highlight_subnav('{:U('index')}');
+showTab();
+function getHost(url){
+	var host="null";
+	if(typeof url=="undefined" || null==url)
+	url=window.location.href;
+	var regex=/.*\:\/\/([^\/]*).*/;
+	var match=url.match(regex);
+	if(typeof match!="undefined" && null!=match)
+	host = match[1];
+	return host;
+} 		
+function getcommentinfobyurl(){
+    updateAlert('数据正在采集中,请耐心等待...','alert-success');
+    var caiji_url=$("#getdatabyurl").val();
+    var caiji_pages=$("#getdatabypage").val();//分页
+    var caiji_domain=getHost(caiji_url).split("."); 
+    caiji_domain=caiji_domain[1];
+    var _date;
+    if (caiji_domain=="taobao"){
+	var url="{:U('GetData/getcommenttaobao')}";
+    }else if ( caiji_domain=="tmall" || caiji_domain=="yao" ){
+	var url="{:U('GetData/getcommenttmall')}";
+    }else if ( caiji_domain=="1688" ){
+	var url="{:U('GetData/getcommentalibaba')}";
+    }
+    else{
+	alert('目前仅支持天猫,淘宝,95095医药,1688的采集!'); 
+	return false;
+    }
+    $.ajax({
+	type: 'post', 
+	url: url ,
+	data:{url:caiji_url,caiji_pages:caiji_pages,gid:'{$gid}'},
+	success: function(json){
+	    if( json.status==1 ){
+		updateAlert('采集成功...','alert-success'); 
+		//属性插入
+		if(caiji_domain=="taobao"){
+		    var jsondatas = eval("("+json.commentlist+")"); 
+		    if (jsondatas.comments) { 
+			$("#pro_comments_list").html("");
+			var num=1;
+			$.each(jsondatas.comments,function(i,n){
+			    if(typeof(n.content)!="undefined" && n.content!=""){
+				_date=(n.date).replace("年","-");
+				_date=_date.replace("月","-");
+				_date=_date.replace("日","");
+				_date=_date+":00"; 
+				$("#pro_comments_list").append('<tr><td align="right" width="100" class="caption">评分_'+num+'</td><td align="left"><select name="start[]" id="c_points_1"><option value="5">5星</option><option value="4">4星</option><option value="3">3星</option><option value="2">2星</option><option value="1">1星</option></select></td><td align="right" class="caption">购买日期_'+num+'</td><td align="left"><input type="text" name="commenttime[]" class="text time" value="'+_date+'" placeholder="请选择日期" /></td></tr><tr><td align="right" class="caption">内容_'+num+'</td><td align="left" colspan="3"><label class="textarea"><textarea style="height: 50px;" name="content[]">'+n.content+'</textarea></label><input name="user[]" type="hidden" value="'+n.user.nick+'"></td></tr>');
+				$('#pro_comments_list .time').datetimepicker({
+				    format: 'yyyy-mm-dd hh:ii',
+				    language:"zh-CN",
+				    minView:2,
+				    autoclose:true
+				});
+				num++;
+			    }
+			});
+		    }else{
+			updateAlert('采集数据为空...请更换地址或分页号','alert-error');
+			return false;
+		    }
+		}
+		else if(caiji_domain=="tmall"|| caiji_domain=="yao" ){
+		    var jsondatas = eval("("+json.commentlist+")"); 
+		     if (jsondatas.rateDetail.rateList) {
+			$("#pro_comments_list").html("");
+			var num=1;
+			$.each(jsondatas.rateDetail.rateList,function(i,n){ 
+			    if(typeof(n.rateContent)!="undefined" && n.rateContent!=""){
+				$("#pro_comments_list").append('<tr><td align="right" width="100" class="caption">评分_'+num+'</td><td align="left"><select name="start[]" id="c_points_1"><option value="5">5星</option><option value="4">4星</option><option value="3">3星</option><option value="2">2星</option><option value="1">1星</option></select></td><td align="right" class="caption">购买日期_'+num+'</td><td align="left"><input type="text" name="commenttime[]" class="text time" value="'+n.rateDate+'" placeholder="请选择日期" /></td></tr><tr><td align="right" class="caption">内容_'+num+'</td><td align="left" colspan="3"><label class="textarea"><textarea style="height: 50px;" name="content[]">'+n.rateContent+'</textarea></label><input name="user[]" type="hidden" value="'+n.displayUserNick+'"></td></tr>');
+				$('#pro_comments_list .time').datetimepicker({
+				    format: 'yyyy-mm-dd hh:ii',
+				    language:"zh-CN",
+				    minView:2,
+				    autoclose:true
+				});
+				num++;
+			    }
+			});
+		     }
+		}
+		else if(caiji_domain=="1688" ){
+		    var datas = json.commentlist.data ; 
+		     if (datas.rates) {
+			$("#pro_comments_list").html("");
+			var num=1;
+			$.each(datas.rates,function(i,n){
+			    var item=n.rateItem[0];
+			    if(typeof(item.remarkContent)!="undefined" && item.remarkContent!=""){ 
+				$("#pro_comments_list").append('<tr><td align="right" width="100" class="caption">评分_'+num+'</td><td align="left"><select name="start[]" id="c_points_1"><option value="5">5星</option><option value="4">4星</option><option value="3">3星</option><option value="2">2星</option><option value="1">1星</option></select></td><td align="right" class="caption">购买日期_'+num+'</td><td align="left"><input type="text" name="commenttime[]" class="text time" value="'+item.remarkTime+'" placeholder="请选择日期" /></td></tr><tr><td align="right" class="caption">内容_'+num+'</td><td align="left" colspan="3"><label class="textarea"><textarea style="height: 50px;" name="content[]">'+item.remarkContent+'</textarea></label><input name="user[]" type="hidden" value="'+n.member+'"></td></tr>');
+				$('#pro_comments_list .time').datetimepicker({
+				    format: 'yyyy-mm-dd hh:ii',
+				    language:"zh-CN",
+				    minView:2,
+				    autoclose:true
+				});
+				num++;
+			    }
+			});
+		     }
+		}
+	    }
+	    else{
+		updateAlert('采集出错...','alert-error');
+		return false;
+	    }
+	}
+    });
+    return false;
+}
+</script>
+</block>

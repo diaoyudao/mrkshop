@@ -1,0 +1,73 @@
+<extend name="Base/member_common"/>
+<block name="body">
+<div class="towp">
+	<div class="guidance towp clear"><a href="javascript:;">首页 </a><a href="javascript:;"> > 账号绑定</a></div>
+</div>
+<div class="towp yh-wrap content_agency clear">
+    <div class="content_left">
+       <include file="Member/member_menu"/>
+    </div>
+    <div class="content right-con2 right-con4">
+        <div class="con-tit"><h2 class="">账号绑定</h2></div>
+        <div class="safecon safecon2 ">
+            <div class="safe-qq">
+                <h3>
+                    <i class=""><img src="__IMG__/qqs.png" /></i>绑定QQ账号<span class="colo6">已绑定</span>
+                    <a class="change-btn fr" >收起</a>
+                </h3>
+                <div class="safe-left">
+                    <p>您正在使用的妙品生活账号关联1个QQ账号</p>
+                    <p class="my-coun">请您牢记该妙品生活账号：11358609-51422354</p>
+                    <p>1、解绑后需要使用此帐号进行登录，解绑后的账号仍可正常使用，订单信息不会丢失，忘记密码请在登录页找回密码；</p>
+                    <p>2、该帐号下关联QQ账号将全部解绑；</p>
+                    <p><a class="a-btn">解除绑定</a></p>
+                </div>
+                <div class="safe-right">
+                    <img src="__IMG__/safe-qq.png">
+                </div>
+            </div>
+            <div class="safe-qq safe-wechat">
+                <h3>
+                    <i class=""><img src="__IMG__/weichat.png" /></i>绑定微信账号<span class="colo6">已绑定</span>
+                    <a class="change-btn fr"  >收起</a>
+                </h3>
+                <div class="safe-left">
+                    <p>您正在使用的妙品生活账号关联1个微信账号</p>
+                    <p class="my-coun">请您牢记该妙品生活账号：11358609-51422354</p>
+                    <p>1、解绑后需要使用此帐号进行登录，解绑后的账号仍可正常使用，订单信息不会丢失，忘记密码请在登录页找回密码；</p>
+                    <p>2、该帐号下关联微信账号将全部解绑；</p>
+                    <p><a class="a-btn">解除绑定</a></p>
+                </div>
+                <div class="safe-right">
+                    <img src="__IMG__/safe-qq.png">
+                </div>
+            </div>
+            <div class="safe-qq safe-sina">
+                <h3>
+                    <i class=""><img src="__IMG__/sina.png" /></i>绑定微博账号<span class="colo6">已绑定</span>
+                    <a class="change-btn fr"  >收起</a>
+                </h3>
+                <div class="safe-left">
+                    <p>您正在使用的妙品生活账号关联1个微博账号</p>
+                    <p class="my-coun">请您牢记该妙品生活账号：11358609-51422354</p>
+                    <p>1、解绑后需要使用此帐号进行登录，解绑后的账号仍可正常使用，订单信息不会丢失，忘记密码请在登录页找回密码；</p>
+                    <p>2、该帐号下关联微博账号将全部解绑；</p>
+                    <p><a class="a-btn">解除绑定</a></p>
+                </div>
+                <div class="safe-right">
+                    <img src="__IMG__/safe-sina.png">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</block>
+<block name='script'>
+    <script>
+    $(function(){
+        $(".safecon2 .change-btn").click(function(){
+            $(this).parents(".safe-qq").toggleClass("safe-qq2")
+        });
+    })
+</script>
+</block>

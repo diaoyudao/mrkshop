@@ -1,0 +1,42 @@
+<div id="subnav" class="subnav">
+    <notempty name="_extra_menu">
+        {// 动态扩展菜单 //}
+        {:extra_menu($_extra_menu,$__MENU__)}
+    </notempty>
+    <volist name="__MENU__.child" id="sub_menu">
+        <!-- 子导航 -->
+        <notempty name="sub_menu">
+            <notempty name="key"><h3><i class="icon icon-unfold"></i>{$key}</h3></notempty>
+            <ul class="side-sub-menu">
+                <volist name="sub_menu" id="menu">
+                    <li>
+                        <a class="item" href="{$menu.url|U}">{$menu.title}</a>
+                    </li>
+                </volist>
+            </ul>
+        </notempty>
+        <!-- /子导航 -->
+    </volist>
+ 
+ <h3>
+    <i class="icon"></i>
+    <a class="item" href="{:U('index')}">广告管理</a>
+</h3>
+<ul class="side-sub-menu" style="margin-left: 10px">
+<volist name="nodes" id="submenu">
+    <li <eq name='submenu["current"]' value="1"> class="current" </eq> > 
+	<a class="item" href="{$submenu.url|U}">{$submenu.name}</a>
+    </li>
+</volist> 
+</ul>
+
+</div>
+<script>
+    $(function(){
+        $(".side-sub-menu li").hover(function(){
+            $(this).addClass("hover");
+        },function(){
+            $(this).removeClass("hover");
+        });
+    })
+</script>

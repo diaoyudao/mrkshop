@@ -1,0 +1,98 @@
+<extend name="Base/common_index"/>
+<block name='style'>
+        <style>
+            .all-naiv{display:none;}
+            .m-nav-fix{position: fixed;top:0;width: 100%;background-color:#F5F5F5;}
+        </style>
+</block>
+<block name="body">
+     <div class="paySuc">
+    	<p class="p1">订单提交成功，请您及时付款，以便尽快为您发货!<span class="order">订单号：<span class="order-num">999999999999999999999999</span></span></p>
+        <p class="p2"> 
+            <span>订单号：9201507210011360</span>
+            <span>收款方：XXXXX          </span>
+        </p>
+        <div class="de-price2">应付金额 : ￥    <span class="big-font">386</span>        元</div>
+    </div>
+    <div class="chose-way towp bor"> 
+   		<h2>支付方式</h2>
+    	<div class="chose">
+        	<div class="way">
+            	<span class="pay1 active"><i class="bg"></i></span>
+                <span class="pay2 "><i class="bg"></i></span>
+                <span class="pay3 "><i class="bg"></i></span>
+            </div>
+            <div class="way1" style="display:block">
+            	<h3>支付平台</h3>
+                <span class="pay1 ">支付宝接口</span>
+            </div>
+            <!-- 微信支付 -->
+            <div class="payWecCon bor" style="display:block">
+                <div class="pay-intr ">
+                    <p>二维码将在<span class="dead-time">3分4秒</span>后过期，请尽快完成支付，
+                        支付完成钱不要关闭该窗口</p>
+                    <div class="code bor">
+                        <img src="__IMG__/code.png" />
+                        <div> <span>请使用微信扫一扫扫描二维码支付</span></div>
+                    </div>
+                </div>
+                <div>
+                    <img src="__IMG__/to-pay1.png">
+                </div>
+            </div>
+            <!-- 银联支付 -->
+            <div class="payBank">
+                <div >
+                    <span class=" "><img src="__IMG__/bank1.jpg" /> </span>
+                    <span class=" active15"><img src="__IMG__/bank2.jpg" /> </span>
+                    <span class=" "><img src="__IMG__/bank2.jpg" /> </span>
+                    <span class=" "><img src="__IMG__/bank1.jpg" /> </span>
+                    <span class=" "><img src="__IMG__/bank2.jpg" /> </span>
+                    <span class=" "><img src="__IMG__/bank1.jpg" /> </span>
+                </div>
+                <!-- 展开更多银行 -->
+                <div class="zanK "><em class="morBank active">展开更多银行<i class="bg"></i></em></div>
+            </div>
+        </div>
+    </div>
+    <div class="towp to-pay">
+    	<input type="button" class="a-btn" value="立即去支付" />
+        <a href="{:U('order/index')}">返回我的订单</a>
+    </div>
+
+</block>
+<block name='script'>
+<script>
+    $(function(){
+        $('.xlph-list > li').mouseenter(function(){
+            $(' .active').removeClass("active");
+            $(this).toggleClass("active");
+        });
+    });
+    $(function(){
+        var nav = $('#j_nav');
+        var bnav = $('.nav');
+        var navTop = bnav.offset().top;
+        $(window).scroll(function (e) {
+            if ($(this).scrollTop() >= navTop) {
+                nav.css('display','block');
+                nav.addClass('m-nav-fix');
+            } else {
+                nav.css('display','none');
+                nav.removeClass('m-nav-fix');
+            }
+        });
+    });
+    $(function(){
+        $('.leve1 > a').click(function(){
+            $(this).css('color','#f89e00')
+                    .find('b').text('-')
+                    .parent('a').next().show()
+                    .parent().siblings().children('a')
+                    .css('color','#333')
+                    .find('b').text('+')
+                    .parent('a').next().hide();
+        })
+    });
+    </script>
+</block>

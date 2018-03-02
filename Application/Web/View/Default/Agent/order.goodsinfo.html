@@ -1,0 +1,162 @@
+<table border="1" cellpadding="0" cellspacing="0" class="pro_info">
+    <tr>
+        <td class="colum">商品名称</td>
+        <td colspan="3">{$info.title}</td>
+    </tr>
+    <tr>
+        <td class="colum">货号</td>
+        <td>{$info.pcode}</td>
+        <td class="colum">分类</td>
+        <td>{$domaindinfo.name}>{$info.category_name}</td>						
+    </tr>
+    <tr>
+        <td class="colum">品牌</td>
+        <td>香奈儿</td>
+        <td class="colum">价格</td>
+        <td>&yen;<span id="zzprice">{$info.price}</span>
+
+            <!--<span class="price">&yen;<span class="big-font zzprice" id="zzmemberprice">{$info.member_price}</span>-->
+            <!--<strike><span class="vip">销售价：<span id="zzprice">{$info.price}</span></span></strike>-->
+    <strike>（市场价：&yen;<span id="zzmarketprice">{$info.marketprice}</span>）</strike>
+</td>						
+</tr>
+<tr>
+    <td class="colum">属性</td>
+    <td colspan="3">
+        <div class="detail-wrap ">
+            <div class="four">
+                <volist name="info.goodattr" id="attr"> 
+                    <dl class="taste"><dt>{$attr.name}：</dt>
+                        <if condition="$attr['attr_type'] eq 1">
+                            <volist name="attr.sub" id="subs">
+                                <dd class="pro_taocan <eq name='key' value='0'> active2</eq>" onclick="selecradiotattr(this);" attrid="{$subs.id}" price="{$subs.price|default=0}">{$subs.value}(+&yen;{$subs.price|default=0})</dd>
+                            </volist>
+                            <else />
+                            <volist name="attr.sub" id="subs">
+                                <dd class="pro_checkbox_taocan <eq name='key' value='0'> active2</eq>" onclick="selectcheckboxattr(this);" attrid="{$subs.id}" price="{$subs.price}">{$subs.value}(+&yen;{$subs.price})</dd>
+                            </volist>
+                        </if>
+                    </dl>
+                </volist> 
+            </div>
+        </div>
+        <input type="hidden" name="id[]" id="goodid" value="{$info.id}"/> 
+        <input type="hidden" name="price[]" id="inputprice" value="{$info.price}"/> 
+        <input type="hidden" name="memberprice[]" id="inputmemberprice" value="{$info.member_price}"/> 
+        <input type="hidden" name="marketprice[]" id="inputmarketprice" value="{$info.marketprice}"/> 
+        <input type="hidden" name="sort[]"  value="{$info.id}"/>
+        <input type="hidden" name="parameters[]" id="parametersid" /> 
+        <!--            <div class="para"> 
+                        尺寸：<label for=""><input type="radio" name="" id="" value="" /> S码 </label>
+                        <label for=""><input type="radio" name="" id="" value="" /> M码 </label>
+                        <label for=""><input type="radio" name="" id="" value="" /> L码 </label>
+                    </div>
+                    <div class="para"> 
+                        款式：<label for=""><input type="radio" name="" id="" value="" /> 碎花            </label>
+                        <label for=""><input type="radio" name="" id="" value="" /> 粉色</label>
+                        <label for=""><input type="radio" name="" id="" value="" /> 白色 </label>
+                    </div>							-->
+    </td>						
+</tr>					
+<tr>
+    <td class="colum">数量</td>
+    <td colspan="3">
+        <input type="text" id="coun-num"  value="1" class="tex" style="line-height: 30px;" />
+    </td>										
+</tr>
+</table>
+<div class="add_in">
+    <input type="button" class="a_btn addcartbutton" id="" value="加入订单" />
+</div>
+<script>
+    var ajaxcomment = 0, ajaxaboutask = 0;
+    function selecradiotattr(obj) {
+        $(obj).parent().find(".pro_taocan").removeClass("active2");
+        $(obj).addClass('active2');
+        picArr = [];
+        var objo = $("div.four");
+        for (var i = 0; i < objo.find("dd.active2").length; i++) {
+            picArr.push(objo.find('.active2:eq(' + i + ')').attr('attrid'));
+        }
+        picStr = picArr.join(',');
+        $("#parametersid").val(picStr);
+        resetproductprice();
+    }
+
+    function resetproductprice() {
+        var attrprice = 0;
+        var objo = $("div.four");
+        var pi = 0;
+        picArr = [];
+        for (var i = 0; i < objo.find("dd.active2").length; i++) {
+            pi = objo.find('.active2:eq(' + i + ')').attr('price');
+            picArr.push(objo.find('.active2:eq(' + i + ')').attr('attrid'));
+            attrprice += parseFloat(pi);
+        }
+        picStr = picArr.join(',');
+        $("#parametersid").val(picStr);
+        var gprice = $("#inputprice").val();//价格
+        var sprice = parseFloat(attrprice) + parseFloat(gprice);
+        var sump = sprice.toFixed(2);
+        $('#zzprice').html(sump);   // 销售价
+
+        var memberpirce = parseFloat($("#inputmemberprice").val()) + parseFloat(attrprice);
+        var marketprice = parseFloat($("#inputmarketprice").val()) + parseFloat(attrprice);
+        $('#zzmemberprice').html(memberpirce.toFixed(2)); //会员价
+        $('#zzmarketprice').html(marketprice.toFixed(2));// 市场价
+    }
+
+    function selectcheckboxattr(obj) {
+        console.log(obj);
+        if ($(obj).hasClass('active2')) {
+            $(obj).removeClass('active2');
+        } else {
+            $(obj).addClass('active2');
+        }
+        picArr = [];
+        var objt = $("div.four");
+        for (var i = 0; i < objt.find("dd.active2").length; i++) {
+            picArr.push(objt.find('.active2:eq(' + i + ')').attr('attrid'));
+        }
+        ;
+        picStr = picArr.join(',');
+        $("#parametersid").val(picStr);
+        resetproductprice();
+    }
+
+    // 获取购物车列表
+    function getcart_list() {
+        url = "{:U('Agent/cartlist')}";
+        $.ajax({
+            url: url,
+            dataType: "json",
+            type: "post",
+            success: function(res) {
+                if (res.status) {
+                    $(".cartlist").html(res.info);
+                } else {
+                    layer.msg(res.info);
+                }
+            }
+        });
+    }
+
+    $(function() {
+        // 加入购物车
+        $(".addcartbutton").click(function() {
+            // 检查库存
+            var stock = "{$info.stock}";
+            var goods_number = parseInt(eval($("#coun-num").val()));
+            if (goods_number > stock) {
+                layer.msg("商品库存不足 ！");
+                return false;
+            }
+            var parameters = $("#parametersid").val();//参数
+            addcart('{$info.id}', goods_number, '{$info.price}', parameters, 0, 0, "{:is_login()}", 1);
+            getcart_list();
+            return false;
+        });
+        resetproductprice();
+    })
+
+</script>

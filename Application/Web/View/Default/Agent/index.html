@@ -1,0 +1,39 @@
+<extend name="Base/member_common"/>
+<block name="body">
+    <!-- 内容 -->
+    <div class="wrap" style="background-color: #f5f5f5;">
+        <div class="guidance towp"><a href="javascript:;">首页</a><a href="javascript:;"> > 会员首页</a></div>
+        <div class="content_agency towp clear">
+            <div class="content_left">
+                <include file="Member/member_menu"/>
+            </div>
+            <div class="content_right" style="border: 0;">
+                <include file="Agent/agent_center" />
+                <div class="options_box">
+                    <div class="tab">
+                        <include file="Agent/agent_menu" />
+                    </div>
+                    <div class="options">
+                        <div class="agency">
+                            <div class="data clear">
+                                <div class="data_left" >
+                                    <h3>订单数据量：</h3>
+                                    <div class="quantity">
+
+                                    </div>
+                                </div>
+                                <div class="data_right">
+                                    <p>结算金额（元）：</p>
+                                    <p><em>56.00</em></p>
+                                    <span>商品数量<i>（100）</i></span>
+                                    <span>未处理订单<i>（45）</i></span>
+                                    <span>会员总数<i>（130）</i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>

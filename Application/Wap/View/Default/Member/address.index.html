@@ -1,0 +1,170 @@
+<extend name="Base/common_index"/>
+<block name='style'>
+    <style>
+        .footer{display: none;}
+    </style>
+</block>
+<block name="body">
+    <eq name='flag' value='update'>
+    <include file="Member/address.edit"/>
+    <else/>
+    <!--头部 S-->
+    <div class="herder">
+        <a href="{:U('Member/index')}" class="back"><i></i></a>
+        <h3>地址管理</h3>
+        <!-- <div class="herd_r"><a href="search.html" class="search"><i></i></a></div>-->
+    </div>
+    <div class="t_line"></div>
+    <!--头部 E--> 
+    <!--地址列表 S--> 
+    <ul class="add_list">
+        <notempty name="list">
+        <volist name="list" id="ao" empty='没有收货地址'>
+            <li>
+                <div class="info">
+                    <span><i><img src="__IMG__/user-name.png" /></i>{$ao['realname']}</span>
+                    <span><i><img src="__IMG__/phone.png" /></i>{$ao['cellphone']}</span>
+                    <span><i><img src="__IMG__/id.png" /></i>{$ao['card_no']}</span>
+                    <p>{$ao['province']}{$ao['city']}{$ao['area']}{$ao['address']}</p>
+                </div>
+                <div class="setD bg_fa clear">
+                    <div class="fl">
+                        <a  class=" " href="javascript:;"><i class="check  <eq name='ao.isdefault' value='1'>checked</eq>"></i>默认地址</a>
+                    </div>
+                    <div class="fr ">
+                        <a href="javascript:;" onclick="delAddress({$ao['id']})" class="dele">删除</a>
+                        <a class="mr-0 edi" href="{:U('member/address',array('id'=>$ao['id'],'flag'=>'update'))}">编辑</a>
+                    </div>
+                </div>
+            </li>
+        </volist>
+         <else/>
+                <li class="no_data">
+                    <h3>
+                        <i class=""> <img src="__IMG__/ts.png"/> </i> 没有收货地址记录哦
+                    </h3>						        	
+                </li>
+            </notempty>
+    </ul>
+
+    <div class="fix_bo" >
+        <a href="{:U('Member/address',array('flag'=>'update'))}" class="long_btn">新增地址</a>
+    </div>
+    <!--地址列表 E-->  
+    </eq>
+</block>
+<block name='script'>
+    <script src="__JS__/jquery.validate.js" type="text/javascript"></script>
+    <script src="__JS__/jquery.cityselect.js" type="text/javascript"></script>
+    <script>
+                            function delAddress(aid) {
+                                //判断新地址是否选中,获取地址id
+                                if (confirm("确定要删除该地址吗？"))
+                                {
+                                      if (aid == null) {
+                                          alert("选择地址无效!");
+                                        return false;
+                                    } else {
+                                        $.ajax({
+                                            type: 'post', //传送的方式,get/post
+                                            url: '{:U("Member/deleteAddress")}', //发送数据的地址
+                                            data: {id: aid},
+                                            dataType: "json",
+                                            success: function(data)
+                                            {
+                                                $("#message").html(data.msg).show();
+                                                setTimeout(function() {
+                                                    $('#message').hide();
+                                                    window.location.reload();
+                                                }, 1500);
+                                            },
+                                            error: function(event, XMLHttpRequest, ajaxOptions, thrownError) {
+                                                alert(XMLHttpRequest + thrownError);
+                                            }
+                                        });      
+                                     }
+                                }
+                            }
+
+                            $(function() {
+                                var prov = "{$nowaddress['province']}";
+                                if (prov) {
+                                    $("#selectaddress").citySelect({
+                                        prov: "{$nowaddress['province']}",
+                                        city: "{$nowaddress['city']}",
+                                        nodata: "{$nowaddress['area']}"
+                                    });
+                                } else {
+                                    $("#selectaddress").citySelect({
+                                        prov: "北京",
+                                        city: "东城区",
+                                        nodata: "none"
+                                    });
+                                }
+
+                                $('#addaddress').validate({
+                                    rules: {
+                                        realname: {
+                                            required: true
+                                        },
+                                        card_no: {
+                                            required: true,
+                                            rangelength: [18, 18]
+                                        },
+                                        cellphone: {
+                                            required: true,
+                                            ismobile: true
+                                        },
+                                        address: {
+                                            required: true
+                                        },
+                                        youbian: {
+                                            rangelength: [6, 6]
+                                        }
+                                    },
+                                    messages: {
+                                        realname: {
+                                            required: '收货人不能为空'
+                                        },
+                                        card_no: {
+                                            required: '身份证不能为空',
+                                            rangelength: "身份证格式不正确"
+                                        },
+                                        cellphone: {
+                                            required: '手机号码不能为空'
+                                        },
+                                        address: {
+                                            required: '收货详细地址不能为空'
+                                        },
+                                        youbian: {
+                                            rangelength: '邮编长度为6位数字'
+                                        }
+                                    },
+                                    errorElement: 'i',
+                                    errorClass: 'ts2',
+                                    highlight: function(e) {
+                                        //   $(e).addClass('ts2');
+                                    },
+                                    success: function(e) {
+                                        $(e).removeClass('ts2');
+                                    },
+                                                      /* 重写错误显示消息方法,以alert方式弹出错误消息 */  
+                            showErrors : function(errorMap, errorList) {  
+                             var msg = "";  
+                             $.each(errorList, function(i, v) {  
+                              msg += (v.message +'!' + "\r\n");  
+                             });  
+                             if (msg != "")  
+                              layer.msg(msg);  
+                            },
+                                });
+                                jQuery.validator.addMethod('ismobile', function(value, element) {
+                                    var length = value.length;
+                                    var mobile = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0-9]|170|177)\d{8}$/;
+                                    return this.optional(element) || (length == 11 && mobile.test(value));
+                                }, '请正确填写手机号码');
+                            });
+    </script>
+
+
+</block>

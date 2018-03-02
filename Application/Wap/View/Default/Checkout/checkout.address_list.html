@@ -1,0 +1,37 @@
+<!--头部 S-->
+<div class="herder">
+    <a href="javascript:;" class="back back_pre2"><i></i></a>
+    <h3>地址管理</h3>
+    <!-- <div class="herd_r"><a href="search.html" class="search"><i></i></a></div>-->
+</div>
+<div class="t_line"></div>
+<!--头部 E--> 
+<!--地址列表 S--> 
+<ul class="add_list" >
+    <volist name="address" id="myaddress">
+        <li>
+            <div class="info">
+                <span><i><img src="__IMG__/user-name.png" /></i>{$myaddress.realname}</span>
+                <span><i><img src="__IMG__/phone.png" /></i>{$myaddress.cellphone|set_start_phone}</span>
+                <span><i><img src="__IMG__/id.png" /></i>{$myaddress.card_no|set_start_card}</span>
+                <p>{$myaddress.province} {$myaddress.city} {$myaddress.area} {$myaddress.address}</p>
+            </div>
+            <div class="setD bg_fa clear">
+                <div class="fl">
+                    <a class=" " onclick="chooseaddress(this)" addressid="{$myaddress.id}"  href="javascript:;"><i class='check  <eq name="myaddress.isdefault" value="1">checked</eq> '></i>选择地址</a>
+                </div>
+                <div class="fr ">
+                    <a href="javascript:;" onclick="delAddress({$myaddress.id})" class="dele">删除</a>
+                    <a class="mr-0 edi" href="javascript:;" onclick="open_address({$myaddress.id})" >编辑</a>
+                </div>
+            </div>
+        </li>
+    </volist>
+</ul>
+<div class="fix_bo" style="padding-bottom:0.3rem;background:#fff;bottom: 0;">
+    <a href="javascript:;" class="long_btn add_loginbtn" onclick="open_address(0)">新增地址</a>
+</div>
+<!--地址列表 E-->  
+<!--底部 S-->
+<div class="b_line"></div>
+<!--底部 E-->

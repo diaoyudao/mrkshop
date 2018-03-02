@@ -1,0 +1,161 @@
+<extend name="Base/member_common"/>
+<block name='body'>
+    <!-- 内容 -->
+    <div class="wrap" style="background-color: #fafafa;">
+        <div class="guidance towp clear"><a href="javascript:;">首页</a><a href="javascript:;"> > 会员首页</a><a href="javascript:;"> > 评价管理</a></div>
+        <div class="content_cm towp clear">
+            <div class="content_left">
+                <include file="Member/member_menu"/>
+            </div>
+            <div class="content_right personal">
+                <h2>个人中心</h2>
+                <div class="message_box">
+                    <div class="message clear" style="padding: 60px 0 30px 60px; border-bottom: 1px solid #eee;">
+                        <div class="message_left">
+                            <a class="tx" href="javascript:;">
+                                <notempty name="faceid">
+                                    <php>
+                                        $random = time();
+                                    </php>
+                                    <div class="upload-pre-item"><img src="__PICURLFACE__{$uid}/face.jpg?r={$random}"  width="300" height="300"/></div>
+                                    <else/>
+                                    <div class="upload-pre-item"><img src="__IMG__/agencyManage/tou.jpg"  width="300" height="300"/></div>
+                                </notempty>
+                                <!--<img src="__IMG__/agencyManage/tou.jpg"/>-->
+                            </a>
+                            <a class="bj" href="{:U('member/cut',array('id'=>$uid))}">编辑头像</a>
+                        </div>
+                        <div class="message_right">
+                            <h3>{$memberInfo.nickname}</h3>
+                            <p><label for="">等级：</label><span>{$memberInfo.levelInfo.level_n}</span></p>
+                            <p>手机号：<em>{$memberInfo.mobile|set_start_phone}</em><span class="fix"><a href="{:U('Safety/safety')}" >修改</a></span></p>
+                            <!--<p><label for="">输入邀请码：</label><input type="text" id="" placeholder="请输入邀请码" /><input class="btn" type="button" name="" id="" value="确认" /></p>-->
+                        </div>
+                    </div>
+                    <div class="write">
+                        <form method="post" name="form" action="{:U('Member/update')}" class="validate" id="addaddress" onsubmit="validateCallback(this, dialogAjaxDone);
+                                return false;">
+                            <p><label for=""><i>*</i>真实姓名：</label>
+                                <input type="text" name="realname" value="{$memberInfo.realname}" id="" placeholder="请输入姓名"/></p>
+                            <p><label for=""><i>*</i>身份证号码：</label>
+                                <input type="" name="card_no" value="{$memberInfo.card_no}" id="" placeholder="请输入身份证号"/></p>
+                            <p><label for="text">昵称：</label>
+                                <input type="text" name="nickname" value="{$memberInfo.nickname}"  placeholder="请输入姓名"/></p>
+                            <p class="gender clear"><label for=""><i>*</i>性别：</label>
+                                <switch name="memberInfo.sex">
+                            <case value="1">
+
+                                <span><input type="radio" name="sex" value='0'  /><em>保密</em></span>
+                                <span><input type="radio" name="sex" value='1'  checked="checked"  /><em>男</em></span>
+                                <span><input type="radio" name="sex" value='2'   /><em>女</em></span>
+                            </case>
+                            <case value="2">
+
+                                <span><input type="radio" name="sex" value='0'  /><em>保密</em></span>
+                                <span><input type="radio" name="sex" value='1'   /><em>男</em></span>
+                                <span><input type="radio" name="sex" value='2' checked="checked"  /><em>女</em></span>
+                            </case>
+                            <case value="0">
+
+                                <span><input type="radio" name="sex" value='0' checked="checked"/><em>保密</em></span>
+                                <span><input type="radio" name="sex" value='1'   /><em>男</em></span>
+                                <span><input type="radio" name="sex" value='2'  /><em>女</em></span>
+                            </case>
+                            <default />default
+                            </switch> 
+                            </p>
+                            <!--<p class="day"><label for="">出生日期：</label><input type="" name="" id="" placeholder="请输入姓名"/><i class="ts1">生日关系到你的会员权益，填后不能修改</i></p>-->
+                            <p class="in" id="selectaddress">
+                                <label for=""><i>*</i>居住地址：</label>
+                                <select id="cmbProvince"  name="province" class="prov"></select>
+                                <em>省</em>
+                                <select id="cmbCity" name="city" class="city"></select>
+                                <em>市</em>
+                                <select id="cmbArea" name="area"  class="dist"></select>	
+                                <em>区/县</em>	
+                            </p>
+                            <p class="jd"><input type="text" name="address" value="{$memberInfo.address}" id="" placeholder="请输入街道名称" /></p>
+                            <input class="save" type="submit" name="" id="" value="保存" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>
+<block name='script'>
+    <script src="__JS__/jquery.validate.js" type="text/javascript"></script>
+    <script src="__JS__/jquery.cityselect.js" type="text/javascript"></script>
+    <script>
+                            $(function() {
+                                var prov = "{$memberInfo['province']}";
+                                if (prov) {
+                                    $("#selectaddress").citySelect({
+                                        prov: "{$memberInfo['province']}",
+                                        city: "{$memberInfo['city']}",
+                                        nodata: "{$memberInfo['area']}"
+                                    });
+                                } else {
+                                    $("#selectaddress").citySelect({
+                                        prov: "北京",
+                                        city: "东城区",
+                                        nodata: "none"
+                                    });
+                                }
+
+                                $('#addaddress').validate({
+                                    rules: {
+                                        realname: {
+                                            required: true
+                                        },
+                                        card_no: {
+                                            required: true,
+                                            rangelength: [18, 18]
+                                        },
+                                        nickname: {
+                                            required: true,
+                                        },
+                                        address: {
+                                            required: true
+                                        },
+//                    youbian: {
+//                        rangelength: [6, 6]
+//                    }
+                                    },
+                                    messages: {
+                                        realname: {
+                                            required: '收货人不能为空'
+                                        },
+                                        card_no: {
+                                            required: '身份证不能为空',
+                                            rangelength: "身份证格式不正确"
+                                        },
+                                        nickname: {
+                                            required: '用户昵称不能为空'
+                                        },
+                                        address: {
+                                            required: '收货详细地址不能为空'
+                                        }
+//                    youbian: {
+//                        rangelength: '邮编长度为6位数字'
+//                    }
+                                    },
+                                    errorElement: 'i',
+                                    errorClass: 'ts2',
+                                    highlight: function(e) {
+                                        //   $(e).addClass('ts2');
+                                    },
+                                    success: function(e) {
+                                        $(e).removeClass('ts2');
+                                    }
+                                });
+                                jQuery.validator.addMethod('ismobile', function(value, element) {
+                                    var length = value.length;
+                                    var mobile = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0-9]|170|177)\d{8}$/;
+                                    return this.optional(element) || (length == 11 && mobile.test(value));
+                                }, '请正确填写手机号码');
+
+                            });
+
+    </script>
+</block>

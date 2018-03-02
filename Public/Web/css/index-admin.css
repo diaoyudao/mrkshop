@@ -1,0 +1,52 @@
+@charset "utf-8";
+
+
+
+
+/* 分类 */
+.classfy1{  margin-top: 50px;}
+.classfy2  {position: relative;}
+.cla-swi{ width: 270px;height: 432px; float: left;}
+.sideNaiv{ width: 214px;float: left; height: 432px;}
+.sideNaiv .sN-tit{ position: relative;background:url("../img/re-mai-bg.png") no-repeat;overflow: hidden; }
+.sN-tit .floor{ float: left;margin: 8px 0 0 8px; color:#fff;font-size: 16px;}
+.sN-tit .img{ width: 32px;height: 28px;display: block;margin: 10px auto;}
+.sN-tit .img img{ width: 32px;height: 28px;}
+.sN-tit p{text-align: center;color: #fff;}
+.sN-tit h4{text-align: center;color: #fff;border-top: 1px solid #fff;position: relative;top:6px;margin: 10px auto 0px;width: 160px;}
+.sN-tit h4 span{background-color: #f16f71;padding: 0 10px;position: relative;top:-8px;}
+ .li-naiv{width: 140px;height: 114px;margin: 0 auto;overflow: hidden;background-color: #fff;}
+ .li-naiv li{ float: left; margin-right: 40px;height: 30px;line-height: 30px;}
+ .li-naiv .li-naiv-list{width: 200px;}
+.sideNaiv .w100{ width: 100%;background-color: #fff; }
+/* 分类产品 */
+.cla-pro{width: 514px;height: 432px;overflow: hidden;border: 1px #f2f2f2 solid;}
+.cla-pro .pro-list{position: relative;left: 1px;width: 600px;overflow: hidden;}
+.cla-pro .pro-list i{ display: inline-block;width: 40px;height: 40px;background-position: -320px 0;vertical-align: middle;   }
+.pro-list li:hover img{}
+.cla-pro li img{ display: block;margin: 0 auto; }
+.cla-pro li {width: 150px;height: 214px;padding:0 10px;border-bottom: 1px #f2f2f2 solid;border-right: 1px solid #f2f2f2;background-color: #fff;float: left;}
+.cla-pro li strong{ display: block;margin: 0 auto; line-height: 40px;height: 40px;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+.cla-pro li .price{ margin-right: 50px; }
+/* 销量排行 */
+.xlph{background: #fff url("../img/xlph-bg.png") no-repeat 0 top;width: 200px;height: 430px;}
+.xlph h3{color:#fff;font-size: 16px;text-align: center;line-height: 32px;}
+.xlph h3 i{display: inline-block;width: 30px;height: 30px;background-position: -366px -6px;vertical-align: middle;}
+.xlph .xlph-list{ padding: 16px 16px 0; }
+.xlph-list{}
+.xlph-list i{ display: inline-block;width: 22px;height: 22px; line-height: 26px;text-align: center;color:#fff;}
+.xlph-list .num1{ background-position: -446px 0; }
+.xlph-list .num2{ background-position: -476px 0; }
+.xlph-list .num3{ background-position: -446px -20px; }
+.xlph-list .num4{ background-position: -475px -20px; }
+.xlph-list li{ background-color: #fff;border-bottom: 1px dashed #ddd;}
+.xlph-list li:last-child{ border: 0; }
+.xlph-list li strong{ display:inline-block;line-height: 50px;width: 140px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;vertical-align: middle;}
+.xlph-list .active strong{ line-height: 14px;}
+.xlph-list .active .pric{ display: block;}
+.xlph-list .pric{display: none;}
+.xlph-list .img img{ display: block;margin: 0 auto;display: none; }
+.xlph-list .active .img img{ display:block;}
+
+
+

@@ -1,0 +1,88 @@
+[ 2018-02-27T09:55:45+08:00 ] 127.0.0.1 /mrkshop/wap.php/member/getMobileCode.html
+DEBUG: post_data:\narray (
+  'http' => 
+  array (
+    'method' => 'POST',
+    'header' => 
+    array (
+      0 => 'Content-Type:application/x-www-form-urlencoded;charset=utf-8',
+      1 => 'AppKey:0c6ab52108e0596417f596f05e7ae013',
+      2 => 'Nonce:230206',
+      3 => 'CurTime:1519696545',
+      4 => 'CheckSum:84487303322ddd3bef3539fc18e10b5476ad76f6',
+    ),
+    'content' => 'mobile=17723163503',
+  ),
+)
+[ 2018-02-27T09:56:25+08:00 ] 127.0.0.1 /mrkshop/wap.php/member/getMobileCode.html
+DEBUG: response_data2:\narray (
+  'code' => 200,
+  'msg' => '401',
+  'obj' => '2990',
+)
+[ 2018-02-27T11:14:45+08:00 ] 127.0.0.1 /Wap/member/getMobileCode.html
+DEBUG: post_data:\narray (
+  'http' => 
+  array (
+    'method' => 'POST',
+    'header' => 
+    array (
+      0 => 'Content-Type:application/x-www-form-urlencoded;charset=utf-8',
+      1 => 'AppKey:0c6ab52108e0596417f596f05e7ae013',
+      2 => 'Nonce:516285',
+      3 => 'CurTime:1519701285',
+      4 => 'CheckSum:1585aded0154a434e31b04981abf66b7f8f3d294',
+    ),
+    'content' => 'mobile=17723163503',
+  ),
+)
+[ 2018-02-27T11:14:46+08:00 ] 127.0.0.1 /Wap/member/getMobileCode.html
+DEBUG: response_data2:\narray (
+  'code' => 200,
+  'msg' => '402',
+  'obj' => '7108',
+)
+[ 2018-02-27T14:11:00+08:00 ] 127.0.0.1 /Wap/member/getMobileCode.html
+DEBUG: post_data:\narray (
+  'http' => 
+  array (
+    'method' => 'POST',
+    'header' => 
+    array (
+      0 => 'Content-Type:application/x-www-form-urlencoded;charset=utf-8',
+      1 => 'AppKey:0c6ab52108e0596417f596f05e7ae013',
+      2 => 'Nonce:405515',
+      3 => 'CurTime:1519711860',
+      4 => 'CheckSum:1fa021121269e9e23c0e2aeb43a3d0237f19e9ed',
+    ),
+    'content' => 'mobile=17723163503',
+  ),
+)
+[ 2018-02-27T14:11:01+08:00 ] 127.0.0.1 /Wap/member/getMobileCode.html
+DEBUG: response_data2:\narray (
+  'code' => 200,
+  'msg' => '403',
+  'obj' => '2678',
+)
+[ 2018-02-27T15:11:32+08:00 ] 127.0.0.1 /Wap/Member/getMobileCode.html
+DEBUG: post_data:\narray (
+  'http' => 
+  array (
+    'method' => 'POST',
+    'header' => 
+    array (
+      0 => 'Content-Type:application/x-www-form-urlencoded;charset=utf-8',
+      1 => 'AppKey:0c6ab52108e0596417f596f05e7ae013',
+      2 => 'Nonce:928955',
+      3 => 'CurTime:1519715492',
+      4 => 'CheckSum:f727c9054351bb88ba4836a2a4a1005c1db93607',
+    ),
+    'content' => 'mobile=17723163503',
+  ),
+)
+[ 2018-02-27T15:11:33+08:00 ] 127.0.0.1 /Wap/Member/getMobileCode.html
+DEBUG: response_data2:\narray (
+  'code' => 200,
+  'msg' => '404',
+  'obj' => '9152',
+)

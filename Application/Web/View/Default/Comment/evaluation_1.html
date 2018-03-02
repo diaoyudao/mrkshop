@@ -1,0 +1,262 @@
+<extend name="Base/member_common"/>
+<block name='style'>
+    <style>
+        .pj_scimg {
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .pj_scimg .sctp {
+            background: rgba(0, 0, 0, 0) url("__IMG__/evaluation/icon_eva.png") no-repeat scroll 20px -93px;
+            border: 1px dashed #ddd;
+            float: left;
+            height: 58px;
+            margin-right: 10px;
+            overflow: hidden;
+            position: relative;
+            width: 58px;
+        }
+        .pj_scimg ul li {
+            float: left;
+            height: 60px;
+            margin-right: 10px;
+            overflow: hidden;
+            position: relative;
+            width: 60px;
+        }
+        .pj_scimg .picli-mask {
+            background: rgba(0, 0, 0, 0) url("__IMG__/evaluation/icon_eva.png") no-repeat scroll -60px -270px;
+            cursor: pointer;
+            display: none;
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            z-index: 2;
+        }
+    </style>
+</block>
+<block name="body">
+    <div class="wrap" style="background-color: #f5f5f5;">
+        <div class="guidance towp"><a href="javascript:;">首页</a><a href="javascript:;"> > 会员首页</a></div>
+        <div class="content_mc towp clear">
+            <div class="content_left">
+                <include file="Member/member_menu"/>
+            </div>
+            <div class="content right-con2 order-mana">
+                <div class="con-tit"><h2 class="">订单管理</h2></div>
+                <form action="{:U('Comment/add')}" method="post" class='validate' name="actform" enctype="multipart/form-data" onsubmit="validateCallback(this, dialogAjaxDone);
+                        return false;">
+                    <div class="contents">
+                        <div class="contents_left">
+                            <a href="javascript:;"><img src="{$goodsinfo.goodid|get_cover_picture_url}"/></a>
+                            <p>{$goodsinfo.goodid|get_good_name}</p>
+                            <p><span>购买时间：{$goodsinfo.create_time|date='Y-m-d H:i:s',###}</span></p>
+                        </div>
+                        <div class="contents_right">
+                            <div class="pf pfs">
+                                <ul class="clear pf_box">
+                                    <li class="active"></li>
+                                    <li class="active"></li>
+                                    <li class="active"></li>
+                                    <li class="active"></li>
+                                    <li></li>
+                                </ul>
+                                <span><i>0</i>分</span>
+                            </div>
+                            <textarea name='content' placeholder="请写下您对商品的评价，有助于我们改进哦~"></textarea>
+                            <!--                        <p class="clear"><a class="sq" href="javascript:;">收起评论</a>
+                                                        <a class="add" href="javascript:;">
+                                                            <input type="file">
+                                                        </a>
+                                                        <span>添加图片</span>
+                                                    </p>-->
+                            <div class="pj_scimg">
+                                <div class="sctp">
+                                    <input class="g-u file-input" id="pics" type="file" >
+                                    <input type="hidden" name="pics" id="pics_id" value="" class="icon" />
+                                </div> 
+                                <ul id="comments_imgs">
+                                    <!--<li>
+                                        <a href="javascript:void(0);"><img class="preview-imgli" src="__IMG__/lineye_logo.jpg" width="60"></a>
+                                        <div class="picli-mask btn-close-del" ></div>
+                                    </li-->
+                                </ul>
+                                <em>最多可添加3张图片！</em>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                        <div class="contents_bottom">
+                            <div class="pf pf1 clear">
+                                <span>卖家的服务态度：</span>
+                                <ul class="clear pf1_box">
+                                    <li class="active"></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                </ul>
+                                <span><i>0分-</i>请给卖家的服务态度评分</span>
+                            </div>
+                            <div class="pf pf2 clear">
+                                <span>物流的服务态度：</span>
+                                <ul class="clear pf2_box">
+                                    <li class="active"></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                </ul>
+                                <span><i>0分-</i>请给物流的服务态度评分</span>
+                            </div>
+                        </div>
+                        <input name="goodscore" type='hidden' value='' />
+                        <input name="servicescore" type='hidden' value='' />
+                        <input name="deliveryscore" type='hidden' value='' />
+                        <input name="goodid" type='hidden' value='{$goodsinfo.goodid}' />
+                        <input name="orderid" type='hidden' value='{$goodsinfo.orderid}' />
+                        <input name="ordergoodsid" type='hidden' value='{$goodsinfo.id}' />
+                        <input name="tag" type='hidden' value='{$goodsinfo.tag}' />
+                        <!--<a class="submit" href="javascript:;">提交</a>-->
+                        <input name='submit' type='submit' class='submit' value='提交' />
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+        
+    </div>
+</div>
+</block>
+<block name='script'>
+    <script src="__JS__/jquery.validate.js" type="text/javascript"></script>
+    <script type="text/javascript">
+                    $(function() {
+                        if ($('form.validate').length) {
+                            $('form.validate').validate({
+                                rules: {
+                                    goodscore: {
+                                        required: true,
+                                    },
+                                    servicescore: {
+                                        required: true,
+                                    },
+                                    deliveryscore: {
+                                        required: true,
+                                    },
+                                    content: {
+                                        required: true,
+                                    }
+                                },
+                                messages: {
+                                    goodscore: {
+                                        required: '请给商品评分'
+                                    },
+                                    servicescore: {
+                                        required: '请给卖家的服务态度评分',
+                                    },
+                                    deliveryscore: {
+                                        required: '请给物流的服务态度评分',
+                                    },
+                                    content: {
+                                        required: '请输入评论内容',
+                                    }
+                                },
+                                errorPlacement: function(error, element) {
+                                    error.appendTo(element.parent().find("em"));
+                                }
+                            });
+                        }
+                    });
+    </script>
+    <script type="text/javascript">
+        $('.pf_box li').removeClass('active');
+        $('.pf_box li').hover(function() {
+            $('.pf_box li').removeClass('active');
+            var i = $(this).index() + 1;
+            $('.pf_box li').slice(0, i).addClass('active');
+            $('.pfs span i').html(i);
+            $("input[name=goodscore]").val(i);
+        });
+        $('.pf1_box li').removeClass('active');
+        $('.pf1_box li').hover(function() {
+            $('.pf1_box li').removeClass('active');
+            var i = $(this).index() + 1;
+            $('.pf1_box li').slice(0, i).addClass('active');
+            $('.pf1 span i').text(i + "分-");
+            $("input[name=servicescore]").val(i);
+        });
+        $('.pf2_box li').removeClass('active');
+        $('.pf2_box li').hover(function() {
+            $('.pf2_box li').removeClass('active');
+            var i = $(this).index() + 1;
+            $('.pf2_box li').slice(0, i).addClass('active');
+            $('.pf2 span i').text(i + "分-");
+            $("input[name=deliveryscore]").val(i);
+        });</script>
+    <script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+    <script type="text/javascript">
+        //多图上传图片
+        $(function() {
+            /* 初始化上传插件*/
+            $("#pics").uploadify({
+                "height": 30,
+                "swf": "__STATIC__/uploadify/uploadify.swf",
+                "fileObjName": "download",
+                "buttonText": "",
+                "uploader": "{:U('File/uploadPicture',array('session_id'=>session_id()))}",
+                "width": 120,
+                'removeTimeout': 1,
+                'fileTypeExts': '*.jpg; *.png; *.gif;',
+                'multi': true,
+                'queueSizeLimit': 3,
+                "onUploadSuccess": uploadPicturepics,
+                'formData': {'pagefrom': 'comments'},
+                'onFallback': function() {
+                    alert('未检测到兼容版本的Flash.');
+                }
+            });
+        });
+        function uploadPicturepics(file, datas) {
+            console.log()
+            if (file.index > 2 && $("#comments_imgs").children("li").length > 2) {
+                return false;
+            }
+            var data = $.parseJSON(datas);
+            var src = '';
+            if (data.status) {
+                src = data.url || '__PICURL__' + data.path;
+                var html = "<li><a href=\"javascript:void(0);\"><img class=\"preview-imgli\"  src=\"" + src + "\" width=\"60\" data-id=\"" + data.id + "\"></a><div class=\"picli-mask btn-close-del\" ></div></li>";
+                picsbox = $("#comments_imgs");
+                picsbox.append(html)
+                picArr = [];
+                for (var i = 0; i < picsbox.children("li").length; i++) {
+                    var data_id = picsbox.children('li:eq(' + i + ')').find('img').attr('data-id');
+                    if (data_id) {
+                        picArr.push(data_id);
+                    }
+                }
+                ;
+                picStr = picArr.join(',');
+                $('#pics_id').val(picStr);
+                $('.btn-close-del').click(function(event) {
+                    event.preventDefault();
+                    $(this).parent().remove();
+                    picsbox = $("#comments_imgs");
+                    picArr = [];
+                    for (var i = 0; i < picsbox.children("li").length; i++) {
+                        var data_id = picsbox.children('li:eq(' + i + ')').find('img').attr('data-id');
+                        if (data_id) {
+                            picArr.push(data_id);
+                        }
+                    }
+                    ;
+                    picStr = picArr.join(',');
+                    $('#pics_id').val(picStr);
+                });
+            } else {
+                alert("上传出错");
+            }
+        }
+    </script>
+</block>

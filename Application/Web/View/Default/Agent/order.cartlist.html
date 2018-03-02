@@ -1,0 +1,76 @@
+<table  class="table">
+    <tr>
+        <th>商品编号</th>
+        <th>商品名称</th>
+        <th>单价</th>
+        <th>数量</th>
+        <th>合计</th>
+        <th>属性</th>					
+        <th>操作</th>					
+    </tr>
+    <notempty name="usercart">
+        <volist name='usercart' id='vo' key='k'>
+            <tr class="cartitem">			                                                                   
+                <td><input type="checkbox" style="display: none;" <if condition="$vo.handle_status eq true"> checked="checked" </if> class="chk" name="sort[]" value="{$vo.sort}" <if condition="$vo.handle_status eq false"> disabled='disabled' </if> />{$vo.goodid}
+            </td>
+            <td colspan="1">
+                <img style='width: 60px; height: 60px; float: left;' src="{$vo.goodid|get_cover_picture_url}" alt='{$vo.goodid}' />
+                <a href="{:U('Goods/detail',array('channelname'=>$vo['channelname'],'id'=>$vo['goodid']))}" target="_blank" class="pic">{$vo.goodid|get_good_name}</a>
+            </td>
+            <td>&yen;{$vo.price} </td>
+            <td>
+            <if condition="$vo.handle_status eq true"> 
+                <input type="hidden" id="coun-num" rel="{$vo.sort}" name="num[{$vo.sort}]" maxlength="2" class="add-min num_val" value="{$vo.num}">
+                {$vo.num}
+                <else/>
+                <span style="cursor:pointer;color: #F78B83;">失效商品</span>
+            </if>
+            </td>
+            <td>{:($vo[price]*$vo[num])}</td>
+            <td>{$vo.parameters}
+                <input type="hidden" value="{$vo.price}" name="price[{$vo.sort}]"/>
+                <input type="hidden" value="{$vo.goodid}" name="goodid[{$vo.sort}]"/>
+                <input type="hidden" value="{$vo.type}" name="type[{$vo.sort}]"/>
+                <input type="hidden" value="{$vo.parameters}" name="parameters[{$vo.sort}]"/>
+                <input type="hidden" value="{$vo.promsg}" name="promsg[{$vo.sort}]"/>
+                <input type="hidden" value="{$vo.proid}" name="proid[{$vo.sort}]"/>
+                <input type="hidden" id="goodprice{:($k-1)}" class="hiddentotal{$vo.sort}" value="{:($vo[price]*$vo[num])}">
+            </td>
+            <td><a href="javascript: ;;" class='delcart' rel="{$vo.sort}" >删除</a></td>
+            </tr>
+        </volist>
+        <else />
+        <tr>
+            <td colspan="7" style="text-align: center;">sorry,没有商品数据...</td>
+        </tr>
+    </notempty>
+</table>
+<script>
+    $(function() {
+        //点击删除购物车中商品
+        $(".delcart").click(function() {
+            var obj = $(this);
+            var string = $(obj).attr("rel");
+          var  lyaers =  layer.confirm('确定要删除购物车的商品吗？', {icon: 3, title: '提示'}, function(index) {
+                if (index) {
+                    $.ajax({
+                        type: 'post', //传送的方式,get/post
+                        url: '{:U("Agent/delItem")}', //发送数据的地址
+                        data: {sort: string},
+                        dataType: "json",
+                        success: function(data) {
+                            $(obj).parents("tr").slideUp().remove();
+                             layer.close(lyaers);
+                        },
+                        error: function(event, XMLHttpRequest, ajaxOptions, thrownError) {
+                            alert(XMLHttpRequest + thrownError);
+                        }
+                    });
+                } else {
+                    return false;
+                }
+            });
+            return false;
+        });
+    })
+</script>

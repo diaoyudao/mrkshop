@@ -1,0 +1,128 @@
+<extend name="Base/store_common"/>
+<block name="body">
+    <!-- 内容 -->
+    <div class="towp yh-wrap content_agency clear user_center">
+        <div class="content_left">
+            <include file="Member/member_menu"/>
+        </div>
+        <div class="content content_right stores   my-members">
+            <h2><a href="#">商品管理</a> > 提现明细</h2>	
+            <div class="pend_money ">
+                <div class="money money1 clear">
+                    <i class="bg"></i>
+                    <span class="info">
+                        <h5>￥{$total}</h5>
+                        <p>提成金额</p>
+                    </span>
+                </div>
+                <div class="tips">
+                    <p>温馨提醒：</p>
+                    您可在每月1-25日，申请一次提现，我们将在每月的固定时间（官方公布时间为准）为您打款。
+                </div>
+                <div class="tijia">
+                    <a href="{:U('Agent/create_bill')}" class="a-btn" > 申请提现 </a>
+                </div>
+            </div>
+            <div class="options_box">
+                <div class="tab">					                                                  
+                    <ul class="clear">
+                        <li class=""><a href="{:U('Agent/billmanage',array('type'=>'log'))}">提成明细</a>  </li>
+                        <li class='active'><a href="{:U('Agent/billmanage',array('type'=>'bill'))}">提现记录</a></li>				
+                    </ul>
+                </div>
+            </div>
+            <div class="tab_box">				
+                <div class="conditions" style="display: none;">
+                    <ul class="clear">
+                        <li><label for="">商品名称</label><input type="" name="" id="" value="" /></li>
+                        <li><label for="">商品编号</label><input type="" name="" id="" value="" /></li>							
+                        <li>
+                            <label for="">商品分类</label>
+                            <select class="opt" name="">
+                                <option value="">0</option>
+                                <option value="">1</option>
+                                <option value="">4</option>
+                                <option value="">7</option>
+                            </select>
+                        </li>						
+                        <li><label for="">下单时间</label>
+                            <input class="txt3" type="" name="" id="" value="" />
+                            到
+                            <input class="txt3" type="" name="" id="" value="" />
+                        </li>
+                        <li class="clear"><a class="active marl_60" href="javascript:;">搜索</a><a href="javascript:;">清空</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="tables4">
+                <h2 class="">提现记录</h2>
+                <div class="tables table_bor ">	
+                    <table width="100%">
+                        <colgroup span="9">		
+                            <col width="12%" />
+                            <col width="10%" />
+                            <col width="22%" />
+                            <col width="8%" />
+                            <col width="8%" />
+                            <col width="12%" />
+                            <col width="5%" />									
+                            <col width="5%" />									
+                            <col width="5%" />									
+                        </colgroup>
+                        <tr>									
+                            <th colspan="1"> 结算编号</th>
+                            <th>结算月份</th>
+                            <th>日期</th>
+                            <th>应结金额</th>
+                            <th>实际支付金额</th>
+                            <th>申请日期</th>
+                            <th>会员名</th>
+                            <th>状态</th>
+                            <th>查看</th>
+                        </tr>
+                        <notempty name='lists'>
+                        <volist name='lists' id='item'>
+                            <tr>
+                                <td class="sp_info chec">
+                                    <span class="">
+                                        {$item.ob_no}
+                                    </span>
+                                </td>
+                                <td>
+                                    {$item.os_month}
+                                </td>
+                                <td>{$item.ob_start_date|date='Y-m-d H:i:s',###}<br>{$item.ob_end_date|date='Y-m-d H:i:s',###} </td>
+                                <td>{$item.ob_result_totals}</td>
+                                <td>{$item.ob_pay_total}</td>
+                                <td>
+                                    {$item.ob_create_date|date='Y-m-d H:i:s',###}
+                                </td>
+                                <td>
+                                    {$item.ob_store_id|get_username}
+                                </td>
+                                <td class="operat">
+                                    {$item.ob_state|get_affiliate_ob_status}
+                                    <!--<a href="#">查看订单详情</a>-->
+
+                                </td>
+                                <td class="operat">
+                                    <a href="{:U('Agent/billmanage',array('type'=>'log','ob_no'=>$item['ob_no']))}">查看</a>
+                                </td>
+                            </tr>
+                        </volist>
+                            <else/>
+                            <tr>
+                                <td colspan='7'>没有数据</td>
+                            </tr>
+                        </notempty>
+                    </table>					
+                </div>	
+            </div>
+
+
+            <div class="pagelist_c">
+                {$_page}
+            </div>
+        </div>
+    </div>
+</block>

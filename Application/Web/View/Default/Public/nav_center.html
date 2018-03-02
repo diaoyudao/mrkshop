@@ -1,0 +1,72 @@
+<div class="nav">
+    <div class="towp">
+        <ul>
+            <li class="allClassfy"><a href="javascript:;"><i class="bg"></i>全部分类</a>
+                <div class="all-naiv all-naiv2">
+                    <ul>
+                        <volist name='category_list' id='categoryinfo'>
+                            <li class="ls">
+                                <a href="{:U('goods/lists',array('domainid'=>$categoryinfo['id']))}">
+                                    <i style="background-image:url(__PICURL__/{$categoryinfo.id}/{$categoryinfo.icon|get_good_img})"></i>
+                                    {$categoryinfo.name}</a>
+                                <div class="showbox">
+                                    <div class="third_cal">
+                                        <volist name='categoryinfo.catelist' id='catelist'>
+                                            <dl><dt> <a href="{:U('Goods/lists',array('domainid'=>$catelist['domainid'],'pid'=>$catelist['id']))}">{$catelist.title}</a> </dt>
+                                                <dd>
+                                                <volist name='catelist.child' id='child'>
+                                                    <a href="{:U('Goods/lists',array('domainid'=>$child['domainid'],'id'=>$child['id'],'pid'=>$child['pid']))}"><span>{$child.title}</span></a>
+                                                </volist>
+                                                </dd>
+                                            </dl>
+                                        </volist>
+                                    </div>
+                                    {:hook('Advs',array('mark'=>'cate_index_'.$categoryinfo['id'],'domainid'=>$categoryinfo['id'],'domaintype'=>'site','show_page'=>'cate'))}
+                                </div>
+                            </li>
+                        </volist>
+                    </ul>
+                </div>
+            </li>
+            <li class="otherClassfy">
+                <ul>
+                    <volist name="_menus" id="nav" > 
+                        <if condition="($nav.types eq 0) and ($menunum lt 9)">
+                            <assign name="menunum" value="$menunum+1" />
+                            <li <if condition="($nav.name eq ACTION_NAME) or I('type') eq $nav.name ">class="active1" </if> ><a href="{$nav.url|get_nav_url}" target="<eq name='nav.target' value='1'>_blank<else/>_self</eq>">{$nav.title}</a></li>
+                        </if>
+                    </volist>
+                    <if condition="session('memberinfo.member_type') eq 2 || session('memberinfo.member_type') eq 1">
+                        <li <if condition="I('type')  eq 1" > class="active1"  </if> ><a href="{:U('Goods/lists',array('type'=>1))}" target="">日常商品</a></li>
+                    </if>
+                    <!-- <if condition="session('memberinfo.member_type') eq 3 && session('memberinfo.member_agent_id') neq 0">
+                        <li <if condition="ACTION_NAME eq 'storegoods'" > class="active1"  </if> ><a href="{:U('Goods/storegoods',array('store_id'=>session('memberinfo.member_agent_id')))}" target="">店铺精选</a></li>
+                    </if> -->
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+<script>
+    $(function() {
+        var nav = $('#j_nav');
+        var bnav = $('.nav');
+        var navTop = bnav.offset().top;
+        $(window).scroll(function(e) {
+            if ($(this).scrollTop() >= navTop) {
+                nav.css('display', 'block');
+                nav.addClass('m-nav-fix');
+            } else {
+                nav.css('display', 'none');
+                nav.removeClass('m-nav-fix');
+            }
+        });
+        //分类左右高度控掉  
+        var lh = $(".all-naiv").height();
+        var rh = $(".showbox").height() + 25;
+        if (rh < lh) {
+            $(".showbox").css({"min-height": lh - 25});
+        }
+        //end
+    });
+</script>

@@ -1,0 +1,48 @@
+<extend name="Base/store_common"/>
+<block name="body">
+    <div class="wrap" style="background-color: #f5f5f5;">
+        <div class="content_agency towp clear user_center complete_order">
+            <div class="content_left">
+                <include file="Member/member_menu"/>
+            </div>
+            <div class="content_right" style="border: 0;">
+                <h2><a href="#">订单管理</a> > 添加订单</h2>
+                <div class="step step1">
+
+                </div>
+                <div class="pro_sear">
+                    <div class="sear_box clear">
+                        <i></i>
+                        <div class="tss">
+                            <p>添加订单完成</p>
+                            <span><lable id='wait'>3</lable>秒后自动跳转订单详情</span>
+                        </div>
+                    </div>
+                    <div class="cz_dd clear">
+                        <a class="next" href="javascript:;">查看订单详情</a>
+                        <a class="cancel" href="{:U('Order/index')}">返回订单管理</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>
+<block name="script"> 
+    <script type="text/javascript">
+        (function() {
+            var wait = document.getElementById('wait'), href = "{:U('Agent/orderlist')}";
+            var interval = setInterval(function() {
+                var time = --wait.innerHTML;
+                if (time <= 0) {
+                    location.href = href;
+                    clearInterval(interval);
+                }
+                ;
+            }, 1000);
+            window.stop = function() {
+                clearInterval(interval);
+            }
+        })();
+    </script>
+</block> 
+

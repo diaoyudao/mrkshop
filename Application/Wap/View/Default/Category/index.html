@@ -1,0 +1,86 @@
+<extend name="Base/common_index"/>
+<block name="body">
+    <!--头部 S-->
+    <div class="herder">
+        <a href="javascript:history.go(-1);" class="back"><i></i></a>
+        <h3>全部分类</h3>
+        <!-- <div class="herd_r"><a href="search.html" class="search"><i></i></a></div>-->
+    </div>
+    <div class="t_line"></div>
+    <!--头部 E--> 
+    <!--全部分类 S--> 
+    <div class="classify">
+
+        <div class="class_L">
+            <ul>
+                <volist name='category_list' id='category' key='k'>
+                    <eq name='k' value='1'>
+                    <li class="fn_hover" category_id='{$category.id}'><a href="javascript:;">{$category.name}</a></li>
+                    <else/>
+                    <li class="" category_id='{$category.id}'><a href="javascript:;">{$category.name}</a></li>
+                    </eq>
+                </volist>
+            </ul>
+            <div class=" b_bh"></div>
+        </div>
+        <volist name='category_list' id='category' key='k'>
+            <eq name='k' value='1'>
+            <div class="class_R category_{$category.id}">
+                <volist name='category.catelist' id='subcate'>
+                    <div class="path"><a href="{:U('Goods/lists',array('domainid'=>$subcate['domainid'],'id'=>$subcate['id']))}">{$subcate.title}</a>></div>
+                    <ul>
+                        <volist name='subcate.child' id='sub'>
+                            <li><a href="{:U('Goods/lists',array('domainid'=>$sub['domainid'],'id'=>$sub['id']))}"><div class="img"><img src="__PICURL__/{$sub.domainid}/{$sub.icon|get_cover='path'}" alt='{$sub.name}'></div><h3>{$sub.title}</h3></a></li>
+                        </volist>
+
+                    </ul>
+                    <div class=" b_bh"></div>
+                </volist>
+            </div>
+
+
+            <!--
+                        <div class="class_R category_{$category.id}">
+                            <ul>
+                                <volist name='category.catelist' id='subcate'>
+                                    <li><a href="{:U('Goods/lists',array('domainid'=>$subcate['domainid'],'id'=>$subcate['id']))}">
+                                            <div class="img"><img src="__PICURL__/{$subcate.domainid}/{$subcate.icon|get_cover='path'}" alt='{$subcate.name}' /></div><h3>{$subcate.title}</h3>
+                                        </a></li>
+                                </volist>
+                            </ul>
+                        </div>-->
+            <else/>
+            <div class="class_R category_{$category.id}" style='display: none;'>
+                <volist name='category.catelist' id='subcate'>
+                    <div class="path"><a href="{:U('Goods/lists',array('domainid'=>$subcate['domainid'],'id'=>$subcate['id']))}">{$subcate.title}</a>></div>
+                    <ul>
+                        <volist name='subcate.child' id='sub'>
+                            <li><a href="{:U('Goods/lists',array('domainid'=>$sub['domainid'],'id'=>$sub['id']))}"><div class="img"><img src="__PICURL__/{$sub.domainid}/{$sub.icon|get_cover='path'}" alt='{$sub.name}'></div><h3>{$sub.title}</h3></a></li>
+                        </volist>
+                    </ul>
+                </volist>
+                <div class=" b_bh"></div>
+            </div>
+
+            </eq>
+        </volist>
+        <div class="Lbg_line"></div>
+    </div>
+    <!--全部分类 E--> 
+</block>
+<block name='script'>
+    <script>
+        $(function() {
+            $(".class_L ul li").click(function() {
+                $(".class_L ul li").removeClass("fn_hover");
+                $(this).addClass("fn_hover");
+                var category_id = $(this).attr('category_id');
+//                console.log(category_id);
+                $(".class_R").hide();
+                $(".category_" + category_id).slideDown();
+            });
+
+        });
+
+    </script>
+</block>

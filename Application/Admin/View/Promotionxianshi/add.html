@@ -1,0 +1,163 @@
+<extend name="Public/base"/>
+
+<block name="body">
+    <script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+		<script type="text/javascript" src="__STATIC__/UploadImages.js"></script>
+    <div class="main-title">
+        <h2>{$meta_title}</h2>
+    </div>
+    <div class="tab-wrap">
+        <!--        <ul class="tab-nav nav">
+                    <li data-tab="tab1" class="current"><a href="javascript:void(0);">基 础</a></li>
+                </ul>-->
+        <div class="tab-content">
+            <form action="{:U()}" method="post" class="form-horizontal">
+                <!-- 基础 -->
+                <div id="tab1" class="tab-pane in tab1">
+                    <div class="form-item">
+                        <label class="item-label">
+                            活动名称<span class="check-tips">（活动名称将显示在限时折扣活动列表中，方便商家管理使用，最多可输入25个字符。）</span>
+                        </label>
+                        <div class="controls">
+                            <input type="text" name="xianshi_name" class="text input-large" value="{$info.xianshi_name|default=''}">
+                        </div>
+                    </div>
+
+                    <div class="form-item">
+                        <label class="item-label">活动标题<span class="check-tips">（活动标题是商家对限时折扣活动的别名操作，请使用例如“新品打折”、“月末折扣”类短语表现，最多可输入10个字符；
+                                非必填选项，留空商品优惠价格前将默认显示“限时折扣”字样。）</span></label>
+                        <div class="controls">
+                            <input type="text" name="xianshi_title" class="text input-large" value="{$info.xianshi_title|default=''}">
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <label class="item-label">活动描述<span class="check-tips">（活动描述是商家对限时折扣活动的补充说明文字，在商品详情页-优惠信息位置显示；
+                                非必填选项，最多可输入30个字符。）</span></label>
+                        <div class="controls">
+                            <input type="text" name="xianshi_explain" class="text input-large" value="{$info.xianshi_explain|default=''}">
+                        </div>
+                    </div>
+                     <div class="form-item">
+                          <label class="item-label">活动Banner<span style="margin-left:0;" class="check-tips">（活动Banner）</span></label>
+                        <div class="controls">
+				<div class="controls">
+                                     <input type="file" id="upload_picture_cover_id">
+                                            <input type="hidden" id="cover_id_cover_id" name="banner">
+                                                <empty name="info.banner">
+                                                <div class="upload-img-box"></div>
+                                                <else /> 
+                                                 <div class="upload-img-box">
+                                                     <div class="upload-pre-item">
+                                                     <img style="height: 100px;width: auto;" src="__PICURL__/1/{$info.banner|get_cover='path'}" data-id="{$info.banner}"/>
+                                                      </div>
+                                                        <span class='btn-close btn-close-cover_id' title='删除图片'></span>
+                                                    </div>
+                                                </empty> 
+                                            
+					    <script type="text/javascript">
+					    //上传图片
+					    /* 初始化上传插件 */
+					    var domainid= '1';
+                                            var fieldname = "cover_id";
+					    $("#upload_picture_cover_id").uploadify({
+						"height"          : 30,
+						"swf"             : "__STATIC__/uploadify/uploadify.swf",
+						"fileObjName"     : "download",
+						"buttonText"      : "上传图片",
+						"uploader"        : "{:U('File/uploadPicture',array('session_id'=>session_id()))}",
+						"width"           : 120,
+						'removeTimeout'	  : 1,
+						'fileTypeExts'	  : '*.jpg; *.png; *.gif;',
+						"onUploadSuccess" : uploadPicturecover_id,
+						'formData'      : {'domainid' :domainid,'fields':fieldname,'pagefrom':'activity'},
+						'onFallback' : function() {
+						    alert('未检测到兼容版本的Flash.');
+						}
+					    });
+					    function uploadPicturecover_id(file, data){
+					    var data = $.parseJSON(data);
+					    var src = '';
+                                            if(data.status){
+                                                src = data.url || '__PICURL__/'+domainid+'/'+ data.path;
+						upload_img = "<div class='upload-pre-item'><img src=" + src +" title='点击显示大图' data-id="+data.id+"> <span class='btn-close btn-close-banner' title='删除图片'></span></div>";
+						picsbox = $("#cover_id_cover_id").parent().find('.upload-img-box');
+						picsbox.append(upload_img);
+                                                $("#cover_id_cover_id").val(data.id);
+					    } else {
+						    updateAlert(data.info);
+						    setTimeout(function(){
+						    $('#top-alert').find('button').click();
+						    $(that).removeClass('disabled').prop('disabled',false);
+						},1500);
+					    }
+					}
+					</script>
+			    </div>
+                    </div>
+                    <div class="form-item">
+                        <?php
+                        $promote_start_time= $info['start_time'] ? date('Y-m-d H:i',$info['start_time']):date('Y-m-d H:i');
+                        $promote_end_time= $info['end_time'] ? date('Y-m-d H:i',$info['end_time']):date('Y-m-d H:i',time()+3600*24*15); 
+                        ?>
+                        <label class="item-label">开始时间<span class="check-tips">（开始时间不能为空且不能早于2014-01-08 15:46）</span></label>
+                        <div class="controls">
+                            <input type="text" name="start_time" class="text time input-large" value="{$promote_start_time}">
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <label class="item-label">结束时间<span class="check-tips">（结束时间不能为空且不能晚于2019-12-31 00:00）</span></label>
+                        <div class="controls">
+                            <input type="text" name="end_time" class="text time input-large" value="{$promote_end_time}">
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <label class="item-label">默认折扣<span class="check-tips">（名称不能为空）</span></label>
+                        <div class="controls">
+                            <input type="text" name="discount" class="text input-large" value="{$info.discount|default='0.98'}">
+                        </div>
+                    </div>
+
+                    <div class="form-item">
+                        <label class="item-label">活动状态<span class="check-tips">(是否启用)</span> </label>
+                        <div class="controls">
+                            <select name="status">
+                                <foreach name="status" item="item">
+                                    <option <eq name="info['status']" value="$key">selected="selected" </eq> value="{$key}">{$item}</option>
+                                 </foreach>
+                            </select>				
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="form-item">
+                    <input type="hidden" name="xianshi_id" value="{$info.xianshi_id|default=''}">
+                    <button type="submit" id="submit" class="btn submit-btn ajax-post" target-form="form-horizontal">确 定</button>
+                    <button class="btn btn-return" onclick="javascript:history.back( - 1);
+                                return false;">返 回</button>
+                </div>
+            </form>
+            </block>
+            <block name="script">
+                <link href="__STATIC__/datetimepicker/css/datetimepicker.css" rel="stylesheet" type="text/css">
+                <php>if(C('COLOR_STYLE')=='blue_color') echo '<link href="__STATIC__/datetimepicker/css/datetimepicker_blue.css" rel="stylesheet" type="text/css">';</php>
+                <link href="__STATIC__/datetimepicker/css/dropdown.css" rel="stylesheet" type="text/css">
+                <script type="text/javascript" src="__STATIC__/jquery.dragsort-0.5.1.min.js"></script>
+                <script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+                <script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+                <script>
+            $(function() {
+            $('.date').datetimepicker({
+            format: 'yyyy-mm-dd',
+                    language: "zh-CN",
+                    minView: 2,
+                    autoclose: true
+            });
+                    $('.time').datetimepicker({
+            language: "zh-CN",
+//          minView: 2,
+                    controlType: 'select',
+                    autoclose: true
+            });
+            });</script>
+            </block>

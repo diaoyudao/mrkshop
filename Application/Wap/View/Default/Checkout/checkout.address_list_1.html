@@ -1,0 +1,25 @@
+<h2>收货地址</h2>
+<div class="add2  clear">
+    <ul>
+        <volist name="address" id="myaddress">
+            <li  <eq name="myaddress.isdefault" value="1">class="active6"</eq> >
+                <h3><span class="name">{$myaddress.realname}</span><span class="phone">{$myaddress.cellphone}</span></h3>
+                <p>{$myaddress.province} {$myaddress.city} {$myaddress.area} {$myaddress.address}</p>
+                <i class="line2"></i>
+                <p class="user-id">身份证号：{$myaddress.card_no}</p>
+                <div class="edit ">
+                    <!--<input type="radio" name="mysender" class="ra" value="{$myaddress.id}" <eq name="myaddress.isdefault" value="1"> checked="checked" </eq> />-->
+                    <a class="b-btn edit1" href="javascript:open_address({$myaddress.id})">编辑</a>
+                    <a  class="b-btn" href="javascript:delAddress({$myaddress.id});">删除</a>
+                </div>
+                <a  class="setDef bg" addressid='{$myaddress.id}' onclick='chooseaddress(this)' title="选择收货地址"></a>
+            </li>
+        </volist>
+        <li class="toAdd">
+            <a href="javascript:open_address(0)">
+                <i></i>
+                添加地址
+            </a>
+        </li>
+    </ul>
+</div>

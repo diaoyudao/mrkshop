@@ -1,0 +1,146 @@
+<extend name="Base/common_index"/>
+<block name="style">
+    <style>
+        .buy_agin a{ float: right; }
+        .buy_agin a.qx{
+            background-color: #ccc;
+            border-radius: 0.08rem;
+            color: #fff !important;
+            cursor: pointer;
+            display: block;
+            height: 0.8rem;
+            line-height: 0.8rem;
+            margin: 0 auto;
+            margin-left: 0.2rem;
+            text-align: center;
+            width: 1.2rem;
+            font-size: 0.24rem;
+            height: 0.5rem;
+            line-height: 0.5rem;
+            padding: 0 0.2rem;
+        }
+        .buy_agin .pj{
+            background-color: #e9a938;
+            border-radius: 0.08rem;
+            color: #fff !important;
+            cursor: pointer;
+            display: block;
+            height: 0.8rem;
+            line-height: 0.8rem;
+            margin: 0 auto;
+            margin-left: 0.2rem;
+            text-align: center;
+            width: 1.2rem;
+            font-size: 0.24rem;
+            height: 0.5rem;
+            line-height: 0.5rem;
+            padding: 0 0.2rem;
+        }
+        .order_mana li{ width: 33%;}
+    </style>
+</block>
+
+<block name="body">
+    <!--头部 S-->
+    <div class="herder">
+        <a href="javascript:history.go(-1);" class="back"><i></i></a>
+        <h3>订单管理</h3>
+        <!-- <div class="herd_r"><a href="search.html" class="search"><i></i></a></div>-->
+    </div>
+    <div class="t_line"></div>
+    <!--头部 E--> 
+    <!--订单列表 S--> 
+    <ul class="tab pinjia order_mana">
+        <li <eq name='state_type' value='all'> class="active" </eq>><a href="{:U('Refund/index')}">所有（{$ordersum}）</a></li>
+        <li <eq name='state_type' value='state_new'> class="active" </eq>><a  href="{:U('Refund/index',array('state_type'=>'state_new'))}">等待处理（{$noevalnum}）</a></li>
+        <li <eq name='state_type' value='state_success'> class="active" </eq>><a  href="{:U('Refund/index',array('state_type'=>'state_success'))}">已完成（{$evalnum}）</a></li>
+    </ul>
+    <notempty name="orderlist">
+        <div id='conten_id'>
+            <volist name='orderlist' id='order' empty='没有订单'>
+                <div class="order_list">
+                    <div class="two_clum">
+                        <span class="fl"><i>订单号:</i><a href="{$order.detail_url}">{$order.refund_sn}</a></span>
+                        <!--<span class="fr">{$order.orderStatus.status_txt}</span>--> 
+                        <eq name='order.refund_type' value='1'><span class="fr" style="background-color: yellowgreen; color: #fff; line-height: 0.5rem; padding: -1px 2px">退款订单</span></eq>
+                        <eq name='order.refund_type' value='2'><span class="fr" style="background-color: green; color: #fff; line-height: 0.5rem; padding: -1px 2px;">退货订单</span></eq>
+                    </div>
+                    <ul>
+                        <volist name='order.goodslist' id='goods' key='k'>
+                            <li>
+                                <a href="{$order.detail_url}">
+                                    <img src="{$goods['pics_img'][$goods['cover_id']]}"/>
+                                    <div class="pro_info">
+                                        <h3><a href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}">{$goods.goodid|get_good_name}</a></h3>
+                                        <p class="pric">
+                                            <span>￥<span class="font36">{$goods.price}</span>
+                                            </span>
+                                            <i> X {$goods.num} </i>
+                                        </p>
+                                    </div>
+                                </a>
+                            </li>
+                        </volist>
+                    </ul>
+                    <div class="two_clum">
+                        <span class="fl"><i>时间：</i>{$order.add_time|date="Y-m-d H:i:s",###}</span>
+                        <span class="fr">总额：<span class="cost">￥{$order.refund_amount}</i></span> 
+                    </div>
+                    <div class="buy_agin">
+                        <a href="{:U('Refund/detail',array('id'=>$order['refund_id']))}" class="pj">查看详情</a>
+                    </div>
+                </div>
+            </volist>
+        </div>
+        <else/>
+        <div class="no_data">
+            <h3>
+                <i class=""> <img src="__IMG__/ts.png"/> </i> 没有订单记录哦
+            </h3>						        	
+        </div>
+    </notempty>
+</div>
+<div id="loding_ajax" style=" text-align:center;height:.88rem;line-height:.88rem;font-size: .44rem;font-weight: bold;color: #000; display: none;">加载中····</div>
+<!--订单列表 E--> 
+</block>
+<block name='script'>
+    <script src="__JS__/ajaxpage.js" ></script>
+    <script>
+        $(function() {
+            AjaxPage.pageCount = "{$totalPages|default=0}";
+            AjaxPage.append = 1;
+            AjaxPage.method = 'GET';
+            AjaxPage.dataType = "html";
+            AjaxPage.Conten = $('#conten_id');
+            AjaxPage.alert = $('#loding_ajax');
+            AjaxPage.filter.ajax = 1;
+            AjaxPage.filter.state_type = "{$state_type}";
+            $(window).scroll(function() {
+                if ($(window).height() + 200 + $(window).scrollTop() > $('body').outerHeight() && AjaxPage.canpage) {
+                    AjaxPage.canpage = false;
+                    AjaxPage.gotoPageNext();
+                }
+            });
+        });
+    </script>
+    <script>
+
+        $(function() {
+            $("a.confirm").click(function() {
+                var msg = $(this).attr("data-msg");
+                var href = $(this).attr('href');
+                layer.confirm(msg, {icon: 3, title: '提示信息'}, function(index) {
+                    if (index) {
+                        layer.close(index);
+                        window.location.href = href;
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
+                return false;
+            });
+        });
+
+    </script>
+</block>

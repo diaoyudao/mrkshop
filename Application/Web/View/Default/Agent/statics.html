@@ -1,0 +1,32 @@
+<extend name="Base/store_common"/>
+<block name="body">
+    <div class="wrap" style="background-color: #f5f5f5;">
+        <div class="content_agency towp clear user_center complete_order">
+            <div class="content_left">
+                <include file="Member/member_menu"/>
+            </div>
+            <div class="content_right" style="border: 0;">
+                <!--<h2><a href="{:U('Agent/statics')}">数据统计</a> > {$meta_title}</h2>-->
+                <include file="Agent/agent_center" />
+                <div class="options_box">
+                    <div class="tab">
+                        <include file="Agent/static_menu" />
+                    </div>
+                </div>
+                <!--<br>-->
+                
+                <div id="container" class="w100pre close_float" style="height:600px"></div>
+            </div>
+        </div>
+    </div>
+</block>
+<block name="script"> 
+    <script src="__JS__/highcharts/highcharts.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            var stat_json = {$stat_json};
+            $('#container').highcharts(stat_json);
+        });
+    </script>
+</block> 
+

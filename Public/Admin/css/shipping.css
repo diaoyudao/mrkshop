@@ -1,0 +1,312 @@
+
+* {
+    margin: 0;
+    padding: 0;
+}
+* {
+    outline: medium none;
+    word-wrap: break-word;
+}
+.w12 {
+    width: 12px;
+}
+.w24 {
+    width: 24px;
+}
+.w30 {
+    width: 60px;
+}
+.w36 {
+    width: 36px;
+}
+.w48 {
+    width: 48px;
+}
+.w60 {
+    width: 60px;
+}
+.w72 {
+    width: 72px;
+}
+.w84 {
+    width: 84px;
+}
+.w96 {
+    width: 96px;
+}
+.w108 {
+    width: 108px;
+}
+.w120 {
+    width: 120px;
+}
+.w132 {
+    width: 132px;
+}
+.w144 {
+    width: 144px;
+}
+.w156 {
+    width: 156px;
+}
+.w150 {
+    width: 150px;
+}
+.w200 {
+    width: 200px;
+}
+.w270 {
+    width: 270px;
+}
+.w300 {
+    width: 300px;
+}
+.w830 {
+    width: 830px;
+}
+input[type="text"], input[type="password"], input.text, input.password {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    color: #777;
+    display: inline-block;
+    font: 12px/20px Arial;
+    height: 20px;
+    outline: 0 none;
+    padding: 4px;
+    vertical-align: top;
+}
+.ncsu-trans-type {
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+.ncsu-trans-type .default {
+    background-color: #e6e6e6;
+    line-height: 30px;
+    min-height: 30px;
+    padding: 4px 10px;
+}
+.add-on {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #e6e6e6;
+    border-color: #ccc;
+    border-image: none;
+    border-style: solid;
+    border-width: 1px 1px 1px 0;
+    display: inline-block;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    vertical-align: top;
+    width: 28px;
+    margin-left: 26px;
+    margin-top: -7px;
+}
+
+.add-on i {
+    color: #666;
+    font-size: 14px;
+    text-shadow: 1px 1px 0 #ffffff;
+}
+.J_DefaultMessage {
+    clear: both;
+    display: block;
+}
+
+.ncsc-table-style {
+    border-collapse: collapse;
+    clear: both;
+    line-height: 20px;
+    width: 100%;
+}
+
+
+.ncsc-table-style tbody td {
+    background-color: #fff;
+    color: #999;
+    padding: 10px 0;
+    text-align: center;
+}
+.bd-line td {
+    border-bottom: 1px solid #e6e6e6;
+}
+.noborder, .noborder td {
+    border-bottom: 0 none;
+    border-top: 0 none;
+}
+.table th, .table td {
+    height: 26px;
+    padding: 6px !important;
+}
+.nscs-table-handle {
+    width: 200px;
+}
+
+.nscs-table-handle span:first-child {
+    border-left: 0 none;
+}
+.nscs-table-handle span {
+}
+.nscs-table-handle span {
+    border-left: 1px solid #e6e6e6;
+    display: inline-block;
+    letter-spacing: normal;
+    padding: 0 4px;
+    text-align: center;
+    vertical-align: middle;
+    word-spacing: normal;
+}
+body, td, input, textarea, select, button {
+    color: #555;
+    font: 12px "Microsoft Yahei","Lucida Grande",Verdana,Lucida,Helvetica,Arial,"Simsun",sans-serif;
+}
+.tbl-attach{ height: 46px ;line-height: 46px;}
+
+a.ncsc-btn-mini {
+    background-color: #f5f5f5;
+    border-color: #dcdcdc #dcdcdc #b3b3b3;
+    border-style: solid;
+    border-width: 1px;
+    color: #777;
+    cursor: pointer;
+    display: inline-block;
+    font: 12px/20px arial;
+    height: 20px;
+    margin-right: 2px;
+    padding: 0 10px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+a.ncsc-btn-mini i, a.ncsc-btn i {
+    font-size: 14px;
+    margin-right: 4px;
+    vertical-align: middle;
+}
+
+
+/*shipping_area*/
+
+.dialog-areas{ padding-bottom: 50px;}
+
+.dialog-areas li {
+    clear: none;
+    display: block;
+    width: 100%;
+}
+
+.ncsc-region {
+    font-size: 0;
+    overflow: visible !important;
+}
+
+.ncsc-region-title {
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: normal;
+    line-height: normal !important;
+    padding: 0 !important;
+    text-align: left !important;
+    vertical-align: top;
+    width: 100px !important;
+    word-spacing: normal;
+}
+
+.ncsc-region-title span {
+    color: #333;
+    display: block;
+    font-weight: bold;
+    height: 20px;
+    line-height: 20px;
+    padding: 5px 0 4px 10px;
+}
+
+label, .pointer {
+    cursor: pointer;
+}
+
+.ncsc-province-list {
+    display: inline-block;
+    font-size: 0 !important;
+    letter-spacing: normal;
+    padding: 0 !important;
+    vertical-align: top;
+    width: 920px  !important;
+    word-spacing: normal;
+}
+.ncsc-province {
+    display: inline-block;
+    font-size: 12px;
+    height: 30px;
+    letter-spacing: normal;
+    position: relative;
+    vertical-align: top;
+    width: 100px;
+    word-spacing: normal;
+    z-index: 1;
+}
+
+.ncsc-province-tab {
+    display: block;
+    height: 20px;
+    line-height: 20px;
+    margin: 1px 1px 0;
+    padding: 4px;
+}
+
+.ncsc-province-tab input, .ncsc-province-tab label {
+    vertical-align: middle;
+}
+
+.ncsc-province-tab .check_num {
+    color: #28b779;
+    font: 12px/16px Verdana,Geneva,sans-serif;
+    letter-spacing: -1px;
+    padding-right: 1px;
+    vertical-align: middle;
+}
+
+
+.ncsc-province-tab i {
+    color: #ccc;
+    cursor: pointer;
+    font-size: 12px;
+    margin-left: 4px;
+}
+
+.ncsc-citys-sub {
+    background-color: #fffec6;
+    border: 1px solid #f7e4a5;
+    display: none;
+    left: 0;
+    position: absolute;
+    top: 28px;
+    white-space: normal;
+    width: 240px;
+    z-index: -1;
+}
+
+.ncsc-citys-sub .areas {
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: normal;
+    line-height: 20px;
+    margin-right: 4px;
+    padding: 4px;
+    vertical-align: middle;
+    word-spacing: normal;
+}
+
+.dialog-areas .form-item {
+    background-color: #fff;
+    width: 100%;
+    margin-top: -40px;
+    position: fixed;
+    bottom: 0;
+    z-index: 100;
+    display: block;
+}
+

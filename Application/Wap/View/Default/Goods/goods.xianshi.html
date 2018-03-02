@@ -1,0 +1,267 @@
+<extend name="Base/common_index"/>
+<block name="style">
+    <link rel = "stylesheet" href = "__CSS__/swiper.min.css" >
+    <style type="text/css">
+        .swiper-pagination-bullet{
+            width: 0.15rem;
+            height: 0.15rem;
+            background-color: #fff;
+            box-sizing: border-box;
+            border: 1px solid #ca4a63;
+            opacity: 1;
+            margin: 0 0.1rem;
+        }
+        .swiper-pagination-bullet-active{
+            background-color: #ca4a63;
+        }
+        .swiper-container-horizontal>.swiper-pagination{
+            bottom: 0.15rem;
+        }
+        .newtj_nav .img img{
+            width: 3.0rem;
+            height: 3.0rem;
+        }
+        .recommend_nav .img img{
+            width: 3.03rem;
+            height: 3.03rem;
+        }
+        .xsqg_nav .img img{
+            height: auto;
+        }
+        .product_nav .img img{
+            height: auto;
+        }
+    </style>
+</block>
+<block name="body">
+    <div class="herder">
+        <a class="back" href="javascript:history.go(-1);"><i></i></a>
+        <h3>限时抢购</h3>
+
+        <div class="herd_r" style=" overflow: visible;"><a class="flow_bj" href="javascript:;">分类</a>
+            <div class="t_sc" style="display:none;">
+                <ul>
+                    <li><a <empty name="domainid">class="current" </empty> href="{:U('Goods/xianshi')}">全部商品</a></li>
+                    <volist name="domainlist" id="domaininfo" key="key" offset="1" length='8'>
+                        <li><a <if condition="$domaininfo[id] eq $domainid"> class='current' </if> href="{:U('Goods/xianshi',array('domainid'=>$domaininfo['id'],'id'=>0,'brand'=>0,'p'=>$p ))}">{$domaininfo.name}</a></li>
+                    </volist>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="swiper-container sy_hdps" >
+        <div class="swiper-wrapper sy_hdp">
+            <!--            <div class="swiper-slide"><img src="__IMG__/banner.jpg"></div>
+                        <div class="swiper-slide"><img src="__IMG__/banner1.jpg"></div>
+                        <div class="swiper-slide"><img src="__IMG__/banner1.jpg"></div>
+                        <div class="swiper-slide"><img src="__IMG__/banner1.jpg"></div>-->
+            {:hook('Advs',array('mark'=>'wap_index_A1','domainid'=>'','domaintype'=>'site','show_page'=>'banner'))}
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+        <div class="banner_zz"></div>
+    </div>
+    <!--首页幻灯 E--> 
+    <div class="xsqg_nav">
+        <ul>
+            <li>
+                <div class="img"> <img src="__IMG__/add_5.png"> </div>
+                <div class="xsqg_time" style="bottom: 0.35rem;">
+                    <em style="background:none;padding:0;height:0.3rem;line-height: 0.3rem;">
+                        剩余
+                        <span id="RemainD">{$ptime.day}</span>天
+                        <span id="RemainH">{$ptime.hour}</span>时
+                        <span id="RemainM">{$ptime.point}</span>分
+                        <span id="RemainS">{$ptime.times}</span>秒结束
+
+                        <!--                        <span>0</span>
+                                                <span>0</span>时
+                                                <span>0</span>
+                                                <span>0</span>分
+                                                <span>0</span>
+                                                <span>0</span>秒结束-->
+                    </em>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="hotlist">
+        <ul>
+            <notempty name="xianshi_goods_list">
+                <volist name="xianshi_goods_list" id="goods" offset="0" length='6' empty="$empty">
+                    <li>		
+                        <div class="l">
+                            <img src="__PICURL__/{$goods.goods_image|get_cover='path'}">
+                            <p>剩余{$goods.xianshi_stock}件</p>
+                        </div>
+                        <div class="r">
+                            <h3>[{$goods.xianshi_title}]{$goods.goods_name}</h3>
+                            <p>{$goods.xianshi_explain}</p>
+                            <div >
+                                <if condition="$goods.xianshi_stock elt 0">
+                                    <a class="btn-x" style="background:gray;" href="javascript:;;">已抢光</a>
+                                    <else/>
+                                    <a href="{:U('Goods/detail',array('active'=>'pomotion','id'=>$goods['goods_id']))}" class="btn_x"><span>立即抢购</sapn></a>
+                                </if>
+                                <span class="x">{$goods.xianshi_price}</span><s class="y">￥{$goods.goods_org_price}</s>
+                            </div>
+
+                        </div>	
+                    </li>
+                </volist>
+                <else/>
+                <li class="no_data" style="min-height: 1rem; line-height: 1rem;">
+                    <h3>
+                        <i class=""> <img src="__IMG__/ts.png"/> </i> 没有限时商品
+                    </h3>						        	
+                </li>
+            </notempty>
+        </ul>
+    </div>
+
+    <!--最新推荐 S-->
+    <div class="nav_nr new_recommend">
+        <div class="h3_bt">
+            <a href="{:('Goods/lists')}">
+                <h3><span>最新推荐</span></h3>
+                <p>为您选择第一性价比的商品</p>
+            </a>
+        </div>
+        <div class="newtj_nav">
+            <ul>    
+                <volist name="newgoodslist" id="newgood">
+                    <li>
+                        <a href="{:U('Goods/detail',array('channelname'=>$newgood['channelname'],'id'=>$newgood['id']))}" title="{$newgood.title}">
+                            <div class="img">
+                                <img src="{$newgood['pics_img'][$newgood['cover_id']]}" alt="{$newgood.title}"/>
+                            </div>
+                            <h3>{:getsubstrutf8($newgood['title'],0,30)}</h3>
+                            <div class="price"><b>&yen;<em>{$newgood.price}</em></b><strike>&yen;{$newgood.marketprice}</strike></div>
+                        </a>
+                        <a href="javascript: addcart('{$newgood.id}',1,'{$newgood.price}','0',0,0);" class="btn_gwc"></a>
+                    </li>
+                </volist>
+            </ul>
+        </div>
+    </div>
+    <!--最新推荐 E-->    
+</block>
+<block name='script'>
+    <link rel="stylesheet" href="__CSS__/swiper.min.css">
+    <script type="text/javascript" src="__JS__/swiper.jquery.min.js"></script>
+    <!--<script src="__JS__/time.js" type="text/javascript" charset="utf-8"></script>-->
+    <script type="text/javascript">
+        $(function() {
+            $('html').css('fontSize', $('body').width() / 640 * 100);
+            var swiper = new Swiper('.swiper-container', {
+                pagination: '.swiper-pagination',
+                paginationClickable: true,
+                speed: 300,
+                watchSlidesProgress: true,
+                slideToClickedSlide: true,
+                autoplay: 3000
+            });
+        });
+        $(function() {
+            var swiper1 = new Swiper('.sy_hdp .swiper-container', {
+                pagination: '.swiper-pagination',
+                paginationClickable: true,
+                speed: 500,
+                watchSlidesProgress: true,
+                slideToClickedSlide: true,
+                autoplay: 3000
+            });
+        });
+        $('.flow_bj').click(function() {
+            $('.t_sc').toggle('normal');
+        })
+
+
+        function FreshTime()
+        {
+            var endtime = new Date("{$xianshi.end_time|date='Y/m/d, H:i:s',###}");//结束时间
+            var nowtime = new Date();//当前时间
+            var lefttime = parseInt((endtime.getTime() - nowtime.getTime()) / 1000);
+            d = parseInt(lefttime / 3600 / 24);
+            h = parseInt((lefttime / 3600) % 24);
+            m = parseInt((lefttime / 60) % 60);
+            s = parseInt(lefttime % 60);
+
+            document.getElementById("RemainD").innerHTML = d;
+            document.getElementById("RemainH").innerHTML = h;
+            document.getElementById("RemainM").innerHTML = m;
+            document.getElementById("RemainS").innerHTML = s;
+            if (lefttime <= 0) {
+                document.getElementById("LeftTime").innerHTML = "团购已结束";
+                clearInterval(sh);
+            }
+            ;
+        }
+        ;
+        FreshTime();
+        var sh;
+        sh = setInterval(FreshTime, 1000);
+
+        /*var mySwiper = new Swiper('.swiper-container', {
+         autoplay: 2000,
+         loop: true,
+         // 如果需要分页器
+         pagination: '.swiper-pagination',
+         // 如果需要前进后退按钮
+         nextButton: '.swiper-button-next',
+         prevButton: '.swiper-button-prev',
+         });*/
+        $('.classify ul li:gt(4)').hide();
+        $('.classify_btn a').click(function() {
+            if ($(this).text() == '更多') {
+                $(this).text('收取').addClass('active');
+                $('.classify ul li:gt(4)').show();
+            } else {
+                $(this).text('更多').removeClass('active');
+                $('.classify ul li:gt(4)').hide();
+            }
+            ;
+        });
+        $('.texture ul li:gt(4)').hide();
+        $('.texture_btn a').click(function() {
+            if ($(this).text() == '更多') {
+                $(this).text('收取').addClass('active');
+                $('.texture ul li:gt(4)').show();
+            } else {
+                $(this).text('更多').removeClass('active');
+                $('.texture ul li:gt(4)').hide();
+            }
+            ;
+        });
+        $('#add').click(function() {
+            if (parseInt($('.pages em').text()) > 1) {
+                var value = parseInt($('.pages em').text()) - 1;
+                $('.pages em').text(value);
+            }
+        })
+        $('#dle').click(function() {
+            if (parseInt($('.pages em').text()) < 13) {
+                var value = parseInt($('.pages em').text()) + 1;
+                $('.pages em').text(value);
+            }
+        })
+        $('.rank_box .rank2 li a').click(function() {
+            $('.rank_box .rank2 li a').removeClass('active');
+            $(this).addClass('active');
+        })
+        /*$(function() {
+         $('.xlph-list > li').mouseenter(function() {
+         $(' .active').removeClass("active");
+         $(this).toggleClass("active");
+         });
+         var nav = $('#j_nav');
+         var navTop = nav.offset().top;
+         $(window).scroll(function(e) {
+         if ($(this).scrollTop() >= navTop) {
+         nav.addClass('m-nav-fix');
+         } else {
+         nav.removeClass('m-nav-fix');
+         }
+         });*/
+    </script>
+</block>

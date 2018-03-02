@@ -1,0 +1,366 @@
+<extend name="Base/common_index"/>
+<block name="body">
+    <!--头部 S-->
+    <div class="herder herder_product"> 
+        <a href="javascript:history.go(-1);" class="back"><i></i></a>
+    </div>
+    <!--头部 E--> 
+    <!--首页幻灯 S-->
+    <div class="swiper-container product_hdp" >
+        <div class="swiper-wrapper ">
+            <volist name="info.pics_img" id="picimg" offset="0" length="5">
+                <div class="swiper-slide"><img src="{$picimg}"></div>
+            </volist>
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+    </div>
+    <!--首页幻灯 E-->
+    <div class="product_center">
+        <h3>{$info.title}</h3>
+        <h4>{:strip_tags($info['description'])}</h4>
+        <div class="price">
+
+            <b>￥<em><span class="zzprice zzmemberprice" id="zzmemberprice">{$info.member_price}</span></em></b>
+            <strike>销售价：￥<span id="zzprice">{$info.price}</span></strike>
+            <strike>市场价：￥<span id="zzmarketprice">{$info.marketprice}</span></strike>
+            <!--税费 S-->
+            <span class="taxes" style="display:none;">
+                税费<i>￥30</i>
+            </span>
+            <!--税费 -->
+        </div>
+        <!--促销 S-->
+        <div class="spcx" style="display:none;">
+            <dt>促销</dt>
+            <dd>
+                <ul>
+                    <li><span>满减</span>满200.00元减50.00元</li>      
+                </ul>
+            </dd>
+        </div>
+        <!--促销 E-->
+        <!--限时抢购 S-->
+        <if condition="$promotion">
+            <div class="qgtime_time">
+                <div class="synumber"><span><a href="{:U('Goods/detail',array('active'=>'pomotion','id'=>$promotion['goods_id']))}">立即参加</a></span></div>
+                <div class="xsqg_ioc"><i></i>{$promotion.xianshi_title}</div>
+                <div class="sytime">结束时间{$promotion.end_time|date='Y-m-d H:i:s',###}</div>
+            </div>
+        </if>
+        <!--限时抢购 E-->
+    </div>
+    <div class="gongneng">
+        <dl  class="btn_sppj">
+            <a href="{:U('Comment/lists',array('gid'=>$info['id']))}"><dt><span><i class="Score"></i>{$info.comment}条</span>商品评价<i class="Get"></i></dt></a>
+        </dl>
+    </div>
+    <notempty name="contentgoodattr">
+    <div class="gongneng">
+        <dl class="btn_ggcs">
+            <dt>规格参数<i class="Get"></i></dt>
+        </dl>
+    </div>
+        </notempty>
+    <div class="product_twxq">
+        {$info.content}
+    </div>
+    <!--底部 S-->
+    <div class="gd-footerMenu"> 
+
+        <eq name='info.favor' value='1'>
+        <a href="javascript:;;" class="wdsc"><i class="gwc_sc gwc_sc_hover"></i><span>已收藏</span></a>
+        <else/>
+        <a href="javascript:addfavortable(this ,{$info.id});" class="wdsc"><i class="gwc_sc"></i><span>收藏</span></a>
+        </eq>
+
+
+        <a href="{:U('Cart/index')}"><i class="gwc_gwc"></i><span>购物车</span><em class="cart_sum">{$cart_list.goods_count}</em></a>
+        <div class="btns"> <a href="javascript:;" class="addToCart ">加入购物车</a> </div>
+        <div class="btns"> <a href="javascript:;" class="Shop_btn">立即购买</a></div>
+    </div>
+    <form id='buynow' action="{:U('Checkout/buynow')}" method="post">
+        <input type="hidden" name="id" id="goodid" value="{$info.id}"/> 
+        <input type="hidden" name="price[]" id="inputprice" value="{$info.price}"/> 
+        <input type="hidden" name="memberprice[]" id="inputmemberprice" value="{$info.member_price}"/> 
+        <input type="hidden" name="marketprice[]" id="inputmarketprice" value="{$info.marketprice}"/> 
+        <input type="hidden" name="sort[]"  value="{$info.id}"/>
+        <input type="hidden" name="parameters[]" id="parametersid" /> 
+        <input type="hidden" name="store_id" id="store_id" value="0" /> 
+        <input type="hidden" name="proid" id="proid" value="0" /> 
+        <input type="hidden" name="number" id="number" value="1" /> 
+    </form>
+    <div class="b_line"></div>
+    <!--底部 E-->
+    <!--提示 S-->
+    <div class="prompt_nr" style="display:none">
+        收藏成功
+    </div>
+    <!--提示 E-->
+    <!--弹出商品参数 S-->
+    <div class="flow_tcsx spcs" style="display: none;">
+        <div class="tcsx_nr" style="bottom: 0px;">
+            <div class="tcsx_spxx">
+                <h3 style='background-color:#fff;z-index: 20'>商品参数</h3> 
+                <ul class="tcsx_sxnav">
+                    <volist name="contentgoodattr" id="attrs">
+                        <li>
+                        <dt style='width:0.8rem'>{$attrs.name}</dt><dd style='width:4.8rem'>{$attrs.value}</dd>
+                        </li>
+                    </volist>
+                </ul>
+            </div>
+            <a href="javascript:;" class="tcsx_btn">确定</a>
+        </div>
+    </div>
+    <!--弹出商品参数 E-->
+    <!--弹出商品规格 S-->
+    <div class="flow_tcsx spgg" style="display:none;">
+        <div class="tcsx_nr">
+            <div class="tcsx_spxx">
+                <dl>
+                    <dt class="img"><img src="{$info['pics_img'][$info['cover_id']]}" id="midimg" alt="{$info.title}"></dt>
+                    <dd>
+                        <div class="xx_bottom">
+                            <div class="tcsx_price">￥<span class="zzprice zzmemberprice" id="zzmemberprice22">{$info.member_price}</span></div>
+                            <p class="spsx_nr">请选择商品属性</p>
+                        </div>
+                        <div class="close"><span class="close-top"></span> <span class="close-bottom"></span> </div>
+                    </dd>
+                </dl>
+                <ul class="tcsx_sxnav four">
+                    <volist name="info.goodattr" id="attr"> 
+                        <if condition="$attr['attr_type'] eq 1">
+                            <li>
+                                <h3>{$attr.name}</h3>
+                                <div class="sxxz sxxz_1">
+                                    <volist name="attr.sub" id="subs">
+                                        <span class="pro_taocan <eq name='key' value='0'> xz_hover</eq>" onclick="selecradiotattr(this);" attrid="{$subs.id}" price="{$subs.price|default=0}">{$subs.value}(+&yen;{$subs.price|default=0})</span>
+                                    </volist>
+                                </div>
+                            </li>
+                            <else />
+                            <li>
+                                <h3>{$attr.name}</h3>
+                                <div class="sxxz sxxz_1">
+                                    <volist name="attr.sub" id="subs">
+                                        <span class="pro_checkbox_taocan <eq name='key' value='0'> xz_hover</eq>" onclick="selectcheckboxattr(this);" attrid="{$subs.id}" price="{$subs.price}">{$subs.value}(+&yen;{$subs.price})</span>
+                                    </volist>
+                                </div>
+                            </li>
+                        </if>
+                    </volist>
+                    <li>
+                        <h3>数量</h3>
+                        <div class="number">
+                            <span class="add_ioc coun-min">-</span>
+                            <input type="text" value="1" class='goods_number'  id="coun-num" onkeyup="this.value = this.value.replace(/\D/g, '')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" maxlength="3">
+                            <span class="minus_ioc coun-plu">+</span> 
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <a href="javascript:;" class="tcsx_btn addcartbutton">确定</a>
+        </div>
+    </div>
+    <!--弹出商品规格 E--> 
+</block>
+<block name='style'>
+    <link rel="stylesheet" href="__CSS__/swiper.min.css">
+    <style>
+        .footer{ display: none;}
+    </style>
+</block>
+<block name='script'>
+
+    <script type="text/javascript" src="__JS__/swiper.jquery.min.js"></script>
+    <script>
+                                $(function() {
+                                    // 加入购物车
+//                                    $(".addcartbutton").click(function() {
+                                    $("body").on('click', ".addcartbutton", function() {
+                                        // 检查库存
+                                        var stock = "{$info.stock}";
+                                        var goods_number = parseInt($("#coun-num").val());
+                                        if (goods_number > stock) {
+                                            layer.msg("商品库存不足 ！");
+                                            return false;
+                                        }
+                                        var parameters = $("#parametersid").val();//参数
+                                        addcart('{$info.id}', goods_number, '{$info.member_price}', parameters, 0, 0, 0);
+                                        return false;
+                                    });
+
+                                    // 立即购买
+                                    $("body").on('click', ".nowbuybutton", function() {
+                                        var is_login = "{:is_login()}";
+                                        if (is_login <= 0) {
+                                            layer.msg('请先登录');
+                                            location.href = "{:U('Member/login')}";
+                                            return false;
+                                        }
+                                        $("input[name=number]").val(parseInt($("#coun-num").val()));
+                                        $("#buynow").submit();
+////                                    $(".nowbuybutton").click(function() {
+//                                        var stock = "{$info.stock}";
+//                                        var goods_number = parseInt($("#coun-num").val());
+//                                        if (goods_number > stock) {
+//                                            layer.msg("商品库存不足 ！");
+//                                            return false;
+//                                        }
+//                                        var parameters = $("#parametersid").val();//参数
+//                                        var go_url = "{:U('Cart/index')}";
+//                                        now_buy('{$info.id}', goods_number, '{$info.member_price}', parameters, 0, 0, 0, go_url);
+//                                        // 跳转到购物车页面
+////                                    window.location.href='{:U("cart/index")}';
+//                                        return false;
+                                    });
+
+
+
+
+                                    // 增加商品数量
+                                    $('.coun-plu').on('click', function() {
+                                        var _temp_num = 0;
+                                        if (isNaN(parseInt($('#coun-num').val()))) {
+                                            _temp_num = 0;
+                                        } else {
+                                            _temp_num = parseInt($('#coun-num').val());
+                                        }
+                                        $('#coun-num').val(_temp_num + 1);
+                                    });
+                                    // 减少商品数量
+                                    $('.coun-min').on('click', function() {
+                                        if ($('#coun-num').val() > 1) {
+                                            $('#coun-num').val(parseInt($('#coun-num').val()) - 1);
+                                        } else {
+                                            $('#coun-num').val(1);
+                                        }
+                                    });
+
+                                    resetproductprice();
+                                });
+    </script>
+
+
+
+
+
+    <script>
+        var ajaxcomment = 0, ajaxaboutask = 0;
+        function selecradiotattr(obj) {
+            $(obj).parent().find(".pro_taocan").removeClass("xz_hover");
+            $(obj).addClass('xz_hover');
+            picArr = [];
+            var objo = $("ul.four");
+            for (var i = 0; i < objo.find("span.xz_hover").length; i++) {
+                picArr.push(objo.find('.xz_hover:eq(' + i + ')').attr('attrid'));
+            }
+            picStr = picArr.join(',');
+            $("#parametersid").val(picStr);
+            resetproductprice();
+        }
+
+        function resetproductprice() {
+            var attrprice = 0;
+            var objo = $("ul.four");
+            var pi = 0;
+            var txt = '';
+            picArr = [];
+
+            for (var i = 0; i < objo.find("span.xz_hover").length; i++) {
+                pi = objo.find('.xz_hover:eq(' + i + ')').attr('price');
+                picArr.push(objo.find('.xz_hover:eq(' + i + ')').attr('attrid'));
+                txt += objo.find('.xz_hover:eq(' + i + ')').text();
+                attrprice += parseFloat(pi);
+            }
+            picStr = picArr.join(',');
+            $("#parametersid").val(picStr);
+            var gprice = $("#inputprice").val();//价格
+            var sprice = parseFloat(attrprice) + parseFloat(gprice);
+            var sump = sprice.toFixed(2);
+            $('#zzprice').html(sump);   // 销售价
+
+            var memberpirce = parseFloat($("#inputmemberprice").val()) + parseFloat(attrprice);
+            var marketprice = parseFloat($("#inputmarketprice").val()) + parseFloat(attrprice);
+            $('.zzmemberprice').html(memberpirce.toFixed(2)); //会员价
+            $('#zzmarketprice').html(marketprice.toFixed(2));// 市场价
+            $(".spsx_nr").html("已选择：" + txt);
+        }
+
+        function selectcheckboxattr(obj) {
+            console.log(obj);
+            if ($(obj).hasClass('xz_hover')) {
+                $(obj).removeClass('xz_hover');
+            } else {
+                $(obj).addClass('xz_hover');
+            }
+            picArr = [];
+            var objt = $("ul.four");
+            for (var i = 0; i < objt.find("span.xz_hover").length; i++) {
+                picArr.push(objt.find('.xz_hover:eq(' + i + ')').attr('attrid'));
+            }
+            ;
+            picStr = picArr.join(',');
+            $("#parametersid").val(picStr);
+            resetproductprice();
+        }
+    </script>
+    <script>
+        $(function() {
+            $('html').css('fontSize', $('body').width() / 640 * 100);
+            var swiper = new Swiper('.swiper-container', {
+                pagination: '.swiper-pagination',
+                paginationClickable: true,
+                speed: 300,
+                watchSlidesProgress: true,
+                slideToClickedSlide: true,
+                autoplay: 3000
+            });
+        });
+        var fxtime;
+    </script>
+    <script>
+
+        //显示商品参数筛选
+        $(".btn_ggcs").click(function() {
+            $(".tcsx_btn").removeClass('addcartbutton');
+            $(".tcsx_btn").removeClass('nowbuybutton');
+            $(".spcs ").finish().show();
+            $(".flow_tcsx .tcsx_nr").finish().css("bottom", '-6rem').eq(0).animate({bottom: '0px', });
+
+        });
+        //隐藏商品参数筛选
+        $(".close,.flow_tcsx .tcsx_btn").click(function() {
+            $(".flow_tcsx .tcsx_nr").finish().animate({bottom: '-6rem'}, function() {
+                $(".flow_tcsx").finish().hide();
+            });
+        });
+
+        //显示商品规格
+        $(".addToCart").click(function() {
+            $(".tcsx_btn").removeClass('nowbuybutton').addClass("addcartbutton");
+            $(".spgg ").finish().show();
+            $(".spgg .tcsx_nr").finish().css("bottom", '-6rem').eq(0).animate({bottom: '0px', });
+        });
+//        //商品规格筛选
+//        $(".sxxz_1 span").click(function() {
+//            $(".sxxz_1 span").removeClass("xz_hover");
+//            $(this).addClass("xz_hover");
+//            var txt_a = $(".sxxz_1 span.xz_hover").html();
+//            $(".spsx_nr").html("已选择：" + txt_a);
+//        });
+
+
+        $(".Shop_btn").click(function() {
+            $(".tcsx_btn").removeClass('addcartbutton').addClass("nowbuybutton");
+            $(".spgg ").finish().show();
+            $(".spgg .tcsx_nr").finish().css("bottom", '-6rem').eq(0).animate({bottom: '0px', });
+        });
+
+
+
+
+
+    </script>
+</block>

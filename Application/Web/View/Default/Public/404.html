@@ -1,0 +1,56 @@
+<extend name="Base/common_index"/>
+<block name="style">
+<style type="text/css">
+.reg_header{margin-bottom: 0;}
+.footer{margin-top: 0;}
+.f25{font-size:25px;}
+.f37{font-size:37px;}
+.f20{font-size:20px; display:block;}
+.con{height:550px; width:1200px; margin-left:auto; margin-right:auto; text-align:center; }
+.err_header{padding: 20px 0;border-bottom: 1px solid #ddd;}
+.exception{background:url("__ROOT__/Public/Web/images/error_01.jpg") no-repeat center; height:550px; position:relative;}
+.err_top_a{width:1200px; margin:0 auto;  position:relative;}
+.err_top_a .err_no {position:absolute; top:79px; left:320px; }
+.err_top .err_tishi{ position:absolute; top:252px; left:685px;}
+.tiaozhuan{border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; background-color:#d5d5d5; margin-top:32px;} 
+</style>
+</block>
+<block name="body"> 
+ <div class="con">
+    <div class="con_a">
+	<div class="err_top exception">
+	    <div class="err_top_a">
+		<p class="err_no">   
+		    <span class="f37">OH,NO</span><span class="f20">出问题了，淡定淡定~ </span>
+		</p>
+	    </div>
+		<div class="err_tishi">
+		    <p class="f25">
+			小易温馨提示：&nbsp;&nbsp;无法连接到该网页
+		    </p>
+		    <p class="tiaozhuan"><span>页面将在&nbsp;&nbsp;<span id="wait">3</span>&nbsp;&nbsp;秒内返回至上一页</span></p> 
+		    <p class="lijitiaozhuan">可点击 <a class="red" id="href" href="javascript:;" onclick="history.go(-1);">立即跳转</a>或者<a class="red" id="btn-stop" href="/">我找首页去... </a> </p>
+		</div>
+	</div>
+	
+    </div>
+</div>
+</block> 
+ <block name="script"> 
+<script type="text/javascript">
+(function(){
+    var wait = document.getElementById('wait') 
+    var interval = setInterval(function(){
+	var time = --wait.innerHTML;
+     	if(time <= 0) {
+	   clearInterval(interval);
+	   history.go(-1); 
+     	};
+    }, 1000);
+    window.stop = function (){
+        console.log(111);
+        clearInterval(interval);
+    }
+})();
+</script>
+</block> 

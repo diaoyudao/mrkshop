@@ -1,0 +1,67 @@
+<volist name="tree" id="list">
+    <dl class="cate-item">
+        <dt class="cf">
+        <form action="{:U('level_add')}" method="post">
+            <if condition="!$list[ismembertype]">
+                <div class="btn-toolbar opt-btn cf">
+                    <!-- <a title="编辑" href="{:U('level_add?id='.$list['id'].'&pid='.$list['pid'])}">编辑</a> -->
+                    <a title="{$list.status|show_status_op}" href="{:U('setStatus?ids='.$list['id'].'&status='.abs(1-$list['status']))}" class="ajax-get">{$list.status|show_status_op}</a>
+                    <a title="删除" href="{:U('setStatus?&status=-1&ids='.$list['id'])}" class="confirm ajax-get">删除</a> 
+                </div>
+            </if>
+            <div class="fold"><i></i></div>
+            <div class="order"> </div> 
+            <div class="name">
+                <span class="tab-sign"></span>
+                <input type="hidden" name="id" value="{$list.id}">
+                <input type="hidden" name="member_type" value="{$list.member_type}">
+
+                <if condition="$list[ismembertype]">
+                    [会员类型] {$list.name} 
+                    <a class="add-sub-cate" title="添加会员等级" href="{:U('level_add?member_type='.$list['id'])}">
+                        <i class="icon-add"></i>
+                    </a>
+                    <elseif condition="$list[isbrand]" />
+                    [品牌] {$list.name} 
+                    <a class="add-sub-cate" title="添加子分类" href="{:U('add?domainid='.$list['domainid'].'&brandid='.$list['id'])}">
+                        <i class="icon-add"></i>
+                    </a>
+                    <else />
+                    会员等级：<span style="display: none;">{$list.alias}</span> <input type="text" name="level_name" class="text input-2x" value="{$list.level_name}">
+                    <!-- 会员等级修改控制 -->
+                    <eq name="_GET['is_admin']" value="1">
+	                    <select name="level">
+	                        <volist name="level_list" id="vo" key="k">
+	                            <option <eq name="list['level']" value="$k">selected</eq>  value="{$k}">{$vo}</option>
+	                        </volist>
+	                    </select>
+                    <else />
+                   	 	<input type="hidden" name="level" class="text input-2x" value="{$list[level]}">
+                    	<input type="text" class="text input-2x" value="{$level_list.$list[level]}" readonly="readonly">
+                    </eq>
+                    <!-- <select name="level" disabled="disabled">
+                        <volist name="level_list" id="vo" key="k">
+                            <option <eq name="list['level']" value="$k">selected</eq>  value="{$k}">{$vo}</option>
+                        </volist>
+                    </select> -->
+                    <!--| 提成比例: <input type="text" name="affiliate" class="text input-mini" value="{$list.affiliate}">-->
+                    <eq name='list.member_type' value='3'>
+                        | 购买折扣: <input type="text" name="discount" class="text input-mini" value="{$list.discount}">折
+                        | 等级积分: <input type="text" name="score" class="text input-mini" value="{$list.score}">
+                        <!--<span style="color:#DDDDDD">购买折扣根据消费积分兑换自动</span>-->
+                        <else/>
+                    | 购买折扣: <input type="text" name="discount" class="text input-mini" value="{$list.discount}">折
+                        | <span style="color: #ccc">非终端消费不需要等级积分</span>
+                    </eq>
+                </if> 
+                <span class="help-inline msg"></span>
+            </div>
+        </form>
+        </dt>
+        <notempty name="list['_']">
+            <dd>
+                {:R('Member/tree', array($list['_']))}
+            </dd>
+        </notempty>
+    </dl>
+</volist>

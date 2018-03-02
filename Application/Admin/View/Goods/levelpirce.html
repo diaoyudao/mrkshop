@@ -1,0 +1,38 @@
+<volist name="level_list" id="item">
+    <switch name="item.member_type">
+    <case value="1">
+        <div class="form-item cf">
+            <label class="item-label item-label_f">代理</label>
+            <label class="item-label item-label_f">{$item.level_name}</label>
+            <div class="controls">
+                <php>$temp_price = $item['discount']/100 * $price </php>
+                <input type="text" class="text input-large" name="member_price[{$item.id}]" value="{$temp_price}">
+                <span class="check-tips" style="margin-left:0;"></span>
+            </div>
+        </div>
+    </case>
+    <case value="2">
+        <div class="form-item cf">
+            <label class="item-label item-label_f">门店</label>
+            <label class="item-label item-label_f">{$item.level_name}</label>
+            <div class="controls">
+                <php>$temp_price = $item['discount']/100 * $price </php>
+                <input type="text" class="text input-large" name="member_price[{$item.id}]" value="{$temp_price}">
+                <span class="check-tips" style="margin-left:0;"></span>
+            </div>
+        </div>
+    </case>
+    <case value="3">
+        <div class="form-item cf">
+            <label class="item-label item-label_f">消费者</label>
+            <label class="item-label item-label_f">{$item.level_name}</label>
+            <div class="controls">
+                <php>$temp_price = $item['discount']/100 * $price </php>
+                <input type="text" class="text input-large" name="member_price[{$item.id}]" value="{$temp_price}">
+                <span class="check-tips" style="margin-left:0;"></span>
+            </div>
+        </div>
+    </case>
+    <default />default
+    </switch>
+</volist>

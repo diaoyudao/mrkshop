@@ -1,0 +1,15 @@
+<style>
+    .proClassfy a{display: block;}
+    .proClassfy a:hover{color: #fff;}
+     .proClassfy .active16 a{color: #fff;}
+</style>
+<div>
+    <span class=" norma <eq name='ACTION_NAME' value='index'>active16</eq>"  ><a class="" href="{:U('cart/index')}">普通商品 [{$type1_count}]</a></span>
+    <if condition="$type2_count gt 0">
+    <span class="baosui <eq name='ACTION_NAME' value='bonded'>active16</eq>"><a href="{:U('cart/bonded')}">保税商品 [{$type2_count}]</a></span>
+    </if>
+    <span class="baosui <eq name='ACTION_NAME' value='zhiyou'>active16</eq>"><a class="" href="{:U('cart/zhiyou')}">直邮商品 [{$type3_count}]</a></span>
+    <if condition="$type4_count gt 0">
+    <span class="baosui <eq name='ACTION_NAME' value='store'>active16</eq>"><a class="" href="{:U('cart/store')}">门店商品 [{$type4_count}]</a></span>
+    </if>
+</div>

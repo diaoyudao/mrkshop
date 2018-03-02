@@ -1,0 +1,40 @@
+<extend name="Base/member_common"/>
+<block name="style">
+    <style type="text/css">
+        .reg_header{margin-bottom: 0;}
+        .footer{margin-top: 0;} 
+    </style>
+</block>
+<block name="body"> 
+
+    <div class="towp shopcar-none">
+        <img src="__IMG__/cg.png" />
+        <h3>提示:{$message}</h3>
+        <!--<p>喜欢的宝贝，要收到碗里来啊！</p>-->
+        <p class="tiaozhuan"><span>页面将在&nbsp;&nbsp;<span id="wait" style="color:red;">{$waitSecond}</span>&nbsp;&nbsp;秒内返回至上一页</span></p>
+        <!--<a href="<?php echo($jumpUrl); ?>" class="c-btn"> 去逛逛 </a>-->
+        <p class="lijitiaozhuan">
+            <a class="c-btn" id="href" href="<?php echo($jumpUrl); ?>">立即跳转</a>
+            <!--<a class="c-btn" id="btn-stop" onclick="stop()" href="javascript:;">停止跳转 </a>-->
+            <a class="c-btn" href="tencent://message/?uin=253490851&Site=妙品生活&Menu=yes">联系客服</a></p>
+    </div>
+
+</block> 
+<block name="script"> 
+    <script type="text/javascript">
+        (function() {
+            var wait = document.getElementById('wait'), href = document.getElementById('href').href;
+            var interval = setInterval(function() {
+                var time = --wait.innerHTML;
+                if (time <= 0) {
+                    location.href = href;
+                    clearInterval(interval);
+                }
+                ;
+            }, 1000);
+            window.stop = function() {
+                clearInterval(interval);
+            }
+        })();
+    </script>
+</block> 

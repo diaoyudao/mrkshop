@@ -1,0 +1,46 @@
+<extend name="Base/common_index"/>
+<block name='style'>
+    <style>
+        body{
+            background-color: #fff;
+        }
+    </style>
+</block>
+<block name="body">
+    <!--头部 S-->
+    <div class="herder">
+        <a href="javascript:history.go(-1);" class="back"><i></i></a>
+        <h3>购物车</h3>
+    </div>
+    <div class="t_line"></div>
+        <include file="Cart/cart.menu"/>
+    <!--头部 E-->
+    <div class="cart-empty">
+        <!-- 购物车为空S -->
+        <div class="main">
+            <img src="__IMG__/cart/empty.png"/>
+            <p>购物车啥也没有哦</p>
+            <p>喜欢的宝贝，要收到碗里来啊！</p>
+            <a href="{:U('Goods/list')}">去逛逛</a>
+        </div>
+        <!-- 购物车为空E -->
+    </div>
+    <!--有商品购物车 E--> 
+    <div class="pay-failure " style='display:none;'>
+
+        <div class="success">
+            <img src="__IMG__/cart-none.jpg" />
+
+            <p>购物车啥也没有哦</p>
+            <p>喜欢的宝贝，要收到碗里来啊！</p>
+            <p><a href="{:U('Goods/list')}">去逛逛</a></p>
+            <br><br>
+            <br><br>
+        </div>
+    </div>
+
+    <!--提示 E--> 
+    <!--精抢购选 S--> 
+
+    <!--精抢购选 E--> 
+</block>

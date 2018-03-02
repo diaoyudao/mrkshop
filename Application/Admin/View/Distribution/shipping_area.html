@@ -1,0 +1,111 @@
+<div class="dialog-areas">
+
+    <php>
+        //dump($cur_area_list);
+
+    </php>
+
+    <volist name="area_list" id="citylist" key="pkey">
+        <li>
+            <dl class="ncsc-region">
+                <dt class="ncsc-region-title">
+                <span>
+                    <if condition="$cur_area_list[$citylist['p']] eq $citylist['p'] ">
+                        <input type="checkbox" class="J_Group J_Group_{$pkey}" checked="checked"  key="{$pkey}" id="{$citylist.p}" value="{$citylist.p}"/>
+                        <label for="{$citylist.p}">{$citylist.p}</label>
+                        <else/>
+
+                        <if condition="$check_area[$citylist['p']] eq $citylist['p']">
+                            <input type="checkbox" disabled='disabled' class="J_Group J_Group_{$pkey}" key="{$pkey}" id="{$citylist.p}" value="{$citylist.p}"/>
+                            <label for="{$citylist.p}" style='color:#CCC;'>{$citylist.p}</label>
+                            <else/>
+                            <input type="checkbox" class="J_Group J_Group_{$pkey}" key="{$pkey}" id="{$citylist.p}" value="{$citylist.p}"/>
+                            <label for="{$citylist.p}">{$citylist.p}</label>                            
+                        </if>
+
+                    </if>
+                </span> 
+                </dt>
+                <dd class="ncsc-province-list">
+                <volist name="citylist.c" id="city">
+                    <div class="ncsc-province">
+
+                        <if condition="$cur_area_list[$city['n']] eq $city['n'] ">
+                            <span class="ncsc-province-tab">
+                                <input type="checkbox" class="J_Province J_Province_{$pkey}" checked="checked" key="{$pkey}" id="{$city.n}"  value="{$city.n}"/>
+                                <label for="{$city.n}">{$city.n}</label>
+                                <span class="check_num"/></span><i class="icon-angle-down trigger"></i>
+                            <div class="ncsc-citys-sub">
+                                <volist name="city.a" id="area">
+                                    <span class="areas">
+                                        <input type="checkbox" class="J_City" id="{$area.s}" value="{$area.s}"/>
+                                        <label for="{$area.s}">{$area.s}</label>
+                                    </span> 
+                                </volist>
+                                <p class="tr hr8"><a href="javascript:void(0);" class="ncsc-btn-mini ncsc-btn-orange close_button">关闭</a></p>
+                            </div>
+                            </span> 
+                            <else/>
+                            <span class="ncsc-province-tab">
+                                <if condition="$check_area[$city['n']] eq $city['n']">
+                                    <input type="checkbox" disabled="disabled" class="J_Province J_Province_{$pkey}" key="{$pkey}" id="{$city.n}"  value="{$city.n}"/>
+                                    <label for="{$city.n}" style='color: #CCC;'>{$city.n}</label>
+                                    <else/>
+                                    <input type="checkbox" class="J_Province J_Province_{$pkey}" key="{$pkey}" id="{$city.n}"  value="{$city.n}"/>
+                                    <label for="{$city.n}">{$city.n}</label>                                
+                                </if>
+                                <span class="check_num"/></span><i class="icon-angle-down trigger"></i>
+                            <div class="ncsc-citys-sub">
+                                <volist name="city.a" id="area">
+                                    <span class="areas">
+                                        <input type="checkbox" class="J_City" id="{$area.s}" value="{$area.s}"/>
+                                        <label for="{$area.s}">{$area.s}</label>
+                                    </span> 
+                                </volist>
+                                <p class="tr hr8"><a href="javascript:void(0);" class="ncsc-btn-mini ncsc-btn-orange close_button">关闭</a></p>
+                            </div>
+                            </span> 
+                        </if>
+
+
+                    </div>
+                </volist>
+                </dd>
+            </dl>
+        </li>
+    </volist>
+
+    <div class="form-item" >
+        <button style="margin-left: 435px;margin-bottom: 10px;" class="btn submit-btn ajax-post J_Submit" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+        <!--<button class="btn btn-return" onclick="javascript:history.back(-1);return false;">返 回</button>-->
+    </div>
+</div>
+
+<script>
+    $(function() {
+        // 全选 checkbox
+        $('body').on('click', '.J_Group', function() {
+            var index = $(this).attr('key');
+            $(".J_Province_" + index).prop("checked", this.checked);
+        });
+
+        /**
+         * 单选checkbox
+         */
+        $(".J_Province").click(function() {
+            var index = $(this).attr('key');
+            var option = $(".J_Province_" + index);
+            var checkall = true;
+            option.each(function(i) {
+                if (!$(this).prop("checked")) {
+                    checkall = false;
+                }
+            });
+            $(".J_Group_" + index).prop("checked", checkall);
+        });
+
+
+
+    });
+
+</script>

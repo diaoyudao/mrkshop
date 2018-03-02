@@ -1,0 +1,3 @@
+<?php
+//000000000000a:15:{s:2:"id";s:1:"9";s:4:"name";s:12:"汽车用品";s:3:"url";s:23:"http://www.mrk.com/qcyp";s:9:"bindgroup";s:4:"Home";s:4:"mark";s:12:"qicheyongpin";s:10:"meta_title";s:12:"汽车用品";s:8:"keywords";s:12:"汽车用品";s:11:"description";s:12:"汽车用品";s:4:"icon";s:4:"4165";s:11:"create_time";s:10:"1459317416";s:11:"update_time";s:10:"1468225689";s:6:"status";s:1:"1";s:6:"weight";s:1:"6";s:4:"sort";s:1:"9";s:4:"show";s:1:"1";}
+?>

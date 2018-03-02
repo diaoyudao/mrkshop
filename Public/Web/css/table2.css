@@ -1,0 +1,135 @@
+.tab{
+	height: 60px;
+	border: 1px solid #e4e4e4;
+	background-color: transparent;
+	padding-left: 20px;
+}
+.tab a{
+	height: 60px;
+	color: #999;
+	line-height: 60px;
+	display: inline-block;
+}
+.tab a:hover, .tab .active{
+	border-bottom:2px solid #F86A06 ;
+	color: #F86A06;
+}
+
+.table2{
+	width:100%;
+	display: none;
+}
+.table2 th{
+	background-color: #fff;
+	line-height: 24px;
+	text-align: center;  
+ 
+    font-size: 12px;
+    color: #666;
+    margin: 40px 0;
+    font-weight: normal;
+    line-height: 24px;
+}
+.tables{margin: 20px 0;}
+.tab_tit3{
+	width: 100%;
+	background-color: #FAFAFA;
+	text-align: left;
+}
+.tab_tit3 span{
+	color: #999;
+	margin-left:10px ;
+	line-height: 32px;
+}
+.table_nr{
+	background-color: #fff;
+}
+.table_nr td{
+	text-align: center;
+	border-right: 1px solid #e4e4e4;
+}
+.table_nr td:last-child{
+	border: 0;
+}
+.pj_nr{
+	
+}
+.pj_nr p{
+	line-height: 24px;
+	color: #666;
+	padding: 10px 30px 0;
+	margin-bottom: 20px;
+	text-align: left;
+}
+.pj_nr .img{
+	padding: 0 30px 20px;
+}
+.pj_nr .img li{
+	float: left;
+	margin-right: 20px;
+	margin-bottom: 20px;
+}
+.pj_nr .img img{
+	width: 60px;
+	height: 60px;
+}
+.sp_xx{
+	
+}
+.sp_xx p{
+	line-height: 20px;
+	color:#666;
+	max-height: 40px;
+	overflow: hidden;
+	margin-bottom: 20px;
+	padding: 0px 20px;
+}
+.sp_xx .price{
+	text-align: left;
+	padding: 0 20px;
+}
+.sp_xx .price span{
+	margin-right: 10px;
+}
+.sp_xx p a:hover{
+	color:#025843
+}
+.sp_xx .colo{
+	color:#f86a06 ;
+}
+.statue{
+	color: #F86A06;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

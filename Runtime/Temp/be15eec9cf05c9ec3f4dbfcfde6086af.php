@@ -1,0 +1,3 @@
+<?php
+//000000000000a:19:{s:2:"id";s:4:"1187";s:11:"category_id";s:2:"38";s:5:"title";s:12:"帮助中心";s:11:"description";s:85:"这里是妙睿可商城帮助中心,所有疑问都可以到这里来寻求解答。";s:8:"cover_id";s:4:"4179";s:8:"domainid";s:1:"1";s:7:"brandid";s:1:"0";s:8:"keywords";s:12:"帮助中心";s:10:"meta_title";s:12:"帮助中心";s:12:"meta_keyword";s:28:"帮助中心,妙睿可商城";s:16:"meta_description";s:126:"妙睿可商城帮助中心，有关购物指南，退换货品等相关问题，可以在妙睿可帮助中心找到答案。";s:7:"ifcheck";s:1:"1";s:4:"view";s:1:"0";s:11:"create_time";s:10:"1466663825";s:7:"content";s:12:"帮助中心";s:8:"fromlink";s:21:"http://www.yimeik.com";s:9:"fromtitle";s:21:"妙睿可网上商城";s:8:"pics_img";a:1:{i:4179;s:57:"/mrkshop/Uploads/Picture/1/5/2016/06/23/576b838fbda58.jpg";}s:4:"tags";a:1:{i:0;s:12:"帮助中心";}}
+?>

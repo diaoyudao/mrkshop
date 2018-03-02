@@ -1,0 +1,120 @@
+<extend name="Public/base"/>
+
+<block name="body">
+    <div class="main-title">
+        <h2>{$meta_title}</h2>
+    </div>
+    <div class="tab-wrap">
+        <ul class="tab-nav nav">
+            <li data-tab="tab1" class="current"><a href="javascript:void(0);">基 础</a></li>
+            <li data-tab="tab2"><a href="javascript:void(0);">高 级</a></li>
+        </ul>
+        <div class="tab-content">
+            <form action="{:U()}" method="post" class="form-horizontal">
+                <!-- 基础 -->
+                <div id="tab1" class="tab-pane in tab1">
+                    <div class="form-item">
+                        <label class="item-label">
+                            货柜格名称<span class="check-tips">（名称不能为空）</span>
+                        </label>
+                        <div class="controls">
+                            <input type="text" name="grid_name" class="text input-large" value="{$info.grid_name|default=''}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-item">
+                        <label class="item-label">别名(货柜格名称别名)</label>
+                        <div class="controls">
+                            <input type="text" name="alias" class="text input-large" value="{$info.alias|default=''}">
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <label class="item-label">
+                            所属货架<span class="check-tips">（所属货架）</span>
+                        </label>
+<!--                        <div class="controls">
+                            <input type="text" name="parent_id" class="text input-large" value="{$info.parent_id|default=''}">
+                        </div>-->
+                        <div class="controls" id="old">
+                                <select name="parent_id" >
+                                     <volist name="list" id="order">
+                                         <option     
+                                     <if condition="$order.id eq $cabint_id ">selected="selected"</if>
+                                                  value="{$order.id}" >{$order.name}</option>	
+                                     </volist>
+                                </select>
+                        </div>
+                    </div>
+
+                    <div class="form-item">
+			<label class="item-label">状态<span class="check-tips"></span> </label>
+			<div class="controls">
+			<select name="status">
+                             <foreach name="status" item="item">
+				<option <if condition="$key eq $info.status" >selected="selected" </if> value="{$key}">{$item}</option>
+                             </foreach>
+                        </select>				
+			</div>
+                    </div>
+                    <div class="form-item">
+			<label class="item-label">货柜类型<span class="check-tips">(货柜类型（1：小；2：中；3：大)</span> </label>
+			<div class="controls">
+			<select name="type">
+                            <foreach name="type" item="item">
+                                <option <if condition="$key eq $info.type" > selected="selected" </if> value="{$key}">{$item}</option>
+                               </foreach>
+                        </select>				
+			</div>
+                    </div>
+                     <div class="form-item">
+                        <label class="item-label">使用次数</label>
+                        <div class="controls">
+                            <input type="text" name="use_times" class="text input-large" value="{$info.use_times|default='0'}">
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <!-- 高级 -->
+                <div id="tab2" class="tab-pane tab2">
+                    <div class="form-item">
+                        <label class="item-label">可见性<span class="check-tips">（是否对用户可见，针对前台）</span></label>
+                        <div class="controls">
+                            <select name="display">
+                                <option value="1">所有人可见</option>
+                                <option value="0">不可见</option>
+                                <option value="2">管理员可见</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <!-- 高级 -->
+                <div id="tab2" class="tab-pane tab2">
+                    <div class="form-item">
+                        <label class="item-label">标题</label>
+                        <div class="controls">
+                            <input type="text" name="link_id" class="text input-large" value="{$info.link_id|default=''}">
+                        </div>
+                    </div><div class="form-item">
+                        <label class="item-label">描述</label>
+                        <div class="controls">
+                            <label class="textarea input-large">
+                                <textarea name="description">{$info.description|default=''}</textarea>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-item">
+                    <input type="hidden" name="id" value="{$info.id|default=''}">
+                    <input type="hidden" name="parent_id" value="{$info.parent_id|default=''}">
+                    <button type="submit" id="submit" class="btn submit-btn ajax-post" target-form="form-horizontal">确 定</button>
+                    <button class="btn btn-return" onclick="javascript:history.back(-1);
+                                                return false;">返 回</button>
+                </div>
+                 </form>
+                </block>

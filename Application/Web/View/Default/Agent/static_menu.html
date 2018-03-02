@@ -1,0 +1,8 @@
+<ul class="clear">
+    <li <eq name='ACTION_NAME' value='statics' >class="active"</eq> ><a  href="{:U('Agent/statics')}#agentpostion">全平台商品上月销量排行统计</a></li>
+    <li <eq name='ACTION_NAME' value='statclasses' >class="active"</eq> ><a  href="{:U('Agent/statclasses')}#agentpostion">热销品类占比统计</a></li>
+    <if condition="session('memberinfo.member_type') eq 2">
+    <li <eq name='ACTION_NAME' value='statorder' >class="active"</eq> ><a href="{:U('Agent/statorder')}#agentpostion">本店订单月销量统计</a></li>
+    </if>
+    <li <eq name='ACTION_NAME' value='statmember' >class="active"</eq> ><a href="{:U('Agent/statmember')}#agentpostion">会员数据</a></li>
+</ul>

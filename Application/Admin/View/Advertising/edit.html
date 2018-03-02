@@ -1,0 +1,116 @@
+<extend name="Public/base" />
+<!-- 子导航 -->
+<block name="sidebar">
+    <include file="sidemenu" />
+</block> 
+<block name="body">
+	<div class="main-title cf">
+		<h2><if condition="$_GET['_action'] eq 'add'">新增<else/>编辑</if>广告位</h2>
+	</div>
+	<!-- 表单 -->
+	<form id="form" action="{:U(ACTION_NAME)}" method="post" class="form-horizontal">
+		<!-- 基础文档模型 -->
+		<div id="tab1" class="tab-pane in tab1">
+			<label class="item-label">所属<span class="check-tips">(广告所属的频道或品牌)</span></label> 
+			<present name="info.id">
+			<php>
+				$domainid= $info['domainid'];
+				$brandid= $info['brandid'];
+				if(!$domainid){
+				    $channellist[$domainid]="所有频道";
+				}
+				if(!$brandid){
+				    $channelbrandlist[$brandid]="所有品牌";
+				}
+			</php>
+			<input type="text" class="text input-large" disabled="disabled" value="{$channellist[$domainid]}——>{$channelbrandlist[$brandid]}"/>
+			<input type="hidden" name="domainid" value="{$domainid}"/>
+			<input type="hidden" name="brandid" value="{$brandid}"/>
+			<else /> 
+			<div class="form-item cf"> 
+			    <select name="domainid" onchange="choosebrand(this.options[this.options.selectedIndex].value)"> 
+				<option value="0">无频道</option>
+				<volist name="channellist" id="dlist">
+				    <option value="{$key}" <eq name='key' value="$domainid"> selected </eq>>{$domainid}-{$dlist}</option>
+				</volist>
+			    </select>  
+			    <select name="brandid" id="brandid">
+				<option value="0">无品牌</option> 
+			    </select>
+			</div> 
+			<script>
+				$(document).ready(function(){
+					choosebrand( '{$domainid}' );
+				});
+				function choosebrand(domainid){
+					var url='__URL__/getbrandbydomain';
+					$.ajax({
+						type: 'POST', 
+						url: url , 
+						data:{domainid:domainid}, 
+						success: function(json){
+							var data=json.info;
+							var html="<option value='0'>无品牌</option>";
+							if( data ){
+								for(i=0;i< data.length;i++){
+								    html+="<option value='"+data[i].id+"'>"+data[i].name+"</option>";
+								}
+							}
+							$("#brandid").html(html);
+							return false;
+						} 
+					});
+				}  
+			</script>
+			</present>
+			<div class="form-item cf">
+				<label class="item-label">位置名称<span class="check-tips">（请输入广告显示的位置）</span></label>
+				<div class="controls">
+					<input type="text" class="text input-large" name="title" value="{$info.title}">
+				</div>
+			</div>
+			<div class="form-item cf">
+				<label class="item-label">标示<span class="check-tips">（请输入广告标示，方便前端调用）</span></label>
+				<div class="controls">
+					<input type="text" class="text input-large" name="mark" value="{$info.mark}">
+				</div>
+			</div>
+			<div class="form-item cf">
+				<label class="item-label">广告类型<span class="check-tips">（请选择广告类型，默认为单图）</span></label>
+				<div class="controls">
+		            <label class="radio"><input type="radio" value="1" <eq name="info['type']" value="1">checked</eq> <if condition="ACTION_NAME eq 'add'">checked</if> name="type">单图</label>
+		            <label class="radio"><input type="radio" value="2" <eq name="info['type']" value="2">checked</eq> name="type">多图</label>
+		            <label class="radio"><input type="radio" value="3" <eq name="info['type']" value="3">checked</eq> name="type">文字</label>
+		            <label class="radio"><input type="radio" value="4" <eq name="info['type']" value="4">checked</eq> name="type">代码</label>
+				</div>
+			</div>
+			<div class="form-item cf">
+				<label class="item-label">广告位宽度<span class="check-tips">（广告在前端展示的宽度,无需写单位px）</span></label>
+				<div class="controls">
+					<input type="text" class="text input-large" name="width" value="{$info.width}">
+				</div>
+			</div>
+			<div class="form-item cf">
+				<label class="item-label">广告位高度<span class="check-tips">（广告在前端展示的高度,无需写单位px）</span></label>
+				<div class="controls">
+					<input type="text" class="text input-large" name="height" value="{$info.height}">
+				</div>
+			</div>
+		</div>
+		<input type="hidden" name="id" value="{$info.id}"/>
+		<div class="form-item cf">
+			<button class="btn submit-btn ajax-post hidden" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+			<input class="btn btn-return" type="reset" value="重置" />
+		</div>
+	</form>
+</block>
+
+<block name="script">
+<script type="text/javascript">
+$(function(){
+	$('#submit').click(function(){
+		$('#form').submit();
+	});
+});
+</script>
+</block>

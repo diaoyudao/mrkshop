@@ -1,0 +1,136 @@
+<extend name="Base/common_index"/>
+<block name='style'>
+    <style>
+        .pj_scimg {
+            margin-top: 0.3rem;
+            margin-bottom: 0.3rem;
+            overflow: hidden;
+            padding-top: 15px;
+            width: 1.3rem;
+        }
+        .pj_scimg dd.uploading_btn {
+            border: 3px dashed #ddd;
+            height: 0.84rem;
+            line-height: 0.84rem;
+            position: relative;
+            text-align: center;
+            width: 1.2rem;
+
+        }
+
+
+        .uploading_btn i {
+            color: #ddd;
+            display: block;
+            font-size: 0.73rem;
+            height: 100%;
+            left: 0;
+            line-height: 100%;
+            position: absolute;
+            text-align: center;
+            top: 0.01rem;
+            width: 100%;
+        }
+
+        .pj_scimg dd .addfile {
+            height: 1rem;
+            left: 0;
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            width: 1rem;
+        }
+    </style>
+</block>
+<block name="body">
+    <!--头部 S-->
+    <div class="herder herder2 ">
+        <a href="{:U('Member/information')}" class="back"><i></i></a>
+        <h3>修改头像</h3>
+    </div>
+    <div class="t_line"></div>
+    <!--头部 E--> 
+
+    <div class="main" id='specialicon'>
+        <center>
+            <div class="upload-img-box">
+                <notempty name="faceid">
+                    <php>
+                        $random = time();
+                    </php>
+                    <img src="__PICURLFACE__{$uid}/face.jpg?r={$random}"  style='width:3.2rem;height: auto; margin-top: 0.4rem;'/>
+                    <else/>
+                    <img src="__IMG__/cal1.jpg"/>
+                </notempty>
+            </div>
+
+
+            <div id="saveimage" class="pj_scimg">
+                <dl class="add_pic">
+                    <dd class="uploading_btn">
+                        <i>+</i>
+                        <input class="addfile up_pic" type="file"></dd>
+                </dl>
+                <!--                <form method="post" class="person-info" name="form" action="{:U('Member/updateimage')}">
+                <input type="file" id="upload_picture" class="uploadify-button">
+                <input type="hidden" id="pic" name="pic" />
+                <input type="hidden" name="face"  id="icon" value="{$info.face|default=''}"/>
+                <input type="submit" class="sub" value="保存"> 
+                </form>-->
+            </div>
+        </center>
+    </div>
+</block>
+
+<block name="script"> 
+    <script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+    <script type="text/javascript">
+        //上传照片
+        $(".up_pic").change(function() {
+            var file = this.files[0];
+            if ((!file || !/image/.test(file.type))) {
+                alert('图片格式不正确！');
+                return;
+            }
+            var URL = window.URL || window.webkitURL;
+            this.value = ''; // 清空临时数据
+            var imgn = new Image();
+            imgn.src = URL.createObjectURL(file);
+            imgn.onload = function() {
+                var imgW = this.width;
+                var imgH = this.height;
+
+                if (imgW > imgH) {
+                    var sx = (imgW - imgH) / 2, sy = 0, swh = imgH;
+                } else {
+                    var sx = 0, sy = (imgH - imgW) / 2, swh = imgW;
+                }
+
+                //生成canvas
+                var canvas = document.createElement('canvas');
+                var ctx = canvas.getContext('2d');
+                var cvsW = 200, cvsH = 200;
+                $(canvas).attr({width: 200, height: 200});
+                ctx.drawImage(imgn, sx, sy, swh, swh, 0, 0, cvsW, cvsH);
+                base64 = canvas.toDataURL('image/png', .9);
+                var result = {
+                    base64: base64,
+                    clearBase64: base64.substr(base64.indexOf(',') + 1)
+                };
+
+                $.post("{:U('Member/update_pic')}", {pic: result.clearBase64}, function(response) {
+                    if (response.result == 'fail') {
+                        layer.open({
+                            content: response.info,
+                            style: 'background-color:#09C1FF; color:#fff; border:none;',
+                            time: 2
+                        });
+                        return false;
+                    } else {
+                        location.href = location.href;
+                    }
+                }, "json");
+            };
+        });
+    </script>
+</block>

@@ -1,0 +1,38 @@
+
+<volist name='orderlist' id='order' empty='没有订单'>
+    <div class="order_list">
+        <div class="two_clum">
+            <span class="fl"><i>订单号:</i><a href="{$order.detail_url}">{$order.orderid}</a></span>
+            <span class="fr">{$order.orderStatus.status_txt}{$order.id}</span> 
+        </div>
+        <ul>
+            <volist name='order.goodslist' id='goods' key='k'>
+                <li>
+                    <a href="{$order.detail_url}">
+                        <img src="{$goods['pics_img'][$goods['cover_id']]}"/>
+                        <div class="pro_info">
+                            <h3><a href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}">{$goods.goodid|get_good_name}</a></h3>
+                            <p class="pric">
+                                <span>￥<span class="font36">{$goods.price}</span>
+                                </span>
+                                <i> X {$goods.num} </i>
+                            <if condition="$order.status eq 3 and $order.refund_status eq 0 and $goods.iscomment eq 0">
+                                <a class='sc fr' href="{:U('Refund/apply_refund',array('orderid'=>$order['id'],'goods_id'=>$goods['goodid']))}">申请售后</a>
+                            </if>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+            </volist>
+        </ul>
+        <div class="two_clum">
+            <span class="fl"><i>时间：</i>{$order.create_time|date="Y-m-d H:i:s",###}</span>
+            <span class="fr">总额：<span class="cost">￥{$order.pricetotal}</i></span> 
+        </div>
+        <notempty name="order.handle">
+            <div class="buy_agin">
+                {$order.handle}
+            </div>
+        </notempty>
+    </div>
+</volist>

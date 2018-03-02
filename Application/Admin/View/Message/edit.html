@@ -1,0 +1,147 @@
+<extend name="Public/base"/>
+
+<block name="body">
+    <script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+    <div class="main-title">
+        <h2>{:isset($info['id'])?'编辑':'新增'}留言</h2>
+    </div>
+    <div class="tab-wrap">
+        <ul class="tab-nav nav">
+            <li data-tab="tab1" class="current"><a href="javascript:void(0);">基 础</a></li>
+            <!--<li data-tab="tab2"><a href="javascript:void(0);">高 级</a></li>-->
+        </ul>
+        <div class="tab-content">
+            <form action="{:U()}" method="post" class="form-horizontal">
+                <!-- 基础 -->
+                <div id="tab1" class="tab-pane in tab1">
+
+
+                    <div class="form-item">
+                        <label class="item-label">
+                            留言标题<span class="check-tips"></span>
+                        </label>
+                        <div class="controls">
+                            <input type="text" name="title" class="text input-large" value="{$info.title}">
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <label class="item-label">
+                            留言姓名<span class="check-tips">{$info.uid|get_username}</span>
+                        </label>
+<!--                        <div class="controls">
+                            <input type="text" name="uid" class="text input-large" value="{$info.uid|default=''}">
+                        </div>-->
+                    </div>
+                    <div class="form-item">
+                        <label class="item-label">
+                            留言对象<span class="check-tips">{$info.object}</span>
+                        </label>
+<!--                        <div class="controls">
+                            <input type="text" name="uid" class="text input-large" value="{$info.uid|default=''}">
+                        </div>-->
+                    </div>
+                    <div class="form-item">
+                        <label class="item-label">
+                            留言类型<span class="check-tips"><eq name='info[message_type]' value='1'>投诉<else/>建议</eq></span>
+                        </label>
+<!--                        <div class="controls">
+                            <input type="text" name="uid" class="text input-large" value="{$info.uid|default=''}">
+                        </div>-->
+                    </div>
+                    <div class="form-item">
+                        <label class="item-label">
+                            留言状态<span class="check-tips"></span>
+                        </label>
+                        <div class="controls">
+                            <select name='status' class='select'>
+                                <option <eq name='info.status' value='1'> selected='selected'</eq> value='1'>未读</option>
+                                <option <eq name='info.status' value='2'> selected='selected'</eq> value='2'>已读</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <label class="item-label">留言内容</label>
+                        <div class="controls">
+                            <label class="textarea input-large">
+                                <textarea name="content">{$info.content|default=''}</textarea>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <notempty name='reply'>
+                        <div class="form-item">
+                        <label class="item-label">回复内容</label>
+                        <div class="controls">
+                            <volist name='reply' id='item'>
+                            <label class="label-info"> {$item.content}  </label>回复时间：{$item.create_time|date="Y-m-d H:i:s",###}
+                            </volist>
+                        </div>
+                    </div>
+                    </notempty>
+
+
+                </div>
+
+                <!-- 高级 -->
+                <div id="tab2" class="tab-pane tab2">
+
+
+
+                </div>
+
+                <!-- 高级 -->
+                <div id="tab2" class="tab-pane tab2">
+
+                    <div class="form-item">
+                        <label class="item-label">分组</label>
+                        <div class="controls">
+
+                            <input type="text" name="group" class="text input-large" value="{$info.group|default=''}">
+
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <label class="item-label">状态</label>
+                        <div class="controls">
+
+                            <!--<input type="text" name="status" class="text input-large" value="{$info.status|default=''}">-->
+
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="form-item">
+                    <input type="hidden" name="id" value="{$info.id|default=''}">
+                    <button type="submit" id="submit" class="btn submit-btn ajax-post" target-form="form-horizontal">确 定</button>
+                    <button class="btn btn-return" onclick="javascript:history.back(-1);
+                            return false;">返 回</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</block>
+
+<block name="script">
+    <script type="text/javascript">
+        <present name = "info.id" >
+                Think.setValue("allow_publish", {$info.allow_publish | default = 1});
+                Think.setValue("check", {$info.check | default = 0});
+                Think.setValue("model[]", {$info.model | json_encode} || [1]);
+                Think.setValue("model_sub[]", {$info.model_sub | json_encode} || [1]);
+                Think.setValue("type[]", {$info.type | json_encode} || [2]);
+                Think.setValue("display", {$info.display | default = 1});
+                Think.setValue("reply", {$info.reply | default = 0});
+                Think.setValue("reply_model[]", {$info.reply_model | json_encode} || [1]);
+                </present>
+                $(function() {
+                    showTab();
+                    $("input[name=reply]").change(function() {
+                        var $reply = $(".form-item.reply");
+                        parseInt(this.value) ? $reply.show() : $reply.hide();
+                    }).filter(":checked").change();
+                });
+        //导航高亮
+        highlight_subnav("{:U('Message/index')}");
+    </script>
+</block>

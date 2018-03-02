@@ -1,0 +1,189 @@
+<extend name="Base/member_common"/>
+<block name='style'>
+    <style>
+        .pj_scimg {
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .pj_scimg .sctp {
+            background: rgba(0, 0, 0, 0) url("__IMG__/evaluation/icon_eva.png") no-repeat scroll 20px -93px;
+            border: 1px dashed #ddd;
+            float: left;
+            height: 58px;
+            margin-right: 10px;
+            overflow: hidden;
+            position: relative;
+            width: 58px;
+        }
+        .pj_scimg ul li {
+            float: left;
+            height: 60px;
+            margin-right: 10px;
+            overflow: hidden;
+            position: relative;
+            width: 60px;
+        }
+        .pj_scimg .picli-mask {
+            background: rgba(0, 0, 0, 0) url("__IMG__/evaluation/icon_eva.png") no-repeat scroll -60px -270px;
+            cursor: pointer;
+            display: none;
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            z-index: 2;
+        }
+        #comments_imgs li{ margin: 0 5px;}
+    </style>
+</block>
+<block name="body">
+    <div class="towp">
+        <div class="guidance towp"><a href="{:U('Member/index')}">首页 </a><a href="{:U('Refund/index')}"> > 售后管理</a><a href="javascript:;"> > 售后服务 </a></div>
+    </div>
+    <div class="towp yh-wrap content_agency clear {$orderdetail.current_step}">
+<!--        <div class="content right-con2 order-mana cG">
+                    <div class="content_left">
+                    </div>-->
+        <div class="content right-con2 order-mana cG ">
+
+            <neq name='orderdetail.status' value='-2'>
+            <div class="steps"></div>
+            </neq>
+            <!--<h3>申请退货</h3>-->
+            <div class="contents clear">
+                <div class="contents_left">
+                    <h3>单据信息</h3>
+                    <dl>
+                        <dt>单据编号：</dt>
+                        <dd>{$orderdetail.refund_sn}</dd>
+                    </dl>
+<!--                    <dl>
+                        <dt>付款方式：</dt>
+                        <dd>{$orderdetail.paymentstring}</dd>
+                    </dl>-->
+                    <dl>
+                        <dt>收&nbsp;货&nbsp;人：</dt>
+                        <dd>{$orderdetail.address.realname},{$orderdetail.address.cellphone}<notempty name='orderdetail.address.phone'>/{$orderdetail.address.phone}</notempty></dd>
+                    </dl>
+                    <dl>
+                        <dt>收货地址：</dt>
+                        <dd>
+                            {$orderdetail.address.province}{$orderdetail.address.city}{$orderdetail.address.area},{$orderdetail.address.address}
+                        <notempty name='orderdetail.address.youbian'>,{$orderdetail.address.youbian}</notempty>
+                        </dd>
+                    </dl>
+                    <notempty name='orderdetail.message'>
+                        <dl>
+                            <dt>我的留言：</dt>
+                            <dd>{$orderdetail.message}</dd>
+                        </dl>
+                    </notempty>
+                    <dl>
+                        <dt>创建时间：</dt>
+                        <dd>{$orderdetail.add_time|date='Y-m-d H:i:s',###}</dd>
+                    </dl>
+                    <dl>
+                        <dt>平台处理时间：</dt>
+                        <dd><notempty name='orderdetail.admin_time'> {$orderdetail.admin_time|date='Y-m-d H:i:s',###} <else /> 待处理 </notempty></dd>
+                    </dl>
+                    <dl>
+                        <dt>反馈状态：</dt>
+                        <dd>{$orderdetail.refund_state|get_refund_status}
+                        <!-- <notempty name='orderdetail.statusstring'> 
+                        {$orderdetail.statusstring}
+                        </notempty> --></dd>
+                    </dl>
+
+                </div>
+                <div class="contents_right">
+                    <switch name="orderdetail.current_step">
+                    <case value="processing"> <!--处理中-->
+                        <div class="ts">
+                            <p>我们正在马不停蹄的为您处理，请耐心等待</p>
+                            <img src="__IMG__/processing/sh.jpg" alt="" />
+                            <p><a class="active" href="javascript:;">{$orderdetail.reason_info}</a>
+                                <a href="javascript:;">{$orderdetail.buyer_message}</a></p>
+                        </div>
+                    </case>
+                    <case value="hP"> <!--已完成-->
+                        <div class="ts ts3">
+                            <img src="__IMG__/hasProcessing/up_1.jpg" alt="" />
+                            <p>平台已处理，请注意查收</p>
+                        </div>
+                    </case>
+                    </switch>
+
+                </div>
+            </div>
+            <div class="tables">
+                <h3>订单详情</h3>
+                <table width="100%">
+                    <colgroup span="6">
+                        <col width="30%" />
+                        <col width="12%" />
+                        <col width="12%" />
+                        <col width="12%" />
+                        <col width="12%" />
+                        <col width="12%" />
+                    </colgroup>
+                    <tr><th>商品</th><th>单价（元）</th><th>数量</th><th>合计（元）</th><th>运费（元）</th><th>状态</th></tr>
+                    <volist name='orderdetail.goodslist' id='goods' key='k'>
+                        <if condition="$goods.goodid eq I('goods_id')" >
+                            <tr>
+                                <td>
+                                    <a href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}"><img src="{$goods['pics_img'][$goods['cover_id']]}"/></a>
+                                    <div>
+                                        <p><a style='border:none; width: 100%'  href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}">{$goods.goodid|get_good_name}</a></p>
+                                        <notempty name='goods.parameters'><em>规格：{$goods.parameters|default="无"}</em></notempty>
+                                    </div>
+                                </td>
+                                <td>￥{$goods.price}</td>
+                                <td>{$goods.num}</td>
+                                <td>￥{$goods.total}</td>
+                                <td>￥{$orderdetail.shipprice}</td>
+                                <td><input type='text' name='inputnum' value='{$goods.num}' placeholder='输入退货数量' /></td>
+                            </tr>
+                        </if>
+                        <if condition="$k eq 1">
+                            <tr>
+                                <td>
+                                    <a href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}"><img src="{$goods['pics_img'][$goods['cover_id']]}"/></a>
+                                    <div>
+                                        <p><a style='border:none; width: 100%'  href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}">{$goods.goodid|get_good_name}</a></p>
+                                        <notempty name='goods.parameters'><em>规格：{$goods.parameters|default="无"}</em></notempty>
+                                    </div>
+                                </td>
+                                <td>￥{$goods.price}</td>
+                                <td>{$goods.num}</td>
+                                <td>￥{$goods.total}</td>
+                                <td rowspan="{$orderdetail.productnum}">￥{$orderdetail.shipprice|default=0.00}</td>
+                                <td rowspan="{$orderdetail.productnum}">{$orderdetail.statusstring}</td>
+                            </tr>
+                            <else />
+                            <tr>
+                                <td>
+                                    <a href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}"><img src="{$goods['pics_img'][$goods['cover_id']]}"/></a>
+                                    <div>
+                                        <p><a style='border:none; width: 100%' href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}">{$goods.goodid|get_good_name}</a></p>
+                                        <notempty name='goods.parameters'><em>规格：{$goods.parameters|default="无"}</em></notempty>
+                                    </div>
+                                </td>
+                                <td>￥{$goods.price}</td>
+                                <td>{$goods.num}</td>
+                                <td>￥{$goods.total}</td>
+                            </tr>
+                        </if>
+                    </volist>
+                </table>
+                <div class="jin">
+<!--                    <p>税费：{$orderdetail.haiguan_rate_total}</p>
+                    <p>运费：￥{$orderdetail.shipprice}</p>-->
+                    <p>商品总金额：<span>￥{$orderdetail.refund_amount}</span></p>
+                    <p>订单总金额：<span><em>￥{$orderdetail.refund_amount}</em></span></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</block>

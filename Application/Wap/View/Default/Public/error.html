@@ -1,0 +1,51 @@
+<extend name="Base/common_index"/>
+<block name="style">
+    <style type="text/css">
+        .reg_header{margin-bottom: 0;}
+        .footer{margin-top: 0;} 
+        body{background-color: #fff;}
+        .cart-empty .main {margin: 1.0rem auto 0;}
+    </style>
+</block>
+<block name="body"> 
+    <!--头部 S-->
+    <div class="herder">
+        <a href="javascript:history.go(-1);" class="back"><i></i></a>
+        <h3>提示</h3>
+        <!-- <div class="herd_r"><a href="search.html" class="search"><i></i></a></div>-->
+    </div>
+    <div class="t_line"></div>
+    <!--头部 E-->
+    <div class="cart-empty">
+        <!-- 购物车为空S -->
+        <div class="main">
+            <img src="__IMG__/cart/failure.png"/>
+            <p>提示:{$error}</p>
+            <p>页面将在&nbsp;&nbsp;<span id="wait" style="color:red;">{$waitSecond}</span>&nbsp;&nbsp;秒内返回至上一页</span></p>
+            <a href="<?php echo($jumpUrl); ?>" class="c-btn"> 去逛逛 </a>
+            <p><a class="c-btn" id="href" href="<?php echo($jumpUrl); ?>">立即跳转</a>
+                <!--<a class="c-btn" id="btn-stop" onclick="stop()" href="javascript:;">停止跳转 </a>-->
+                <a class="c-btn" href="tencent://message/?uin=253490851&Site=妙品生活&Menu=yes">联系客服</a></p>
+        </div>
+        <!-- 购物车为空E -->
+    </div>
+</block>
+<block name="script"> 
+    <script type="text/javascript">
+        (function() {
+            var wait = document.getElementById('wait'), href = document.getElementById('href').href;
+            var interval = setInterval(function() {
+                var time = --wait.innerHTML;
+                if (time <= 0) {
+                    location.href = href;
+                    clearInterval(interval);
+                }
+                ;
+            }, 1000);
+            window.stop = function() {
+                console.log(111);
+                clearInterval(interval);
+            }
+        })();
+    </script>
+</block> 

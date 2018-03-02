@@ -1,0 +1,34 @@
+<h2>配送方式 &nbsp;
+    <notempty name="lowwest">
+        (消费满{$lowwest}元免邮)
+        <if condition="$all lt $lowwest">
+            <a class="toshopcart" target="_blank" href="{:U('Goods/lists')}">&lt;&lt; 前去凑单</a>
+        </if>
+    </notempty></h2>
+<p style="display: none;">客户您好：你所下单得客户为：<span class="where">XXX门店</span>，地址：<span class="ad">XXXXXXXX</span>,联系电话：<span class="tel">138XXXXXXXXXX</span> 请合理根据您自身的情况选择配送方式</p>
+<notempty name="distribution">
+<volist name="distribution" id="dvo" key='k'>
+    <div>
+        <input type="radio" id='kd{$k}' money="{$dvo.money}" class="radiodistribution" <eq name="key" value="0">checked="checked"</eq> value="{$dvo['id']}" name="distribution">
+        <label for="kd{$k}">{$dvo['title']}</label>
+        <notempty name="lowwest">
+            <if condition="$all lt $lowwest">
+                <assign name="distriprice" value="$dvo['price']" />
+                <else/>
+                <assign name="distriprice" value="0" />
+            </if>    
+            <else/>
+            <assign name="distriprice" value="$dvo['price']" />
+        </notempty>
+
+        <!--<span>( <if condition='$dvo["price"]'> ￥{$dvo['price']}<else /> 免运费</if>)</span>-->
+        <span>(订单总重量在{$dvo.snum}千克内{$dvo.sprice}元,每增加{$dvo.xnum}千克，增加{$dvo.xprice}元)</span>
+        <span>{$dvo['description']}</span>
+    </div>
+</volist>
+    <else/>
+    <div>
+        <p>所在地区没有配送方式，不能下单</p>
+    </div>
+    </notempty>
+<!--<div><a href="javascript:alert('配送规则')">配送规则？</a></div>-->

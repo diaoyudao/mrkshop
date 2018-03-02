@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+    <include file="Public/head_index"/>
+</head>
+<body>
+    <!-- 头部 -->
+<include file="Public/header_cart"/>
+<!-- /头部 -->
+<!-- 主体 -->
+<include file="Public/body"/>
+<!-- /主体 -->
+<!-- 底部 -->
+<include file="Public/footer_index"/>
+<include file="Public/var"/>
+<!-- /底部 -->
+<block name="bottom"></block>
+<div class="tdivbg" id="tdivbg"></div>
+<div class="browser" id="browser">
+    <img src="__IMG__/msg.png" class="pic">
+    <p>
+        <a href="https://www.google.com/intl/cn/chrome/browser/" class="chrome">Chrome</a>
+        <a href="https://www.mozilla.org/zh-CN/firefox/new/" class="firefox">Firefox</a>
+        <a href="http://windows.microsoft.com/zh-CN/internet-explorer/download-ie" class="ie">IE</a>
+    </p>
+</div>
+<script src="__JS__/jquery-1.11.2.min.js"></script>
+<script src="__STATIC__/layer/layer.js"></script>
+
+<script src="__JS__/mrk.js" type="text/javascript" charset="utf-8"></script>
+<block name="script"></block>
+<script>
+
+    var _CART_URL = "{:U('Cart/addItem')}";
+    var _FAVORTABLE_URL = "{:U('Favortable/addfavortable')}";
+    var LOGIN_URL = "{:U('member/login')}";
+
+    $('.allClassfy').click(function() {
+        $('.all-naiv').fadeToggle();
+    });
+
+
+    /*判断浏览器版本是否过低*/
+
+
+    var Sys = {};
+
+    var ua = navigator.userAgent.toLowerCase();
+
+    if (window.ActiveXObject) {
+
+        Sys.ie = ua.match(/msie ([\d.]+)/)[1];
+        //$(".tdivbg,.browser").css({"dislay":"block"});
+        if (Sys.ie <= 7) {
+
+            document.getElementById("tdivbg").style.display = "block";
+            document.getElementById("browser").style.display = "block";
+            document.body.style.overflow = "hidden";
+
+        }
+
+    }
+</script>
+</body>
+</html>
+
+

@@ -1,0 +1,20 @@
+<volist name="lists" id="ginfo" empty='没有数据' >
+    <li> 
+        <a href="{:U('Goods/storedetail',array('channelname'=>$ginfo['channelname'],'store_id'=>$ginfo['store_id'],'id'=>$ginfo['id']))}" title="{$ginfo.title}">
+            <div class="img">
+                <div class="nr_ioc">
+                    <eq name="$ginfo.product_type" value="2" >
+                    <span class="baoshui">保</span>
+                    </eq>
+                </div>
+                <img src="{$ginfo['pics_img'][$ginfo['cover_id']]}" alt="{$ginfo.title}" />
+            </div>
+            <div class="product_nr">
+                <h3 class="title">{$ginfo.title}</h3>
+                <p>{$ginfo.title}</p>
+                <div class="price"><b>￥<em>{$ginfo.show_price}</em></b><strike>￥{$ginfo.marketprice}</strike></div>
+            </div>
+        </a>
+        <a href="javascript:addcart('{$ginfo.id}',1,'{$ginfo.show_price}','',0,0,0);" title="加入购物车" class="collect"><i></i></a>
+    </li>
+</volist>

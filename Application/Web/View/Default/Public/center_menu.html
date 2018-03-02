@@ -1,0 +1,21 @@
+<!-- 左边导航条================================================== -->
+<div class="uc_aside">
+    <a href="{:U('Home/Center/index')}"  class="uas_head <eq name='ACTION_NAME' value='index'>on</eq>"><i class="as_ico as_ico1"></i>会员主页</a>
+    
+    <dl>
+	    <dt><i class="as_ico as_ico2"></i><a href="{:U('Home/Center/allorder')}" <if condition="in_array(ACTION_NAME,array('allorder','comment','collect'))"> class="on" </if> >我的订单</a><em class="as_dt"></em></dt>	
+	    <dd>
+		<a href="{:U('Home/Center/allorder')}" class="<eq name='ACTION_NAME' value='allorder'>on</eq>">我的订单</a>
+		<a href="{:U('Home/Center/comment')}" class="<eq name='ACTION_NAME' value='comment'>on</eq>">我的评价</a>
+		<a href="{:U('Home/Center/collect')}" class="<eq name='ACTION_NAME' value='collect'>on</eq>">我的收藏</a>
+	    </dd>
+    </dl>
+    <dl>
+	    <dt><i class="as_ico as_ico3"></i><a href="{:U('Home/Center/information')}" <if condition="in_array(ACTION_NAME,array('information','address'))"> class="on" </if> >个人中心</a><em class="as_dt"></em></dt>	
+	    <dd>
+		<a href="{:U('Home/Center/information')}"  class="<eq name='ACTION_NAME' value='information'>on</eq>">个人资料</a>
+		<!-- <a href="{:U('home/center/information')}">完善资料</a> -->
+		<a href="{:U('Home/Center/address')}"  class="<eq name='ACTION_NAME' value='address'>on</eq>">收货地址</a>
+	    </dd>
+    </dl>
+</div>

@@ -1,0 +1,21 @@
+/*.preview{width:400px; height:465px; }*/
+/* smallImg */
+.preview{float: left;overflow: hidden;}
+.smallImg{position: relative;overflow: hidden;width: 64px;float: left; height: 346px;}
+.scrollbutton{width:62px; height:18px; overflow:hidden; position:relative; float:left; cursor:pointer; }
+.scrollbutton.smallImgUp , .scrollbutton.smallImgUp.disabled{background:url("../img/pro-Detail/arr-top.png") no-repeat;position: absolute;top:0;}
+.scrollbutton.smallImgDown , .scrollbutton.smallImgDown.disabled{background:url("../img/pro-Detail/arr-bot.png") no-repeat; position: absolute;bottom: 0;}
+
+#imageMenu { float:left;margin-top: 24px; height: 290px; padding-top: 6px; overflow: hidden;}
+#imageMenu li {}
+#imageMenu li img{}
+
+/* bigImg */
+.bigImg{position:relative; float:left;  height:400px; overflow:hidden;}
+.bigImg img{width: 400px;  height:400px; overflow:hidden;}
+.bigImg #midimg{width:400px; height:400px;}
+.bigImg #winSelector{width:235px; height:210px;}
+#winSelector{position:absolute; cursor:crosshair; filter:alpha(opacity=15); -moz-opacity:0.15; opacity:0.15; background-color:#000; border:1px solid #fff;}
+/* bigView */
+#bigView{position:absolute;border: 1px solid #959595; overflow: hidden; z-index:999;}
+#bigView img{position:absolute;}

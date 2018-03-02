@@ -1,0 +1,78 @@
+<extend name="Base/member_common"/>
+<block name="body">
+    <!-- 内容 -->
+    <div class="wrap" style="background-color: #f5f5f5;">
+        <div class="guidance towp clear"><a href="javascript:;">首页</a><a href="javascript:;"> > 会员首页</a></div>
+        <div class="content_agency towp clear">
+            <div class="content_left">
+                <include file='Member/member_menu'/>
+            </div>
+            <div class="content content_right" style="border: 0;">
+                <div class="con-tit">
+                    <h2 class="">建议投诉 <a href="{:U('Message/add')}" class="a-btn8 fr" > 新增 </a>  </h2>
+                </div>
+
+                <table border="0" cellspacing="0" cellpadding="0" class="sug_table" >
+                    <tr>
+                        <th>类型</th>
+                        <th>标题</th>
+                        <th>时间</th>
+                        <th>处理人</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    <notempty name="lists">
+                        <volist name='lists' id='item'>
+                            <tr>
+                                <td><if condition="$item.message_type eq 1" >投诉<else/>建议</if></td>
+                            <td>{$item.title}</td>
+                            <td>{$item.create_time|date='Y-m-d H:i:s',###}</td>
+                            <td>无</td>
+                            <td>{$item.status|get_message_status}</td>
+                            <td>
+                                <a href="{:U('Message/detail',array('id'=>$item['id']))}" class="link" >查看</a>
+                                <eq name="item.status" value="1">
+                               <!-- <a href="{:U('Message/update',array('id'=>$item['id']))}" class="link" >修改</a> --->
+                                </eq>
+                            </td>
+                            </tr>
+                        </volist>
+                        <else/>
+                        <tr>
+
+                            <td colspan="8">
+                                <div class="no_data">
+                                    <h3>
+                                        <i class=""> <img src="__IMG__/confirmGoods/ts.png"/> </i> 没有记录哟！
+                                    </h3>						        	
+                                </div>
+                            </td></tr>
+                    </notempty>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</block>
+<block name='script'>
+    <script>
+
+        $(function() {
+            $("a.confirm").click(function() {
+                var msg = $(this).attr("data-msg");
+                var href = $(this).attr('href');
+                layer.confirm(msg, {icon: 3, title: '提示信息'}, function(index) {
+                    if (index) {
+                        layer.close(index);
+                        window.location.href = href;
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
+                return false;
+            });
+        });
+
+    </script>
+</block>

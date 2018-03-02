@@ -1,0 +1,120 @@
+<extend name="Base/member_common"/>
+<block name="body">
+    <!-- 内容 -->
+    <div class="wrap" style="background-color: #f5f5f5;">
+        <div class="guidance towp"><a href="javascript:;">首页</a><a href="javascript:;"> > 会员首页</a></div>
+        <div class="content_agency towp clear">
+            <div class="content_left">
+                <include file="Member/member_menu"/>
+            </div>
+            <div class="content_right" style="border: 0;">
+                <div class="members_box">
+                    <div class="members clear">
+                        <div class="tx_box"><a class="tx" href="javascript:;"><span>编辑</span></a></div>
+                        <div class="information">
+                            <p>温柔豢养123</p>
+                            <p><span><em>v1</em>会员</span><span>资深</span></p>
+                            <ul class="security clear">
+                                <li>安全等级:</li>
+                                <li></li>
+                                <li>中</li>
+                                <li><a href="javascript:;">提升</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="invitation">
+                        <h3>邀请</h3>
+                        <ul class="clear">
+                            <li>
+                                <div class="code"><label for="">服务码：</label><input type="tel" name="" placeholder="输入服务码" /></div>
+                                <input type="button" name="" id="" value="发送短信" />
+                            </li>
+                            <li>
+                                <span><img src="__IMG__/agencyManage/qrCode.jpg"/></span>
+                                <div class="btn">
+                                    <a href="javascript:;">更改</a>
+                                    <a href="javascript:;">导出</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="options_box" style="margin-top: 100px;">
+                    <div class="tab">
+                        <ul class="clear">
+                            <li class=""><a href="{:U('express/index')}">快件管理</a></li>
+                            <li class=""><a href="{:U('express/express')}">货架管理</a></li>
+                            <li class="active"><a href="{:U('express/express_grid_list')}">货架格子</a></li>
+                            <li class=""><a href="{:U('express/express_record')}">货架记录</a></li>
+                            <li class=""><a href="{:U('express/express_log')}">货架使用明细</a></li>
+                        </ul>
+                    </div>
+                    <div class="options">
+                        <div class="state" style="display: block;">
+                            <div class="search clear">
+                                <h3>货架使用明细</h3>
+                                <input class="ss" type="button" name="" id=""/>
+                                <div class="bl">
+                                    <label for="">状态：</label>
+                                    <select name="">
+                                        <option value=""></option>
+                                        <option value="">可用</option>
+                                        <option value="">dfd</option>
+                                        <option value="">dfd</option>
+                                        <option value="">grg</option>
+                                    </select>
+                                </div>
+                                <input class="hy" type="text" name="" id="" placeholder="货架编号/类型" />
+                                <div class="date">
+                                    <label for="">开/关架时间：</label>
+                                    <input type="text" name="" id="" value="" />
+                                    <span>-</span>
+                                    <input type="text" name="" id="" value="" />
+                                </div>
+                            </div>
+                            <div class="xx">
+                                <table width="100%">
+                                    <colgroup span="9">
+                                        <col width="12%" />
+                                        <col width="12%" />
+                                        <col width="12%" />
+                                        <col width="12%" />
+                                        <col width="12%" />
+                                        <col width="12%" />
+                                        <col width="12%" />
+                                        <col width="12%" />
+                                        <col width="12%" />
+                                    </colgroup>
+                                    <tr><th>货架编号</th>
+                                        <th>货架格子编号</th>
+                                        <th>货架格子名称</th>
+                                        <th>货架型号</th>
+                                        <th>创建时间</th>
+                                        <th>货架使用次数</th>
+                                        <th>货架目前状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    <volist name="lists" id="grid">
+                                        <tr><td>L-{$grid.express_alias}</td>
+                                            <td>G-{$grid.alias}</td>
+                                            <td>{$grid.grid_name}</td>
+                                            <td>{$grid.type_txt}</td>
+                                            <td>{$grid.create_time|date='Y-m-d',###}</td>
+                                            <td>{$grid.use_times}</td>
+                                            <td>{$grid.status_txt}</td>
+                                            <td>
+                                                <a href="javascript:;">关闭</a></td></tr>
+                                    </volist>
+                                </table>
+                            </div>
+                            <div class="page_box clear">
+                                {$_page}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>

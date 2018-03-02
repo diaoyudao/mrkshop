@@ -1,0 +1,217 @@
+<extend name="Public/base"/>
+#tab1 table{border-right:1px solid #F00;border-bottom:1px solid #F00}
+#tab1 table td{border-left:1px solid #F00;border-top:1px solid #F00}
+<block name="body">
+    <div class="main-title">
+        <h2>
+            {$info['id']?'编辑':'新增'}订单
+
+        </h2>
+    </div>
+    <ul class="tab-nav nav">
+        <li data-tab="tab1" class="current"><a href="javascript:void(0);">订单详情</a></li>
+        <li data-tab="tab2" ><a href="javascript:void(0);">订单修改</a>
+
+        </li></ul>
+    <div class="tab-content">
+        <div id="tab1" class="tab-pane in tab1">
+            <table  id="table" class="gridtable" width="100%">
+                <thead>
+                    <tr>
+                        <th >商品编号</th>
+                        <th >商品名</th>
+                        <th >规格</th>
+                        <th >价格</th>
+                        <th >数量</th>
+                        <th>浏览</th>
+                    </tr>
+                </thead>
+                <tbody> 
+                <volist name="list" id="vo">  
+                    <tr>
+                        <td align="center">{$vo.goodid}</td>
+                        <td>
+
+                    <if condition="$vo['groupid'] eq 0"> 
+                        <A target="_blank" href="{:U('Goods/edit',array('id'=>$vo['goodid'],'cate_id'=>$vo['category_id']))}" > <img src="__PICURL__{$vo.goodid|get_cover_id|get_cover='path'}"  width="40" height="40"/>{$vo.goodid|get_good_name}</A>
+                        <elseif condition="$vo['groupid'] gt 0"/>
+                        <volist name="vo['goodsinfo']" id="voo">
+                            <div class="sale_info">
+                                <A target="_blank" href="{:U('Goods/edit',array('id'=>$voo['goodid'],'cate_id'=>$voo['category_id']))}" > <img src="__PICURL__{$voo.goodid|get_cover_id|get_cover='path'}"  width="40" height="40"/>{$voo.goodid|get_good_name}</A>
+                            </div>
+                        </volist>
+                    </if>
+
+                    </td>
+                    <td align="center">
+                        <span class="weight">
+                            <if condition="$vo['groupid'] eq 0">
+                                {$vo.parameters|default="无"}
+                                <elseif condition="$vo['groupid'] gt 0"/>
+                                {$vo.parameters|default="无"}(组合商品)
+                            </if>
+                        </span>
+                    </td>
+                    <td align="center">{$vo.price}</td>
+                    <td align="center">{$vo.num}</td>
+                    <!--<td align="center"><a href="{:backU('Home/Good/detail',array('channelname'=>get_field_bymodel('subdomain',$vo['domainid'],  'id', 'mark'),'id'=>$vo['goodid']))}" target="_blank">浏览</a></td>-->
+                    <td align="center"><a href="index.php?s=Goods/detail/id/{$vo['goodid']}.html" target="_blank">浏览</a></td>
+                    </tr>
+                </volist>
+                </tbody>
+            </table>
+            <BR/>  
+            <div style="color:red">
+                <volist name="alist" id="ad">
+                    <p style="text-align:right;color:red;width:100%">收件人：{$ad.realname}</p> 
+                    <p style="text-align:right;color:red;width:100%">电话：{$ad.cellphone}</p> 
+                    <p style="text-align:right;color:red;width:100%">地址： {$ad.address} </p>
+                </volist>
+                <volist name="detail" id="vo">
+                    <p style="text-align:right;color:red;width:100%">小计：{$vo.total}元 </p> 
+                    <p style="text-align:right;color:red;width:100%">运费：{$vo.shipprice}元</p> 
+                    <p style="text-align:right;color:red;width:100%">总金额： {$vo.pricetotal}元 </p>
+                    <p style="text-align:right;color:red;width:100%">下单时间：{$vo.create_time||date='Y-m-d H:i:s',###}</p>
+                    <notempty name="vo.payment_time">
+                        <p style="text-align:right;color:red;width:100%">付款时间：{$vo.payment_time||date='Y-m-d H:i:s',###}</p>
+                    </notempty>
+                    <notempty name="vo.send_time">
+                        <p style="text-align:right;color:red;width:100%">发货时间：{$vo.send_time||date='Y-m-d H:i:s',###}</p>
+                    </notempty>
+                    <notempty name="vo.complete_time">
+                        <p style="text-align:right;color:red;width:100%">收货时间：{$vo.complete_time||date='Y-m-d H:i:s',###}</p>
+                    </notempty>
+                </volist>
+            </div>
+<!--订单日志-->
+            <div>
+                <h3>操作日志</h3>
+                <volist name="listlog" id="log">
+                    
+                    <p>{$log.log_msg}-操作人：{$log.log_role|get_username}-操作时间：{$log.log_time|date="Y-m-d H:i:s",###}</p>
+                </volist>
+            </div>
+
+        </div>
+        <div id="tab2" class="tab-pane  tab2">
+            <form action="{:U()}" method="post" class="form-horizontal">
+                <div class="form-item" style="float: left;">
+                    <label class="item-label">订单号<!-- <span class="check-tips">（{$info.tag}）</span> --></label>
+                    <div class="controls">
+                        <input type="text" style="background-color: #eee;" class="text input-large" name="tag" disabled="disabled" value="{$info.tag|default=''}">
+                    </div>
+                </div>
+                <div class="form-item" style="float: left;">
+                    <label class="item-label">商品总金额<span class="check-tips">（原始金额:<if condition="$info.o_total gt 0">{$info.o_total}<else />{$info.total}</if>）</span></label>
+                    <div class="controls">
+                        <input type="text" style="background-color: #eee;" class="text input-large" disabled="disabled" name="total" value="{$info.total}" />
+                        <input type="hidden" name="old_total" value="<if condition='$info.o_total gt 0'>{$info.o_total}<else />{$info.total}</if>" />
+                    </div>
+                </div>
+                <div class="form-item" style="float: left;">
+                    <label class="item-label">订单总额<span class="check-tips">（原始总额:<if condition="$info.o_pricetotal gt 0">{$info.o_pricetotal}<else />{$info.pricetotal}</if>）</span></label>
+                    <div class="controls">
+                        <input type="text" style="background-color: #eee;" class="text input-large" disabled="disabled" name="pricetotal" value="{$info.pricetotal}">
+                        <input type="hidden" name="old_pricetotal" value="<if condition='$info.o_pricetotal gt 0'>{$info.o_pricetotal}<else />{$info.pricetotal}</if>" />
+                    </div>
+                </div>
+                <div class="form-item" style="float: left;">
+                    <label class="item-label">海关税<span class="check-tips"></span></label>
+                    <div class="controls">
+                        <input type="text" style="background-color: #eee;" disabled="disabled" class="text input-large" name="shipprice" value="{$info.haiguan_rate_total}">
+                    </div>
+                </div>
+                <div class="form-item" style="float: left;">
+                    <label class="item-label">运费<span class="check-tips">（原始运费:<if condition="$info.o_shipprice gt 0">{$info.o_shipprice}<else />{$info.shipprice}</if>）</span></label>
+                    <div class="controls">
+                        <input type="text" class="text input-large" name="shipprice" value="{$info.shipprice}">
+                        <input type="hidden" class="text input-large" name="old_shipprice" value="<if condition='$info.o_shipprice gt 0'>{$info.o_shipprice}<else />{$info.shipprice}</if>">
+                    </div>
+                </div>
+                <div class="form-item" style="float: left;">
+                    <label class="item-label">备注说明<!-- <span class="check-tips">（总额）</span> --></label>
+                    <div class="controls">
+                        <input type="text" class="text input-large" name="info" value="{$info.message}">
+                    </div>
+                </div>
+                <div class="form-item" style="float: left;">
+                    <label class="item-label">操作人<!-- <span class="check-tips">（用于调转的URL，支持带http://的URL或U函数参数格式）</span> --></label>
+                    <div class="controls">
+                        <input type="text" class="text input-large" name="assistant" value="{$info.assistant|default='暂无'}">
+                    </div>
+                </div>
+                
+                <!-- 订单商品列表 -->
+                <div style="width:100%;clear: both;padding: 20px 0;">
+                <table id="goods_tab" class="gridtable" width="90%">
+		                <thead>
+		                    <tr>
+		                        <th >编号</th>
+		                        <th >商品名</th>
+		                        <th >规格</th>
+		                        <th >数量</th>
+		                        <th >原始价格</th>
+		                        <th >实际价格</th>
+		                        <th >变动时间</th>
+		                    </tr>
+		                </thead>
+		                <tbody> 
+		                <volist name="list" id="vo">  
+		                    <tr>
+		                        <td align="center">{$vo.id}</td>
+		                        <td>
+				                    <if condition="$vo['groupid'] eq 0"> 
+				                        <A target="_blank" href="{:U('Goods/edit',array('id'=>$vo['goodid'],'cate_id'=>$vo['category_id']))}" > <img src="__PICURL__{$vo.goodid|get_cover_id|get_cover='path'}"  width="40" height="40"/>{$vo.goodid|get_good_name}</A>
+				                        <elseif condition="$vo['groupid'] gt 0"/>
+				                        <volist name="vo['goodsinfo']" id="voo">
+				                            <div class="sale_info">
+				                                <A target="_blank" href="{:U('Goods/edit',array('id'=>$voo['goodid'],'cate_id'=>$voo['category_id']))}" > <img src="__PICURL__{$voo.goodid|get_cover_id|get_cover='path'}"  width="40" height="40"/>{$voo.goodid|get_good_name}</A>
+				                            </div>
+				                        </volist>
+				                    	</if>
+		                    			</td>
+					                    <td align="center">
+					                        <span class="weight">
+					                            <if condition="$vo['groupid'] eq 0">
+					                                {$vo.parameters|default="无"}
+					                                <elseif condition="$vo['groupid'] gt 0"/>
+					                                {$vo.parameters|default="无"}(组合商品)
+					                            </if>
+					                        </span>
+					                    </td>
+					                    <td align="center">{$vo.num}<input type="hidden" value="{$vo.num}" name="goods_num[{$vo.id}]" /></td>
+					                    <td align="center"><if condition="$vo.o_price gt 0">{$vo.o_price}<else />{$vo.price}</if></td>
+					                    <td align="center"><input type="text" value="{$vo.price}" name="ngoods_price[{$vo.id}]" />
+					                    <input type="hidden" value="{$vo.price}" name="oprice[{$vo.id}]" />
+					                    <input type="hidden" value="<if condition='$vo.o_price gt 0'>{$vo.o_price}<else />{$vo.price}</if>" name="ogoods_price[{$vo.id}]" /></td>
+					                    <td align="center"><if condition="$vo.change_time gt 0">{$vo.change_time|date='Y-m-d H:i:s',###}<else />-</if></td>
+					                </tr>
+		                		</volist>
+		                		</tbody>
+		           	 		</table>
+                		</div>
+		                <div class="form-item">
+		                    <input type="hidden" name="id" value="{$info.id|default=''}">
+		                    <input type="hidden" name="orderid" value="{$info.orderid|default=''}">
+		                    <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+		                    <button class="btn btn-return" onclick="javascript:history.back(-1);return false;">返 回</button>
+		                </div>
+            </form>
+        </div> 
+    </div>
+</block>
+<block name="script">
+    <script type="text/javascript" charset="utf-8">
+        //导航高亮
+        highlight_subnav('{:U('index')}');
+        if ($('ul.tab-nav').length) {
+            //当有tab时，返回按钮不显示
+            $('.btn-return').hide();
+        }
+        $(function() {
+            //支持tab
+            showTab();
+        })
+
+    </script>
+</block>

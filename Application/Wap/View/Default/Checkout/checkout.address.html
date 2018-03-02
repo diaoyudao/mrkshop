@@ -1,0 +1,199 @@
+<style>
+    .add-address{
+        margin: 0;
+        left: 0;
+        top: 0;
+    }
+    .add-table{width: 620px;}
+</style>
+
+<form method="post" name="form" action="{:U('Checkout/save')}" class="validate" id="addaddress" onsubmit="validateCallback(this);
+        return false;">
+    <div class="edi_add ">
+        <div class="list">
+            <span>真实姓名</span>
+            <input type="text" name="realname" id="realname" value="{$addressinfo.realname}"  placeholder="请输入收货人姓名" class="" />
+        </div>	
+        <div class="list">
+            <span>联系方式</span>
+            <input type="text" name='cellphone' value="{$addressinfo['cellphone']}"  placeholder="请输入您的联系方式" class="" />
+        </div>	
+        <div class="list area" id="selectaddress">
+            <span>所在地区</span>
+            <select name="province" class="prov text2"></select>
+            <select name="city" class="city text2"></select>
+            <select name="area" class="dist text2"></select>
+        </div>
+        <div class="list">
+            <span>详细地址</span>
+            <input type="text" name="address" id="address" value="{$addressinfo['address']}" placeholder="请输入详细地址" class="" />
+        </div>	
+        <div class="list">
+            <span>身份证号</span>
+            <input type="text"  name="card_no" value="{$addressinfo['card_no']}" placeholder="请输入收货人身份证号" class="" />
+        </div>	
+        <div class="list">
+            <span>邮政编码</span>
+            <input type="text"  name="youbian" value="{$addressinfo['youbian']}" placeholder="请输入收货人邮政编码" class="" />
+        </div>	
+        <div class="setD bg_fa clear">
+            <div class="fl">
+                <a class="a_adrss" href="javascript:;">
+                    <if condition="$addressinfo['isdefault'] eq 1">
+                        <i class="checked"></i>
+                        <else/>
+                        <i class="check"></i>
+                    </if>
+                    设为默认地址 
+                    <!--<input type="radio" name="isdefault" value="1" class="i_radio" style="width: 0px;height: 0px; background-color: #fff;" />-->
+                    <input type="hidden" name="isdefault" value="{$addressinfo['isdefault']}" class="i_radio" />
+                </a>
+
+                <!--                <if condition="$addressinfo['isdefault'] eq 1">
+                                    <label><input name="isdefault" type="checkbox" checked="checked" class="txt2"><span>设为默认地址</span></label>
+                                    <else/>
+                                    <label> <input  name="isdefault" type="checkbox" class="txt2"><span>设为默认地址</span></label>
+                                </if>-->
+                <!--<a class=" " href="javascript:;"><i class="check checked"></i>默认地址</a>-->
+            </div>
+        </div>
+    </div>
+    <div class="fix_bo" style="padding-bottom:0.3rem;background:#fff;bottom: 0;">
+        <input type="hidden" value="{$addressinfo['id']}" name="id" class="text">
+        <input type="submit" class="long_btn btn_save" value="确认收货人信息" />
+    </div>
+</form>
+
+<block name='script'>
+    <script src="__JS__/jquery.validate.js" type="text/javascript"></script>
+    <script src="__JS__/jquery.cityselect.js" type="text/javascript"></script>
+    <script>
+    $(function() {
+        $(".a_adrss").click(function(e) {
+            cname = $(this).find("i").attr("class");
+            if (cname == "check") {
+                $(".i_radio").val("1");
+                $(this).find("i").removeClass("check").addClass("checked");
+            } else {
+                $(".i_radio").val("0");
+                $(this).find("i").removeClass("checked").addClass("check");
+            }
+        })
+    });
+
+
+    function validateCallback(form) {
+        var $form = $(form);
+        if (!$form.valid()) {
+            return false;
+        }
+        var _submitFn = function() {
+            $.ajax({
+                type: form.method || 'POST',
+                url: $form.attr("action"),
+                data: $form.serializeArray(),
+                dataType: "json",
+                cache: false,
+                success: function(res) {
+                    if (res.status) {
+                        // 关闭地址页面
+                        $(".c_page2,.tdivbg").css({"display": "block"});
+                        $(".c_page3").addClass("lrmove animated");
+                        setTimeout(removeClass, 1000);
+                        function removeClass() {
+                            $(".c_page3").removeClass("lrmove animated");
+                            $(".c_page3,.tdivbg").css({"display": "none"});
+                        }
+                        layer.msg(res.info);
+                    } else {
+                        layer.msg(res.info);
+                    }
+                    myaddresslist();
+
+                },
+                error: function(event, XMLHttpRequest, ajaxOptions, thrownError) {
+                    alert("表单错误，" + XMLHttpRequest + thrownError);
+                }
+            });
+        }
+        _submitFn();
+        return false;
+    }
+
+
+    $(function() {
+        var prov = "{$addressinfo['province']}";
+        if (prov) {
+            $("#selectaddress").citySelect({
+                prov: "{$addressinfo['province']}",
+                city: "{$addressinfo['city']}",
+                nodata: "{$addressinfo['area']}"
+            });
+        } else {
+            $("#selectaddress").citySelect({
+                prov: "北京",
+                city: "东城区",
+                nodata: "none"
+            });
+        }
+
+
+
+        $('#addaddress').validate({
+            rules: {
+                realname: {
+                    required: true
+                },
+                card_no: {
+                    required: true,
+                    rangelength: [18, 18]
+                },
+                cellphone: {
+                    required: true,
+//                            ismobile: true
+                    rangelength: [11, 11]
+                },
+                address: {
+                    required: true
+                },
+                youbian: {
+                    rangelength: [6, 6]
+                }
+            },
+            messages: {
+                realname: {
+                    required: '收货人不能为空'
+                },
+                card_no: {
+                    required: '身份证不能为空',
+                    rangelength: "身份证格式不正确"
+                },
+                cellphone: {
+                    required: '手机号码不能为空',
+                    rangelength: '手机格式错误'
+                },
+                address: {
+                    required: '收货详细地址不能为空'
+                },
+                youbian: {
+                    rangelength: '邮编长度为6位数字'
+                }
+            },
+            errorElement: 'i',
+            errorClass: 'ts2',
+            highlight: function(e) {
+                //   $(e).addClass('ts2');
+            },
+            success: function(e) {
+                $(e).removeClass('ts2');
+            }
+        });
+        jQuery.validator.addMethod('ismobile', function(value, element) {
+            var length = value.length;
+            var mobile = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0-9]|170|177)\d{8}$/;
+            return this.optional(element) || (length == 11 && mobile.test(value));
+        }, '请正确填写手机号码');
+    });
+
+    </script>
+</block>

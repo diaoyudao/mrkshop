@@ -1,0 +1,74 @@
+<extend name="Base/member_common"/>
+<block name='style'>
+
+</style>
+</block>
+<block name="body">
+    <!-- 内容 -->
+    <div class="wrap" style="background-color: #f5f5f5;">
+        <div class="guidance towp clear"><a href="javascript:;">首页</a><a href="javascript:;"> > 会员首页</a></div>
+        <div class="content_agency towp clear user_center complete_order">
+            <div class="content_left">
+                <include file='Member/member_menu' />
+            </div>
+            <div class="content content_right" style="border: 0;">
+                <h2><a href="{:U('Member/index')}">会员中心</a> &gt; 详情 <a href="{:U('Message/index')}" class="a-btn8 fr" > 返回 </a> </h2>		
+                <div class="sug_con">	
+                    <div class="tips">
+                        您的建议我们将全力处理，如有咨询或疑问需要解决，请联系我们人工服务
+                    </div>
+                    <dl>
+                        <dt>类型：</dt>
+                        <dd>
+                        <if condition="$detail.message_type eq 1" >投诉<else/>建议</if>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>对象：</dt>
+                        <dd>
+                            {$detail.object}
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>标题：</dt>
+                        <dd>
+                            {$detail.title}
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>内容：</dt>
+                        <dd>
+                            <textarea name="" rows="" cols="" class="textare" placeholder="" >{$detail.content}</textarea>
+                        </dd>						
+                    </dl>
+                    <dl>
+                        <dt>状态：</dt>
+                        <dd>
+                        <if condition="$detail.status eq 1" >待处理<else/>
+
+                            已处理
+                            <volist name="reply" id="vo">
+                                <span>|&nbsp;&nbsp;&nbsp; 处理意见：{$vo.content}<span>{$vo.create_time|date="Y-m-d H:i:s",###}</span></span>
+                            </volist>
+                        </if>
+                        </dd>						
+                    </dl>						
+                    <dl>
+                        <dt>您的姓名：</dt>
+                        <dd>
+                            {$detail.username}
+                        </dd>						
+                    </dl>
+
+                    <dl>
+                        <dt>您的手机号：</dt>
+                        <dd>
+                            {$detail.userphone}
+                        </dd>
+                    </dl>						
+                </div>
+
+            </div>
+        </div>
+    </div>
+</block>

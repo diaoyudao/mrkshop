@@ -1,0 +1,222 @@
+<extend name="Base/common_index"/>
+<block name='style'>
+        <style>
+            .footer{display: none;}
+        </style>
+</style>
+</block>
+
+<block name="body">
+    <!--头部 S-->
+    <div class="herder herder2 ">
+        <a href="javascript:history.go(-1);" class="back"><i></i></a>
+        <h3>建议投拆</h3>
+        <div class="herd_r"><a href="{:U('Message/index')}" value="">取消</a></div>
+    </div>
+    <div class="t_line"></div>
+    <!--头部 E--> 
+    <form action="{:U()}" method="post" class='validate' name="actform" enctype="multipart/form-data">
+        <div class="order_list after_sales">
+
+            <div class="tab2 item service message_type ">
+                <h4>选择类型</h4>
+                <eq name="detail.message_type" value="1">
+                <a class="" data-id ="2" href="javascript:;">建议</a>
+                <a  class="active" data-id ="1" href="javascript:;">投诉</a>
+                <else/>
+                <a class="active" data-id ="2" href="javascript:;">建议</a>
+                <a  href="javascript:;" data-id ="1">投诉</a>
+                </eq>
+                <input type="hidden" value="{$detail.message_type}" name='message_type' />
+
+            </div>
+            <div class="tab2 item service object">
+                <h4>选择对象</h4>
+                <eq name="detail.object" value="门店">
+                <a  href="javascript:;">商家</a>
+                <a class="active"  href="javascript:;">门店</a>
+                <else/>
+                <a class="active" href="javascript:;">商家</a>
+                <a  href="javascript:;">门店</a>
+                </eq>
+                <input type="hidden" value="{$detail.object}" name="object"/>
+            </div>
+            <div class="textarea_wp">			
+                <textarea name="content" id="textarea"  class="textarea_1" placeholder="为便于更好的获取信息，请输入您要投诉或建议的具体事件描
+                          述，及该对象的具体信息">{$detail.content}</textarea>
+            </div>
+            <div class="item_1">
+                <div class="reasons clear  b01">
+                    <span>您的标题</span>
+                    <input type="text" name="title" value="{$detail.title}" placeholder="请输入标题" />
+                </div>
+                <div class="reasons clear  b01">
+                    <span>您的姓名</span>
+                    <input type="text" name="username" value="{$detail.username}" placeholder="请输入姓名" />
+                </div>
+                <div class="reasons clear  b01">
+                    <span>您的电话</span>
+                    <input type="text" name="userphone" value="{$detail.userphone}" placeholder="请输入电话号码" />
+                </div>
+            </div>
+
+
+        </div>
+        <div class="error"></div>
+        <!--订单列表 E--> 
+        <!--底部 S-->
+        <div class="flow_footer" style="bottom:0;">
+            <div class="flow_footer_cz"> 
+                <!--<a href="javascript:;" class="jiesuan">提交</a>--> 
+                   <input type="hidden" name="id" value="{$detail.id}"/>
+                <input type="submit" name="" id="" value="提交" class="jiesuan" />
+            </div>
+            <h3 class="flow_sfk"></h3>
+        </div>
+    </form>
+    <div class="b_line"></div>
+
+</block>
+<block name='script'>
+    <script src="__JS__/jquery.validate.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $('.object a').click(function() {
+            $(".object a").removeClass("active");
+            $(this).addClass('active');
+            $("input[name=object]").val($(this).html());
+        });
+        $('.message_type a').click(function() {
+            $(".message_type a").removeClass("active");
+            $(this).addClass('active');
+            $("input[name=message_type]").val($(this).attr('data-id'));
+        })
+
+        $(function() {
+            $(".yd_tc_btn").bind("click", function() {
+                $(".yd_tc").show();
+                setTimeout(function() {
+                    $(".yd_tc").hide();
+                }, 1000)
+            })
+
+        })
+    </script>
+    <script type="text/javascript">
+        $(function() {
+
+            if ($('form.validate').length) {
+                $('form.validate').validate({
+                    rules: {
+                        message_type: {
+                            required: true,
+                        },
+                        title: {
+                            required: true,
+                        },
+                        content: {
+                            required: true,
+                        },
+                        username: {
+                            required: true
+                        },
+                        userphone: {
+                            required: true,
+                            rangelength: [11, 11]
+                        }
+                    },
+                    messages: {
+                        message_type: {
+                            required: '请选择类型'
+                        },
+                        title: {
+                            required: '请输入投诉或建议标题'
+                        },
+                        content: {
+                            required: '请输入您要投诉或建议的具体描述'
+                        },
+                        username: {
+                            required: '请输入您的姓名'
+                        },
+                        userphone: {
+                            required: '请输入您的联系手机号码',
+                            rangelength: '手机号格式错误'
+                        }
+                    },
+                                      /* 重写错误显示消息方法,以alert方式弹出错误消息 */  
+                            showErrors : function(errorMap, errorList) {  
+                             var msg = "";  
+                             $.each(errorList, function(i, v) {  
+                              msg += (v.message +'!' + "\r\n");  
+                             });  
+                             if (msg != "")  
+                              layer.msg(msg);  
+                            },
+                });
+            }
+        });
+    </script>
+    <script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+    <script type="text/javascript">
+        //多图上传图片
+        $(function() {
+            /* 初始化上传插件*/
+            $("#pics").uploadify({
+                "height": 30,
+                "swf": "__STATIC__/uploadify/uploadify.swf",
+                "fileObjName": "download",
+                "buttonText": "",
+                "uploader": "{:U('File/uploadPicture',array('session_id'=>session_id()))}",
+                "width": 120,
+                'removeTimeout': 1,
+                'fileTypeExts': '*.jpg; *.png; *.gif;',
+                'multi': true,
+                'queueSizeLimit': 3,
+                "onUploadSuccess": uploadPicturepics,
+                'formData': {'pagefrom': 'comments'},
+                'onFallback': function() {
+                    alert('未检测到兼容版本的Flash.');
+                }
+            });
+        });
+        function uploadPicturepics(file, datas) {
+            if (file.index > 2 && $("#comments_imgs").children("li").length > 2) {
+                return false;
+            }
+            var data = $.parseJSON(datas);
+            var src = '';
+            if (data.status) {
+                src = data.url || '__PICURL__' + data.path;
+                var html = "<li><a href=\"javascript:void(0);\"><img class=\"preview-imgli\"  src=\"" + src + "\" width=\"60\" data-id=\"" + data.id + "\"></a><div class=\"picli-mask btn-close-del\" ></div></li>";
+                picsbox = $("#comments_imgs");
+                picsbox.append(html)
+                picArr = [];
+                for (var i = 0; i < picsbox.children("li").length; i++) {
+                    var data_id = picsbox.children('li:eq(' + i + ')').find('img').attr('data-id');
+                    if (data_id) {
+                        picArr.push(data_id);
+                    }
+                }
+                ;
+                picStr = picArr.join(',');
+                $('#pics_id').val(picStr);
+                $('.btn-close-del').click(function(event) {
+                    event.preventDefault();
+                    $(this).parent().remove();
+                    picsbox = $("#comments_imgs");
+                    picArr = [];
+                    for (var i = 0; i < picsbox.children("li").length; i++) {
+                        var data_id = picsbox.children('li:eq(' + i + ')').find('img').attr('data-id');
+                        if (data_id) {
+                            picArr.push(data_id);
+                        }
+                    }
+                    ;
+                    picStr = picArr.join(',');
+                    $('#pics_id').val(picStr);
+                });
+            } else {
+                alert("上传出错");
+            }
+        }
+    </script>
+</block>

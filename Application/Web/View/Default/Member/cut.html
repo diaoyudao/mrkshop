@@ -1,0 +1,133 @@
+<extend name="Base/member_common"/>
+<block name='style'>
+    <style>
+        .uploadify{
+            background: rgba(0, 0, 0, 0) url("__IMG__/evaluation/icon_eva.png") no-repeat scroll 40px -104px;
+            display: block;
+            border: 1px dashed #ddd;
+            float: left;
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+            vertical-align: middle;
+            margin-left:20px
+        }
+        .uploadify-button { margin: 20px;}
+        .upload-img-box{margin-left:140px;width:auto}
+        </style>
+    </block>
+    <block name="body">
+        <div class="wrap" style="background-color: #f5f5f5;">
+        <div class="guidance towp"><a href="{:U('Index/index')}">首页</a><a href="{:U('Member/index')}"> > 会员中心</a></div>
+        <div class="content_mc towp clear">
+            <div class="content_left">
+                <include file="Member/member_menu"/>
+            </div>
+            <div class="content_right" style="border: 0;">
+                <div class="orderForm_box">
+                    <div class="orderForm_tit clear">
+                        <h3>修改头像</h3>
+                        <!--<a href="javascript:;">上传图片</a>-->
+                    </div>
+                    <div>
+                        <div class="controls" id="specialicon" style="position: relative;">
+                            <!--<label class="item-label" >上传图像</label> -->
+                            <input type="file" id="upload_picture" class="uploadify-button">
+                            <div class="upload-img-box">
+                                <notempty name="faceid">
+                                    <php>
+                                        $random = time();
+                                    </php>
+                                    <div class="upload-pre-item"><img src="__PICURLFACE__{$uid}/face.jpg?r={$random}"  width="300" height="300"/></div>
+                                    <else/>
+                                    <div class="upload-pre-item"><img src="__IMG__/cal1.jpg"  width="300" height="300"/></div>
+                                </notempty>
+                            </div>
+                        </div>
+                        <div id="saveimage">
+                            <form method="post" class="person-info" name="form" action="{:U('Member/updateimage')}">
+                                <input type="hidden" id="pic" name="pic" />
+                                <input type="hidden" name="face"  id="icon" value="{$info.face|default=''}"/>
+                                <!-- <input type="submit" class="sub" value="保存"> -->
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>
+
+<block name="script"> 
+    <script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+    <script type="text/javascript">
+        //上传图片
+        /* 初始化上传插件 */
+        $(function() {
+            var picuid = '{$uid}';
+            $("#upload_picture").uploadify({
+                "height": 30,
+                "swf": "__STATIC__/uploadify/uploadify.swf",
+                "fileObjName": "download",
+                "buttonText": "",
+                "uploader": "{:U('File/uploadPictureFace',array('session_id'=>session_id()))}",
+                "width": 100,
+                'removeTimeout': 1,
+                'fileTypeExts': '*.jpg; *.png; *.gif;',
+                "onUploadSuccess": uploadPicture,
+                'formData': {'uid': picuid},
+                'onFallback': function() {
+                    alert('未检测到兼容版本的Flash.');
+                }
+            });
+
+            var content = $('#main');
+            var top_alert = $('#top-alert');
+            top_alert.find('.close').on('click', function() {
+                top_alert.removeClass('block').slideUp(200);
+                // content.animate({paddingTop:'-=55'},200);
+            });
+            window.updateAlert = function(text, c) {
+                text = text || 'default';
+                c = c || false;
+                if (text != 'default') {
+                    top_alert.find('.alert-content').text(text);
+                    if (top_alert.hasClass('block')) {
+                    } else {
+                        top_alert.addClass('block').slideDown(200);
+                        // content.animate({paddingTop:'+=55'},200);
+                    }
+                } else {
+                    if (top_alert.hasClass('block')) {
+                        top_alert.removeClass('block').slideUp(200);
+                        // content.animate({paddingTop:'-=55'},200);
+                    }
+                }
+                if (c != false) {
+                    top_alert.removeClass('alert-error alert-warn alert-info alert-success').addClass(c);
+                }
+            };
+
+
+
+        });
+        function uploadPicture(file, data) {
+            var data = $.parseJSON(data);
+            var src = '';
+            if (data.status) {
+                $("#icon").val(data.id);
+                src = data.url || '__PICURLFACE__' + data.path;
+                $("#pic").val(src);
+                $("#target-info").attr("src", src);
+                var random = Math.floor(Math.random() * (1000 + 1));
+                $("#specialicon").find('.upload-img-box').html('<div class="upload-pre-item"><img width="300" height="300" src="' + src + '?r=' + random + '"/></div>');
+            } else {
+                updateAlert(data.info);
+                /*setTimeout(function(){
+                 $('#top-alert').find('button').click();
+                 $(that).removeClass('disabled').prop('disabled',false);
+                 },1500);*/
+            }
+        }
+    </script>
+</block>

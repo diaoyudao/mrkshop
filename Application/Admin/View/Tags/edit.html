@@ -1,0 +1,36 @@
+<extend name="Public/base"/>
+<block name="body">
+	<div class="main-title">
+	    <h2>
+		{$info['id']?'编辑':'新增'}标签
+	    </h2>
+	</div> 
+	<form action="{:U()}" method="post" class="form-horizontal"> 
+	    <div class="form-item">
+		    <label class="item-label">标签名称 <span class="check-tips">问题标题不能为空</span></label>
+		    <div class="controls">
+			    <input type="text" class="text input-large" name="keywords" value="{$info.keywords|default=''}">
+		    </div>
+	    </div>  
+	    
+
+	    <div class="form-item">
+		    <label class="item-label">
+			是否热门 <span class="check-tips">（默认否）</span>
+		    </label>
+		    <div class="controls">
+			<input type="radio" value="1" name="ishot" <eq name="info.ishot" value="1">checked</eq>>是
+			<input type="radio" value="0" name="ishot" <eq name="info.ishot" value="0">checked</eq>>否
+		    </div>
+	    </div> 
+		 
+	    <div class="form-item"> 
+		    <input type="hidden" name="id" value="{$info.id|default=''}">
+		    <input type="hidden" name="domainid" value="{$info.domainid|default='1'}">
+		    <input type="hidden" name="types" value="{$info.types}">  
+		    <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+		    <button class="btn btn-return" onclick="javascript:history.back(-1);return false;">返 回</button> 
+		</button>
+	    </div>
+	</form>
+</block> 

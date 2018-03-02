@@ -1,0 +1,35 @@
+
+<volist name='orderlist' id='order' empty='没有订单'>
+    <div class="order_list">
+        <div class="two_clum">
+            <span class="fl"><i>订单号:</i><a href="{$order.detail_url}">{$order.refund_sn}</a></span>
+            <!--<span class="fr">{$order.orderStatus.status_txt}</span>--> 
+            <eq name='order.refund_type' value='1'><span class="fr" style="background-color: yellowgreen; color: #fff; line-height: 0.5rem; padding: -1px 2px">退款订单</span></eq>
+            <eq name='order.refund_type' value='2'><span class="fr" style="background-color: green; color: #fff; line-height: 0.5rem; padding: -1px 2px;">退货订单</span></eq>
+        </div>
+        <ul>
+            <volist name='order.goodslist' id='goods' key='k'>
+                <li>
+                    <a href="{$order.detail_url}">
+                        <img src="{$goods['pics_img'][$goods['cover_id']]}"/>
+                        <div class="pro_info">
+                            <h3><a href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}">{$goods.goodid|get_good_name}</a></h3>
+                            <p class="pric">
+                                <span>￥<span class="font36">{$goods.price}</span>
+                                </span>
+                                <i> X {$goods.num} </i>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+            </volist>
+        </ul>
+        <div class="two_clum">
+            <span class="fl"><i>时间：</i>{$order.add_time|date="Y-m-d H:i:s",###}</span>
+            <span class="fr">总额：<span class="cost">￥{$order.refund_amount}</i></span> 
+        </div>
+        <div class="buy_agin">
+            <a href="{:U('Refund/detail',array('id'=>$order['refund_id']))}" class="pj">查看详情</a>
+        </div>
+    </div>
+</volist>

@@ -1,0 +1,392 @@
+<extend name="Base/member_common"/>
+<block name='style'>
+    <style>
+        .pj_scimg {
+            margin-top: 10px;
+            overflow: hidden;
+        }
+              .pj_scimg .sctp {
+            background: rgba(0, 0, 0, 0) url("__IMG__/evaluation/icon_eva.png") no-repeat scroll 20px -93px;
+            border: 1px dashed #ddd;
+            float: left;
+            height: 58px;
+            margin-right: 10px;
+            overflow: hidden;
+            position: relative;
+            width: 58px;
+            margin-top:20px;
+        }
+        .pj_scimg ul li {
+            float: left;
+            height: 60px;
+            margin-right: 10px;
+            overflow: hidden;
+            padding-right: 10px;
+            padding-top: 20px;
+            position: relative;
+            width: 60px;
+        }
+
+
+        .pj_scimg a.delete_btn {
+            background: #e13335 none repeat scroll 0 0;
+            border-radius: 50%;
+            color: #fff;
+            display: inline-block;
+            font-size: 14px;
+            height: 20px;
+            line-height: 20px;
+            position: absolute;
+            right: 0;
+            text-align: center;
+            top: 10px;
+            width: 20px;
+            z-index: 3;
+        }
+        .pj_scimg .picli-mask {
+            background: rgba(0, 0, 0, 0) url("__IMG__/evaluation/icon_eva.png") no-repeat scroll -60px -270px;
+            cursor: pointer;
+            display: none;
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            z-index: 2;
+        }
+        #comments_imgs li{ margin: 0 5px;}
+    </style>
+</block>
+<block name="body">
+    <div class="towp">
+        <div class="guidance towp"><a href="{:U('Member/index')}">首页 </a><a href="{:U('Order/index')}"> > 订单管理</a><a href="javascript:;"> > 售后服务 </a></div>
+    </div>
+    <div class="towp yh-wrap content_agency clear apply">
+        <!--<div class="content right-con2 order-mana cG">-->
+        <!--            <div class="content_left">
+                    </div>-->
+        <div class="content right-con2 order-mana cG {$orderdetail.current_step}">
+
+            <neq name='orderdetail.status' value='-2'>
+            <div class="steps"></div>
+            </neq>
+            <h3>申请退货</h3>
+            <div class="contents clear">
+                <div class="contents_left">
+                    <h3>订单信息</h3>
+                    <dl>
+                        <dt>订单编号：</dt>
+                        <dd>{$orderdetail.orderid}</dd>
+                    </dl>
+                    <dl>
+                        <dt>付款方式：</dt>
+                        <dd>{$orderdetail.paymentstring}</dd>
+                    </dl>
+                    <dl>
+                        <dt>收&nbsp;货&nbsp;人：</dt>
+                        <dd>{$orderdetail.address.realname},{$orderdetail.address.cellphone}<notempty name='orderdetail.address.phone'>/{$orderdetail.address.phone}</notempty></dd>
+                    </dl>
+                    <dl>
+                        <dt>收货地址：</dt>
+                        <dd>
+                            {$orderdetail.address.province}{$orderdetail.address.city}{$orderdetail.address.area},{$orderdetail.address.address}
+                        <notempty name='orderdetail.address.youbian'>,{$orderdetail.address.youbian}</notempty>
+                        </dd>
+                    </dl>
+                    <notempty name='orderdetail.message'>
+                        <dl>
+                            <dt>我的留言：</dt>
+                            <dd>{$orderdetail.message}</dd>
+                        </dl>
+                    </notempty>
+                    <dl>
+                        <dt>下单时间：</dt>
+                        <dd>{$orderdetail.create_time|date='Y-m-d H:i:s',###}</dd>
+                    </dl>
+                    <dl>
+                        <dt>付款时间：</dt>
+                        <dd><notempty name='orderdetail.payment_time'> {$orderdetail.payment_time|date='Y-m-d H:i:s',###} <else /> 待付款 </notempty></dd>
+                    </dl>
+                    <dl>
+                        <dt>发货时间：</dt>
+                        <dd><notempty name='orderdetail.deliverys.send_time'> {$orderdetail.deliverys.send_time|date='Y-m-d H:i:s',###} <else /> 待发货 </notempty></dd>
+                    </dl>
+
+                </div>
+                <div class="contents_right">
+                    <form action="{:U('Refund/add')}" method="post" class='validate' name="actform" enctype="multipart/form-data" onsubmit="validateCallback(this, dialogAjaxDone);
+                            return false;">
+                        <div class="reason">
+                            <ul>
+                                <li>
+                                    <span>选择退货原因：</span>
+                                    <select name="resion_id">
+                                        <option value="">请选择</option>
+                                        <volist name='refund_resion' id='item'>
+                                            <option value="{$item.id}">{$item.resion}</option>
+                                        </volist>
+                                    </select>
+                                </li>
+                                <li class="clear">
+                                    <span>说明：<em>（0/200字）</em></span>
+                                    <textarea name='buyer_message' maxlength="200"></textarea>
+                                </li>
+                                <li class="clear">
+                                    <span>上传图片：</span>
+                                    <div class="pj_scimg">
+                                        <div class="sctp">
+                                            <input class="g-u file-input" id="pics" type="file" >
+                                            <input type="hidden" name="pics" id="pics_id" value="" class="icon" />
+                                        </div> 
+                                        <ul id="comments_imgs">
+                                        </ul>
+                                        <em>最多可添加3张图片！</em>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <div class="tj clear">
+                                <input type='hidden' name='goods_num' value='{$goods.num}' />
+                                <input type='hidden' name='order_id' value='{$orderdetail.id}' />
+                                <input type='hidden' name='goodid' value='{:I("goods_id")}' />
+                                <input type='hidden' name='id' value='{:I("id")}' />
+                                <input style='margin:0 0 8px 0;display:inline; height: 34px; width: 140px; line-height: 
+                                       34px;' class='submit' type='submit' name='submit' value='提交申请' />
+                                <a href="javascript:history.go(-1)">取消返回</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="tables">
+                <h3>订单详情</h3>
+                <table width="100%">
+                    <colgroup span="6">
+                        <col width="30%" />
+                        <col width="12%" />
+                        <col width="12%" />
+                        <col width="12%" />
+                        <col width="12%" />
+                        <col width="12%" />
+                    </colgroup>
+                    <tr><th>商品</th><th>单价（元）</th><th>数量</th><th>合计（元）</th><th>运费（元）</th><th>个数</th></tr>
+                    <volist name='orderdetail.goodslist' id='goods' key='k'>
+                        <if condition="($goods.goodid eq I('goods_id')) AND ($goods.id eq I('id'))" >
+                            <tr>
+                                <td>
+                                    <a href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}"><img src="{$goods['pics_img'][$goods['cover_id']]}"/></a>
+                                    <div>
+                                        <p><a style='border:none; width: 100%'  href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}">{$goods.goodid|get_good_name}</a></p>
+                                        <notempty name='goods.parameters'><em>规格：{$goods.parameters|default="无"}</em></notempty>
+                                    </div>
+                                </td>
+                                <td>￥{$goods.price}</td>
+                                <td>{$goods.num}</td>
+                                <td>￥{$goods.total}</td>
+                                <td>￥{$orderdetail.shipprice}</td>
+                                <td><input type='text' name='inputnum' value='{$goods.num}' placeholder='输入退货数量' /></td>
+                            </tr>
+                        </if>
+                        <eq name='goodsid' value='-1'>
+                        <if condition="$k eq 1">
+                            <tr>
+                                <td>
+                                    <a href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}"><img src="{$goods['pics_img'][$goods['cover_id']]}"/></a>
+                                    <div>
+                                        <p><a style='border:none; width: 100%'  href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}">{$goods.goodid|get_good_name}</a></p>
+                                        <notempty name='goods.parameters'><em>规格：{$goods.parameters|default="无"}</em></notempty>
+                                    </div>
+                                </td>
+                                <td>￥{$goods.price}</td>
+                                <td>{$goods.num}</td>
+                                <td>￥{$goods.total}</td>
+                                <td rowspan="{$orderdetail.productnum}">￥{$orderdetail.shipprice}</td>
+                                <td rowspan="{$orderdetail.productnum}">{$orderdetail.statusstring}</td>
+                            </tr>
+                            <else />
+                            <tr>
+                                <td>
+                                    <a href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}"><img src="{$goods['pics_img'][$goods['cover_id']]}"/></a>
+                                    <div>
+                                        <p><a style='border:none; width: 100%' href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}">{$goods.goodid|get_good_name}</a></p>
+                                        <notempty name='goods.parameters'><em>规格：{$goods.parameters|default="无"}</em></notempty>
+                                    </div>
+                                </td>
+                                <td>￥{$goods.price}</td>
+                                <td>{$goods.num}</td>
+                                <td>￥{$goods.total}</td>
+                            </tr>
+                        </if>
+                        </eq>
+                    </volist>
+                </table>
+                <div class="jin">
+                    <p>税费：{$orderdetail.haiguan_rate_total}</p>
+                    <p>运费：￥{$orderdetail.shipprice}</p>
+                    <p>商品总金额：￥{$orderdetail.total}</p>
+                    <p>订单总金额：<em>￥{$orderdetail.pricetotal}</em></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</block>
+<block name='script'>
+    <script src="__JS__/jquery.validate.js" type="text/javascript"></script>
+    <script type="text/javascript">
+                        $(function() {
+//                           var num = $("input[name=inputnum]").val();
+                            var num = "{$goods.num}";
+                            $("input[name=goods_num]").val(num);
+                            $("input[name=inputnum]").keyup(function() {
+                                var inputnum = $(this).val();
+                                if (inputnum > num) {
+                                    $("input[name=inputnum]").val(num);
+                                    layer.msg('退货数量不能大于购买数量');
+                                    return false;
+                                }else{
+                                     $("input[name=goods_num]").val(inputnum);
+                                }
+                            });
+
+                            if ($('form.validate').length) {
+                                $('form.validate').validate({
+                                    rules: {
+                                        resion_id: {
+                                            required: true,
+                                        },
+                                        buyer_message: {
+                                            required: true,
+                                        },
+                                        pics: {
+                                            required: true
+                                        }
+                                    },
+                                    messages: {
+                                        resion_id: {
+                                            required: '请选择退货原因'
+                                        },
+                                        buyer_message: {
+                                            required: '请输入退货说明'
+                                        },
+                                        pics: {
+                                            required: '请上传商品图片'
+                                        }
+                                    },
+                                    errorPlacement: function(error, element) {
+                                        error.appendTo(element.parent().find("em"));
+                                    }
+                                });
+                            }
+                        });
+    </script>
+    <script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+    <script type="text/javascript">
+                        //多图上传图片
+                        $(function() {
+                            /* 初始化上传插件*/
+                            $("#pics").uploadify({
+                                "height": 30,
+                                "swf": "__STATIC__/uploadify/uploadify.swf",
+                                "fileObjName": "download",
+                                "buttonText": "",
+                                "uploader": "{:U('File/uploadPicture',array('session_id'=>session_id()))}",
+                                "width": 120,
+                                'removeTimeout': 1,
+                                'fileTypeExts': '*.jpg; *.png; *.gif;',
+                                'multi': true,
+                                'queueSizeLimit': 3,
+                                "onUploadSuccess": uploadPicturepics,
+                                'formData': {'pagefrom': 'comments'},
+                                'onFallback': function() {
+                                    alert('未检测到兼容版本的Flash.');
+                                }
+                            });
+                        });
+                        function uploadPicturepics(file, datas) {
+                            console.log()
+                            if (file.index > 2 && $("#comments_imgs").children("li").length > 2) {
+                                return false;
+                            }
+                            var data = $.parseJSON(datas);
+                            var src = '';
+                            if (data.status) {
+                                src = data.url || '__PICURL__' + data.path;
+                                var html = "<li><a href=\"javascript:void(0);\"><a href='javascript:;;' onclick='remove_pic(this)' data-id=\"" + data.id + "\" class='delete_btn'>-</a><img class=\"preview-imgli\"  src=\"" + src + "\" width=\"60\" data-id=\"" + data.id + "\"></a><div class=\"picli-mask btn-close-del\" ></div></li>";
+                                picsbox = $("#comments_imgs");
+                                picsbox.append(html)
+                                picArr = [];
+                                for (var i = 0; i < picsbox.children("li").length; i++) {
+                                    var data_id = picsbox.children('li:eq(' + i + ')').find('img').attr('data-id');
+                                    if (data_id) {
+                                        picArr.push(data_id);
+                                    }
+                                }
+                                ;
+                                picStr = picArr.join(',');
+                                $('#pics_id').val(picStr);
+                                $('.btn-close-del').click(function(event) {
+                                    event.preventDefault();
+                                    $(this).parent().remove();
+                                    picsbox = $("#comments_imgs");
+                                    picArr = [];
+                                    for (var i = 0; i < picsbox.children("li").length; i++) {
+                                        var data_id = picsbox.children('li:eq(' + i + ')').find('img').attr('data-id');
+                                        if (data_id) {
+                                            picArr.push(data_id);
+                                        }
+                                    }
+                                    ;
+                                    picStr = picArr.join(',');
+                                    $('#pics_id').val(picStr);
+                                });
+                            } else {
+                                alert("上传出错");
+                            }
+                        }
+                        
+                         //删除图片
+        function remove_pic(obj) {
+            if (!confirm("确定要删除吗？")) {
+                return false;
+            }
+            var id = $(obj).data('id');
+            var indexLayer;
+            $.ajax({
+                url:"{:U('Comment/remove_pic')}",  //"/index.php?s=Comment/remove_pic.html",
+                data: {id: id},
+                type: "post",
+                dataType: "json",
+                success: function(response) {
+                    if (response.result != 'success') {
+                        layer.open({
+                            content: response.info,
+                            style: 'background-color:#09C1FF; color:#fff; border:none;',
+                            time: 2
+                        });
+                        return;
+                    }
+                    $(obj).parent().remove();
+                    return;
+                },
+                beforeSend: function() {
+                    indexLayer = layer.open({
+                        type: 2,
+                        time: 1,
+                    });
+                },
+                complete: function() {
+                    layer.close(indexLayer);
+                },
+                error: function() {
+                    layer.open({
+                        content: '网络错误,请稍后再试！',
+                        style: 'background-color:#09C1FF; color:#fff; border:none;',
+                        time: 2
+                    });
+                    return;
+                }
+            });
+        }
+    </script>
+</block>

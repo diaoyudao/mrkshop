@@ -1,0 +1,91 @@
+<extend name="Base/member_common"/>
+<block name='style'>
+
+</style>
+</block>
+<block name="body">
+<!-- 内容 -->
+<div class="wrap" style="background-color: #fafafa;">
+    <div class="guidance towp clear"><a href="{:U('Index/index')}">首页</a><a href="{:U('Member/index')}"> > 会员首页</a><a href="javascript:;"> > 评价管理</a></div>
+    <div class="content_cm towp clear">
+        <div class="content_left">
+           <include file='Member/member_menu'/>
+        </div>
+        <div class="content_right">
+            <h2>评价管理</h2>
+            <div class="success check_com clear">
+                <div class="fl this_pro">
+                    <a href="{:U('Goods/detail',array('id'=>$info['goodid']))}">
+                        <img src="__PICURL__/{$info.icon|get_good_img}"/>
+                        {$info.goodid|get_good_name}
+                    </a>
+                    <!--<p>购买时间：2015-10-20</p>-->
+                </div>
+                <div class="fr com-right com_list2">					
+                    <p class="com-nr">{$info.content}</p>
+                    <div class="sai clear">
+                        <!-- 请限制只显示4张图片 -->
+                        <ul class="clear  saitu">
+                            <volist name="info.picss" id="item">
+                            <li>
+                                <img src="{$item}" alt="">
+                                <div class="img_zomm">
+                                    <img src="">
+                                </div>                            	
+                            </li>
+                            </volist>
+                        </ul>
+                        <div class="ping">
+                            <div class="pingfen pingfen{$info.score}"><img src="__IMG__/commstar.jpg"> </div>
+                            <div class="colo9">
+                                <!--<i class="guigei2">规格：150g</i>-->
+                                <i class="date2">{$info.create_time|date="Y-m-d H:i:s",###}</i></div>
+                        </div>
+                    </div> 
+                    <notempty name="info.reply_content">
+                    <div class="feed_back">
+                        <i>对方回复：</i>{$info.reply_content}
+                    </div>
+                    </notempty>
+                    <a href="{:U('comment/index')}" class="a-btn fr" >返回我的评价</a>
+                </div>
+            </div>
+            <div class="hot">
+                <h2>热卖单品</h2>
+                <ul class="clear">
+                     <volist name="aboutproduct" id="vo" empty='没有数据'>
+                    <li>
+                        <a href="{:U('Goods/detail',array('channelname'=>$vo['channelname'],'id'=>$vo['id']))}">
+                            <img src="{$vo.id|get_cover_picture_url}" />
+                            <span>{$vo['title']}</span>
+                        </a>
+                        <p><em>￥<span>{$vo['price']}</span></em><i>￥{$vo['marketprice']}</i></p>
+                        <p class="dy">成交量：<span>{$vo.sales}</span>件</p>
+                    </li>
+                </volist>
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</block>
+<block name='script'>
+    <script>
+      $(function(){   
+		$(".saitu li>img").mouseenter(function(){				
+			var url=$(this).attr("src");
+			$(this).siblings(".img_zomm").show().find("img").attr("src",url);			
+			$(this).parent("li").addClass("active").siblings().removeClass("active");
+		});
+		$(".saitu li").mouseleave(function(){
+			$(".img_zomm").fadeOut();
+			$(".saitu li").removeClass("active")
+		});
+		$(".img_zomm img").bind( "mouseleave click" ,function(){
+			$(".img_zomm").fadeOut();
+			$(".saitu li").removeClass("active")
+		});
+    })
+    </script>
+</block>

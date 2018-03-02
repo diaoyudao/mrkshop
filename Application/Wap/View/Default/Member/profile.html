@@ -1,0 +1,87 @@
+<extend name="Base/common_index"/>
+<block name="body">
+    <!--头部 S-->
+    <div class="herder herder2 ">
+        <a href="javascript:history.go(-1);" class="back"><i></i></a>
+        <h3>账户管理</h3>
+        <div class="herd_r"><a href="{:U('Member/information',array('flag'=>'update'))}" value="">编辑</a></div>
+    </div>
+    <div class="t_line"></div>
+    <!--头部 E--> 
+    <div class="count_mana">
+        <dl class="edit_head_pro"><dt>头像</dt><dd>
+                <a href="{:U('member/cut',array('id'=>$uid))}" class="fr">
+                    <i>
+                        <notempty name="faceid">
+                            <php>
+                                $random = time();
+                            </php>
+                            <img src="__PICURLFACE__{$uid}/face.jpg?r={$random}" />
+                            <else/>
+                            <img src="__IMG__/head-defalt.png"/>
+                        </notempty>
+                    </i>
+                    </a>
+            
+            </dd></dl>
+        <dl>
+            <dt>会员等级</dt>
+            <dd class="famle" ><span class="rtext1">{$memberInfo.levelInfo.level_n}</span></dd>
+        </dl>
+        <dl>
+            <dt>昵称</dt>
+            <dd class="famle" ><span class="rtext1">{$memberInfo.nickname}</span></dd>
+        </dl>
+        <dl>
+            <dt>手机号</dt>
+            <dd class="famle" ><span class="rtext1">{$memberInfo.mobile|set_start_phone}</span></dd>
+        </dl>
+    </div>
+    <div class="count_mana">
+        <dl>
+            <dt>性别</dt>
+            <dd class="famle" >
+                <select>
+                    <switch name="memberInfo.sex">
+                    <case value="1">
+                        <option value='0'>保密</option>
+                        <option value='1' selected='selected'> 男</option>
+                        <option value='2'> 女</option>
+                    </case>
+                    <case value="2">
+                        <option value='0'>保密</option>
+                        <option value='1' > 男</option>
+                        <option value='2' selected='selected'> 女</option>
+                    </case>
+                    <default />
+                    <option value='0' selected='selected'>保密</option>
+                    <option value='1' > 男</option>
+                    <option value='2'> 女</option>
+                    </switch> 
+
+                </select>
+            </dd>
+        </dl>
+        <dl>
+            <dt>姓名</dt>
+            <dd class="famle" ><span class="rtext1">{$memberInfo.realname}</span></dd>
+        </dl>
+        <dl>
+            <dt>身份证号</dt>
+            <dd class="famle" ><span class="rtext1">{$memberInfo.card_no|set_start_card}</span></dd>
+        </dl>
+        <dl>
+            <dt>居住地址</dt>
+            <dd class="famle" ><p class="rtext1"><span>{$memberInfo.address}</span></p></dd>
+        </dl>
+    </div>
+
+
+
+    <div class="fix_bo" style='margin-bottom: 0.8rem;'>
+        <!--<input type="button" class="long_btn" value="退出当前账号" />-->
+        <a href="{:U('Member/logout')}" class="long_btn"> 退出当前账号</a>
+    </div>
+    <div class="b_line"></div>
+    <!--底部 E-->
+</block>

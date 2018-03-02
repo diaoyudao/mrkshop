@@ -1,0 +1,41 @@
+<volist name="tree" id="list">
+	<dl class="cate-item">
+		<dt class="cf">
+			<form action="{:U('edit')}" method="post">
+				<if condition="!$list[isdomain] && !$list[isbrand]">
+				<div class="btn-toolbar opt-btn cf">
+					<a title="编辑" href="{:U('edit?id='.$list['id'].'&pid='.$list['pid'])}">编辑</a>
+					<a title="{$list.status|show_status_op}" href="{:U('setStatus?ids='.$list['id'].'&status='.abs(1-$list['status']))}" class="ajax-get">{$list.status|show_status_op}</a>
+					<a title="删除" href="{:U('del?id='.$list['id'])}" class="confirm ajax-get">删除</a> 
+				</div>
+				</if>
+				<div class="fold"><i></i></div>
+				<div class="order"> </div> 
+				<div class="name">
+					<span class="tab-sign"></span>
+					<input type="hidden" name="id" value="{$list.id}">
+					 
+					<if condition="$list[isdomain]">
+						[频道] {$list.name} 
+						<a class="add-sub-cate" title="添加子分类" href="{:U('add?domainid='.$list['id'])}">
+							<i class="icon-add"></i>
+						</a>
+					<elseif condition="$list[isbrand]" />
+						[品牌] {$list.name} 
+						<a class="add-sub-cate" title="添加子分类" href="{:U('add?domainid='.$list['domainid'].'&brandid='.$list['id'])}">
+							<i class="icon-add"></i>
+						</a>
+					<else />
+						属性：<input type="text" name="name" class="text" value="{$list.name}">
+					</if> 
+					<span class="help-inline msg"></span>
+				</div>
+			</form>
+		</dt>
+		<notempty name="list['_']">
+			<dd>
+				{:R('GoodAttribute/tree', array($list['_']))}
+			</dd>
+		</notempty>
+	</dl>
+</volist>

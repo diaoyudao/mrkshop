@@ -1,0 +1,160 @@
+<extend name="Base/member_common"/>
+<block name="body">
+    <!-- 内容 -->
+    <div class="wrap" style="background-color: #f5f5f5;">
+        <div class="guidance towp"><a href="javascript:;">首页</a><a href="javascript:;"> > 会员首页</a></div>
+        <div class="content_agency towp clear">
+            <div class="content_left">
+                <include file="Member/member_menu"/>
+            </div>
+            <div class="content_right" style="border: 0;">
+                <div class="members_box">
+                    <div class="members clear">
+                        <div class="tx_box"><a class="tx" href="javascript:;"><span>编辑</span></a></div>
+                        <div class="information">
+                            <p>温柔豢养123</p>
+                            <p><span><em>v1</em>会员</span><span>资深</span></p>
+                            <ul class="security clear">
+                                <li>安全等级:</li>
+                                <li></li>
+                                <li>中</li>
+                                <li><a href="javascript:;">提升</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="invitation">
+                        <h3>邀请</h3>
+                        <ul class="clear">
+                            <li>
+                                <div class="code"><label for="">服务码：</label><input type="tel" name="" placeholder="输入服务码" /></div>
+                                <input type="button" name="" id="" value="发送短信" />
+                            </li>
+                            <li>
+                                <span><img src="__IMG__/agencyManage/qrCode.jpg"/></span>
+                                <div class="btn">
+                                    <a href="javascript:;">更改</a>
+                                    <a href="javascript:;">导出</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="options_box" style="margin-top: 100px;">
+                    <div class="tab">
+                        <ul class="clear">
+                            <li class=""><a href="{:U('express/index')}">快件管理</a></li>
+                            <li class="active"><a href="{:U('express/express')}">货架管理</a></li>
+                            <li class=""><a href="{:U('express/express_grid_list')}">货架格子</a></li>
+                            <li class=""><a href="{:U('express/express_record')}">货架记录</a></li>
+                            <li class=""><a href="{:U('express/express_log')}">货架使用明细</a></li>
+                        </ul>
+                    </div>
+                    <div class="options" >
+                        <div class="courier"  style="display: none;">
+                            <div class="data">
+                                <div class="data_cent" >
+                                    <h3>货架数量：</h3>
+                                    <div class="quantity">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="manage">
+                            <div class="xx">
+                                <table width="100%">
+                                    <colgroup span="6">
+                                        <col width="16%" />
+                                        <col width="16%" />
+                                        <col width="16%" />
+                                        <col width="16%" />
+                                        <col width="16%" />
+                                        <col width="20%" />
+                                    </colgroup>
+                                    <tr><th>编号</th><th>货架名称</th><th>货架型号</th><th>货架使用状态</th><th>创建时间</th><th>操作</th></tr>
+                                    <volist name='lists' id='info'>
+                                        <tr><td>L-{$info.alias}</td>
+                                            <td>{$info.name}</td>
+                                            <td>{$info.type_txt}</td>
+                                            <td>{$info.status_txt}</td>
+                                            <td>{$info.create_time|date='Y-m-d H:i:s',###}</td>
+                                        <eq name='info.status' value='0'>
+                                        <td><a class="active" href="javascript:;">删除</a>
+                                            <a class="active" express_id ='{$info.id}' href="javascript:open_express({$info.id})">编辑</a></td>
+                                        <else/>
+                                        <td><a href="javascript:;">删除</a>
+                                            <a class="active" express_id ='{$info.id}' href="javascript:open_express({$info.id})">编辑</a></td>
+                                        </eq>
+                                        </tr>
+                                    </volist>
+                                </table>
+                            </div>
+                            <div class="found clear">
+                                <a class="newBatchs" href="javascript:batch_express_grid();">批量新建货架格子</a>
+                                <a class="news" href="javascript:open_express(0)">新建货架</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <style>
+        .newBatch_cnt div{ margin-left: 10px;}
+    </style>
+</block>
+<block name="script">
+    <script src="__JS__/jquery.validate.js" type="text/javascript"></script>
+    <script>
+
+        //新建货架
+        function open_express(express_id) {
+            $.ajax({
+                url: "{:U('Express/edit_express')}",
+                type: "post",
+                dataType: "json",
+                data: {id: express_id},
+                success: function(json) {
+                    layer.open({
+                        title: '新建货架',
+                        type: 1,
+                        skin: 'layui-layer-rim', //加上边框
+                        area: ['520px', '390px'], //宽高
+                        content: json.info
+                    });
+                    return false;
+                }
+            });
+        }
+
+        // 批量新建货柜格子
+        function batch_express_grid() {
+            $.ajax({
+                url: "{:U('Express/express_grid')}",
+                type: "post",
+                dataType: "json",
+                data: {id: 0},
+                success: function(json) {
+                    layer.open({
+                        title: '批量新建货架格子',
+                        type: 1,
+                        skin: 'layui-layer-rim', //加上边框
+                        area: ['560px', '400px'], //宽高
+                        content: json.info
+                    });
+                    return false;
+                }
+            });
+        }
+        function type_select(obj, type) {
+            $(obj).parent().parent().find('a').removeClass('active');
+            $(obj).addClass("active");//.parent('li').find('a').removeClass('active');
+            $("input[name=" + type + "]").val($(obj).attr('gtype'));
+        }
+
+    </script>
+</block>

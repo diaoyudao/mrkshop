@@ -1,0 +1,76 @@
+<extend name="Base/common_index"/>
+<block name="body">
+    <!--头部 S-->
+    <div class="herder">
+        <a href="javascript:history.go(-1);" class="back"><i></i></a>
+        <h3>商品评价</h3>
+        <!-- <div class="herd_r"><a href="search.html" class="search"><i></i></a></div>-->
+    </div>
+    <div class="t_line"></div>
+    <!--头部 E--> 
+    <!--精抢购选 S--> 
+
+    <!--精抢购选 E--> 
+    <div class="sp_reviews">
+        <ul id="conten_id">
+            <volist name='lists' id='item'>
+                <li>
+                <dt>
+                <div class="img">
+                    <php>
+                        $impath = get_face($item["uid"]);
+                        $random = time();
+                    </php>
+                    <notempty name="impath">
+                        <img src="__PICURLFACE__{$item.uid}/face.jpg?r={$random}" alt="{$item['uid']|get_username}">
+                        <else/>
+                        <img src="__IMG__/head.jpg" alt="">
+                    </notempty>
+                </div>
+                <!--<img src="__IMG__/head.jpg" alt="" /></div>-->
+                <h4>{$item['uid']|get_username}</h4>
+                </dt>
+                <dd>
+                    <div class="reviews_nr">
+                        {$item.content}
+                    </div>
+                <notempty name="item.picss">
+                    <div class="reviews_img">
+                        <foreach name="item['picss']" item="pic">
+                            <span class="img"><img src="{$pic}" alt="{$item.content}"></span>
+                        </foreach>
+                    </div>
+                </notempty>
+                <a href="javascript:;"><div class="reviews_xj"><span>{$item.create_time|date="Y-m-d H:i:s",###}</span><i class="grade grade_{$item.score}"><em></em></i>{$item.score}分</div></a>
+                </dd>
+
+                </li>
+            </volist>
+        </ul>
+    </div> 
+    <!--底部 E-->
+    <div id="loding_ajax" style=" text-align:center;height:.88rem;line-height:.88rem;font-size: .44rem;font-weight: bold;color: #000; display: none;">加载中····</div>
+</block>
+<block name='script'>
+    <script src="__JS__/ajaxpage.js" ></script>
+    <script>
+        $(function() {
+            AjaxPage.pageCount = {$totalPages};
+            AjaxPage.append = 1;
+            AjaxPage.method = 'GET';
+            AjaxPage.dataType = "html";
+            AjaxPage.Conten = $('#conten_id');
+            AjaxPage.alert = $('#loding_ajax');
+            AjaxPage.filter.ajax = 1;
+            AjaxPage.filter.gid = {$goodsid};
+
+
+            $(window).scroll(function() {
+                if ($(window).height() + 200 + $(window).scrollTop() > $('body').outerHeight() && AjaxPage.canpage) {
+                    AjaxPage.canpage = false;
+                    AjaxPage.gotoPageNext();
+                }
+            });
+        });
+    </script>
+</block>

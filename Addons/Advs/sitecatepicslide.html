@@ -1,0 +1,15 @@
+<if condition="$list['type'] eq 2">
+<div class="fl index_item_fl">
+    <div class="bd">
+        <ul>
+            <volist name="list.res" id="lo" key="k">
+                <li>
+                    <a href="{$lo.link}" target="_blank" title="{$lo.title}">
+                  <img src="{$lo.path}" alt="{$lo.title}" />
+                    </a>
+                </li>
+            </volist> 
+        </ul>
+    </div>
+</div>
+</if>

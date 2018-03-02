@@ -1,0 +1,425 @@
+<extend name="Base/common_index"/>
+<block name='style'>
+    <style>
+        .pj_scimg {
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .pj_scimg .sctp {
+            background: rgba(0, 0, 0, 0) url("__IMG__/evaluation/icon_eva.png") no-repeat scroll 20px -93px;
+            border: 1px dashed #ddd;
+            float: left;
+            height: 58px;
+            margin-right: 10px;
+            overflow: hidden;
+            position: relative;
+            width: 58px;
+        }
+        .pj_scimg ul li {
+            float: left;
+            height: 60px;
+            margin-right: 10px;
+            overflow: hidden;
+            position: relative;
+            width: 60px;
+        }
+        .pj_scimg .picli-mask {
+            background: rgba(0, 0, 0, 0) url("__IMG__/evaluation/icon_eva.png") no-repeat scroll -60px -270px;
+            cursor: pointer;
+            display: none;
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            z-index: 2;
+        }
+        #comments_imgs li{ margin: 0 0px; width: 0.56rem; height: 0.56rem; float: left;}
+        .footer{ display: none;}
+        .current { background-color: #000; color: #fff;}
+        .after_sales .item_1 div input{float:initial;}
+				/* 图片删除按钮*/
+				.upload span.remove_btn{
+				  position: absolute;
+				  float: right;
+				  top: 0.1rem;
+				  right: 0.1rem;		  
+				  font-size: 14px;
+				  padding: 0;
+				  z-index: 22;
+				  color: #fff;
+				  background-color: #000;
+				  border-radius: 1rem;
+				  width: 0.24rem;
+					height: 0.24rem;
+					line-height: 0.24rem;
+				  text-align: center;
+				  cursor: pointer;
+				}
+				.order_list li img{border-radius: 0;}
+				.load_btn{padding:0.2rem;padding-bottom:0;}
+    </style>
+</block>
+<block name="body">
+    <!--头部 S-->
+    <div class="herder">
+        <a href="javascript:history.go(-1);" class="back"><i></i></a>
+        <h3>售后</h3>
+        <!-- <div class="herd_r"><a href="search.html" class="search"><i></i></a></div>-->
+    </div>
+    <div class="t_line"></div>
+    <!--头部 E--> 
+    <!--订单列表 S--> 
+    <form action="{:U('Refund/add')}" method="post" class='validate' name="actform" enctype="multipart/form-data" onsubmit="validateCallback(this, dialogAjaxDone);
+            return false;">
+        <div class="order_list after_sales">
+            <ul>
+                <volist name='orderdetail.goodslist' id='goods' key='k'>
+                    <if condition="($goods.goodid eq I('goods_id')) AND ($goods.id eq I('id'))" >
+                        <li>
+
+                            <a href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}">
+                                <img src="{$goods['pics_img'][$goods['cover_id']]}"/>
+                                <div class="pro_info">
+                                    <h3><a href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}">{$goods.goodid|get_good_name}</a></h3>
+                                    <p class="pric">
+                                        <span>￥<span class="font36">{$goods.price}</span>
+                                        </span>
+                                        <i> X {$goods.num} </i>
+                                    </p>
+                                </div>
+                            </a>
+                        </li>
+                    </if>
+                </volist>
+            </ul>
+            <div class="tab2 item service" style="display:none;">
+                <h4>服务类型</h4>
+                <a class="active" href="javascript:;">退货</a>
+                <a  href="javascript:;">换货</a>
+            </div>
+            <div class="item_1">
+                <div class="reason">
+                    <span id="ression_info">退货理由</span>
+                    <a href="javascript:;" class=" fr">请选择 <span class="fons"> > </span> </a>		
+                </div>
+                <div>
+                    <span>备注信息</span>
+                    <input type="text" name="buyer_message" placeholder="请输入其他备注" />
+                </div>
+            </div>
+            <div class="item_2">
+                <div class="num">
+                    <span>申请数量</span>
+                    <div class="fr">
+                        <a href="javascript:;" class="coun-plu"  id="minus " > - </a>
+                        <input type='text' name='inputnum' value='1' id="coun-num" placeholder='输入退货数量' />
+                        <a href="javascript:;"  class="coun-min" id="minus" > + </a>
+                    </div>				
+                </div>
+                <div class="je" style="display:none;">
+                    <span>退货金额</span>
+                    <p class="pric">
+                        <input type="text" value="￥19.00" class="font36" />		
+                    </p>
+                </div>
+                <div class="tips">
+                    (提示：原订单金额<span class="colo18">￥{$orderdetail.pricetotal}</span>，含运费￥{$orderdetail.shipprice})
+                </div>
+            </div>	
+            <div class="upload">
+                <span>上传图片</span>
+                <div class="load">
+                    <ul id="comments_imgs"> </ul>
+                    <div class="sctp load_btn" style='margin-top:0.2rem'>
+                        <input class="g-u file-input" id="pics" type="file" >
+                        <!-- <input type="hidden" name="pics" id="pics_id" value="" class="icon" /> -->
+                    </div> 
+                </div>
+                <p style="clear:both;">上传凭证，最多传3张</p>
+            </div>
+        </div>
+        <div class="fix_bo fix_bo3">
+            <input type='hidden' name='goods_num' value='{$goods.num}' />
+            <input type='hidden' name='order_id' value='{$orderdetail.id}' />
+            <input type='hidden' name='goodid' value='{:I("goods_id")}' />
+            <input type='hidden' name='id' value='{:I("id")}' />
+            <input type='hidden' name='resion_id' value='' />
+            <input type="submit" class="long_btn long_btn_ri fr yd_tc_btn" value="提交申请" />
+        </div>
+    </form>
+    <!--订单列表 E--> 
+    <div class="bounced">
+        <div class="opacity"></div>
+        <ul>
+            <volist name='refund_resion' id='item'>
+                <li><a href="javascript:;" resion_id="{$item.id}">{$item.resion}</a></li>
+            </volist>
+        </ul>
+    </div>
+    <div  class="yd_tc">
+        <div class="tijiao_true tijiao_true2">
+
+            <h3><i></i></h3>
+            <p>
+                提交成功
+            </p>
+        </div>
+    </div>
+
+    <!--底部 S-->
+    <div class="b_line"></div>
+    <!--底部 E-->
+
+</block>
+<block name='script'>
+    <script src="__JS__/jquery.validate.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $('.reason a').click(function() {
+            $('.bounced').show();
+        })
+        $('.bounced a').click(function() {
+            $('.bounced').hide();
+            $('.reason a').text($(this).text());
+            $("input[name=resion_id]").val($(this).attr("resion_id"));
+            $(this).parents('ul').find('a').css({'background': "#fff", 'color': '#000'});
+            $(this).css({'background': "#000", 'color': '#fff'});
+        })
+    </script>
+    <!--    <script type="text/javascript">
+            $(function() {
+                $(".yd_tc_btn").bind("click", function() {
+                    $(".yd_tc").show();
+                    setTimeout(function() {
+                        $(".yd_tc").hide();
+                    }, 1000)
+                })
+    
+            })
+        </script>-->
+    <script type="text/javascript">
+
+        $(function() {
+//                           var num = $("input[name=inputnum]").val();
+            var num = "{$goods.num}";
+            $("input[name=goods_num]").val(num);
+            $("input[name=inputnum]").keyup(function() {
+                var inputnum = $(this).val();
+                if (inputnum > num) {
+                    $("input[name=inputnum]").val(num);
+                    layer.msg('退货数量不能大于购买数量');
+                    return false;
+                } else {
+                    $("input[name=goods_num]").val(inputnum);
+                }
+            });
+
+            // 增加商品数量
+            $('.coun-plu').on('click', function() {
+                var _temp_num = 0;
+                if (isNaN(parseInt($('#coun-num').val()))) {
+                    _temp_num = 0;
+                } else {
+                    _temp_num = parseInt($('#coun-num').val());
+                }
+                _temp_num = _temp_num + 1
+                if (_temp_num > num) {
+                    _temp_num = num;
+                }
+                $('#coun-num').val(_temp_num);
+                $("input[name=goods_num]").val(_temp_num);
+            });
+            // 减少商品数量
+            $('.coun-min').on('click', function() {
+                var _tmp = 0;
+                if ($('#coun-num').val() > 1) {
+                    _tmp = $('#coun-num').val() - 1;
+                    $('#coun-num').val(parseInt(_tmp));
+                    $("input[name=goods_num]").val(_tmp);
+                } else {
+                    $('#coun-num').val(1);
+                    $("input[name=goods_num]").val(1);
+                }
+            });
+
+            if ($('form.validate').length) {
+                $('form.validate').validate({
+                    rules: {
+                        resion_id: {
+                            required: true,
+                        },
+                        buyer_message: {
+                            required: true,
+                        },
+                        pics: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        resion_id: {
+                            required: '请选择退货原因'
+                        },
+                        buyer_message: {
+                            required: '请输入退货说明'
+                        },
+                        pics: {
+                            required: '请上传商品图片'
+                        }
+                    },
+                    errorPlacement: function(error, element) {
+                        error.appendTo(element.parent().find("em"));
+                    },
+                                      /* 重写错误显示消息方法,以alert方式弹出错误消息 */  
+                            showErrors : function(errorMap, errorList) {  
+                             var msg = "";  
+                             $.each(errorList, function(i, v) {  
+                              msg += (v.message +'!' + "\r\n");  
+                             });  
+                             if (msg != "")  
+                              layer.msg(msg);  
+                            },
+                });
+            }
+        });
+    </script>
+    <script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+    <script type="text/javascript">
+  	//上传照片
+  	$(".load_btn").click(function(){
+  		if($("#comments_imgs li").length >=3){
+  			return false;
+  		}
+  		return true;
+  	});
+  	
+    $("#pics").change(function()
+    {
+      var file = this.files[0];
+    	if ((!file || !/image/.test(file.type))) {
+    		alert('图片格式不正确！');
+    		return;
+    	}
+    	
+      var URL = window.URL || window.webkitURL;
+      this.value = ''; // 清空临时数据
+      var imgn= new Image();
+      imgn.src = URL.createObjectURL(file);
+      imgn.onload = function() {
+    	var imgW = this.width;
+    	var imgH = this.height;
+
+      if(imgW>imgH){
+    		var sx=(imgW-imgH)/2,sy=0,swh=imgH;
+    	}else{
+    		var sx=0,sy=(imgH-imgW)/2,swh=imgW;
+    	}
+    	
+    	//生成canvas
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+    		var cvsW=200,cvsH=200;
+        $(canvas).attr({width : 200, height : 200});
+        ctx.drawImage(imgn, sx, sy, swh, swh,0,0,cvsW,cvsH);
+
+    		base64 = canvas.toDataURL('image/png', .9 );
+    		var result = {
+                base64 : base64,
+                clearBase64: base64.substr( base64.indexOf(',') + 1 )
+               };
+
+    		$.post("{:U('Refund/update_pic')}",{pic : result.clearBase64},function(rs)
+    		{			
+    			if(rs.error=='1'){
+    				alert(rs.message);
+    			}else{
+    				var src = result.base64;
+    				$("#comments_imgs").append('<li><a href="javascript:void(0);"><img class="preview-imgli" src="'+src+'" width="60"></a><div class="picli-mask btn-close-del"><span onclick="drop_pic(this)" class="remove_btn">X</span></div><input type="hidden" name="back_pic[]" value="'+rs.content+'" /></li>');
+    				//$(obj).find(".pic_list").append("<li class='back_pic'><img src='"+result.base64+"' /><span onclick='drop_pic(this)' class='remove_btn'>X</span><input type='hidden' name='back_pic[]' value='"+rs.content+"' /></li>");
+    			}
+    		},"json");
+      };
+    });
+
+    //删除图片
+    function drop_pic(obj)
+    {
+    	if(!confirm("确定要删除吗？"))
+    	 {
+    		return false;
+    	 }
+    	
+    	var filename = $(obj).parent().parent().find('input').val();
+    	$.post("{:U('Refund/drop_pic')}",{filename: filename}, function(data){
+    		if (data.error == '0') {
+    			$(obj).parent().parent().remove();
+    		}
+    		if(data.message){
+    			alert(data.message);
+    		}
+    	},'json');
+    }
+    
+        //多图上传图片
+        /* $(function() {
+            // 初始化上传插件
+            $("#pics").uploadify({
+                "height": 30,
+                "swf": "__STATIC__/uploadify/uploadify.swf",
+                "fileObjName": "download",
+                "buttonText": "",
+                "uploader": "{:U('File/uploadPicture',array('session_id'=>session_id()))}",
+                "width": 120,
+                'removeTimeout': 1,
+                'fileTypeExts': '*.jpg; *.png; *.gif;',
+                'multi': true,
+                'queueSizeLimit': 3,
+                "onUploadSuccess": uploadPicturepics,
+                'formData': {'pagefrom': 'comments'},
+                'onFallback': function() {
+                    alert('未检测到兼容版本的Flash.');
+                }
+            });
+        });
+        function uploadPicturepics(file, datas) {
+            console.log()
+            if (file.index > 2 && $("#comments_imgs").children("li").length > 2) {
+                return false;
+            }
+            var data = $.parseJSON(datas);
+            var src = '';
+            if (data.status) {
+                src = data.url || '__PICURL__' + data.path;
+                var html = "<li><a href=\"javascript:void(0);\"><img class=\"preview-imgli\"  src=\"" + src + "\" width=\"60\" data-id=\"" + data.id + "\"></a><div class=\"picli-mask btn-close-del\" ></div></li>";
+                picsbox = $("#comments_imgs");
+                picsbox.append(html)
+                picArr = [];
+                for (var i = 0; i < picsbox.children("li").length; i++) {
+                    var data_id = picsbox.children('li:eq(' + i + ')').find('img').attr('data-id');
+                    if (data_id) {
+                        picArr.push(data_id);
+                    }
+                }
+                ;
+                picStr = picArr.join(',');
+                $('#pics_id').val(picStr);
+                $('.btn-close-del').click(function(event) {
+                    event.preventDefault();
+                    $(this).parent().remove();
+                    picsbox = $("#comments_imgs");
+                    picArr = [];
+                    for (var i = 0; i < picsbox.children("li").length; i++) {
+                        var data_id = picsbox.children('li:eq(' + i + ')').find('img').attr('data-id');
+                        if (data_id) {
+                            picArr.push(data_id);
+                        }
+                    }
+                    ;
+                    picStr = picArr.join(',');
+                    $('#pics_id').val(picStr);
+                });
+            } else {
+                alert("上传出错");
+            }
+        } */
+    </script>
+</block>

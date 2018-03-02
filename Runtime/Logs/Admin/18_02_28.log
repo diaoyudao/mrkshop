@@ -1,0 +1,50 @@
+[ 2018-02-28T09:45:59+08:00 ] 127.0.0.1 /admin.php?s=/Public/login.html
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+NOTIC: [8] Use of undefined constant __PICURL__ - assumed '__PICURL__' D:\wamp64\www\mrkshop\ThinkPHP\Library\Behavior\ContentReplaceBehavior.class.php 第 39 行.
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000500s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000500s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.016002s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.016502s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.000500s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.000500s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.000500s ]
+INFO: [ app_end ] --END-- [ RunTime:0.000500s ]
+
+[ 2018-02-28T09:46:19+08:00 ] 127.0.0.1 /admin.php?s=/Public/login.html
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000500s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001001s ]
+NOTIC: [8] Undefined index: lite D:\wamp64\www\mrkshop\ThinkPHP\Library\Think\Db.class.php 第 37 行.
+NOTIC: [8] ob_end_clean(): failed to delete buffer. No buffer to delete D:\wamp64\www\mrkshop\ThinkPHP\Library\Think\Controller.class.php 第 214 行.
+
+[ 2018-02-28T09:46:36+08:00 ] 127.0.0.1 /admin.php?s=/Public/login.html
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000501s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001001s ]
+NOTIC: [8] Undefined index: lite D:\wamp64\www\mrkshop\ThinkPHP\Library\Think\Db.class.php 第 37 行.
+NOTIC: [8] ob_end_clean(): failed to delete buffer. No buffer to delete D:\wamp64\www\mrkshop\ThinkPHP\Library\Think\Controller.class.php 第 214 行.
+
+[ 2018-02-28T09:47:00+08:00 ] 127.0.0.1 /admin.php?s=/Public/login.html
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000500s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000500s ]
+NOTIC: [8] ob_end_clean(): failed to delete buffer. No buffer to delete D:\wamp64\www\mrkshop\ThinkPHP\Library\Think\Controller.class.php 第 214 行.
+
+[ 2018-02-28T10:31:30+08:00 ] 127.0.0.1 /admin.php?s=/Public/login.html
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+NOTIC: [8] Use of undefined constant __PICURL__ - assumed '__PICURL__' D:\wamp64\www\mrkshop\ThinkPHP\Library\Behavior\ContentReplaceBehavior.class.php 第 39 行.
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000500s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.006001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.006501s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.000500s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.000500s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.000500s ]
+INFO: [ app_end ] --END-- [ RunTime:0.000500s ]
+

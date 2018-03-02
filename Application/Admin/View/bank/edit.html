@@ -1,0 +1,60 @@
+<extend name="Public/base"/>
+
+<block name="body">
+	<div class="main-title">
+		<h2>
+			{$info['id']?'编辑':'新增'}银行账号
+			<notempty name="pid">
+				[&nbsp;父导航：<a href="{:U('index','pid='.$pid)}">{$parent.title}</a>&nbsp;]
+			</notempty>
+		</h2>
+	</div>
+	<form action="{:U()}" method="post" class="form-horizontal">
+		<input type="hidden" name="pid" value="{$pid}">
+		<div class="form-item">
+			<label class="item-label">所属频道</label>
+			<div class="controls">
+				<select class="select" id="domainid" name="domainid"> 
+				    <volist name="banklist" id="bankvo">
+					    <option value="{$bankvo.id}" <eq name="bankvo[id]" value="$info['domainid']">selected</eq>>{$bankvo.name}</option>
+				    </volist>
+				</select>
+			</div>
+		</div>
+		<div class="form-item">
+			<label class="item-label">银行名称<span class="check-tips">（用于显示的文字）</span></label>
+			<div class="controls">
+				<input type="text" class="text input-large" name="bankname" value="{$info.bankname|default=''}">
+			</div>
+		</div>
+		<div class="form-item">
+			<label class="item-label">银行账号<span class="check-tips"></span></label>
+			<div class="controls">
+				<input type="text" class="text input-large" name="bankcode" value="{$info.bankcode|default=''}">
+			</div>
+		</div>
+		<div class="form-item">
+			<label class="item-label">开户人姓名<span class="check-tips"></span></label>
+			<div class="controls">
+				<input type="text" class="text input-large" name="bankuser" value="{$info.bankuser|default=''}">
+			</div>
+		</div>
+		<div class="form-item">
+			<label class="item-label">优先级<span class="check-tips">（导航显示顺序）</span></label>
+			<div class="controls">
+				<input type="text" class="text input-small" name="weight" value="{$info.weight|default='0'}">
+			</div>
+		</div>
+		<div class="form-item">
+			<input type="hidden" name="id" value="{$info.id|default=''}">
+			<button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+			<button class="btn btn-return" onclick="javascript:history.back(-1);return false;">返 回</button>
+		</div>
+	</form>
+</block>
+<block name="script">
+<script type="text/javascript" charset="utf-8">
+	//导航高亮
+	highlight_subnav('{:U('index')}');
+</script>
+</block>

@@ -1,0 +1,91 @@
+<extend name="Base/common_index"/>
+<block name="style">
+    <style type="text/css">
+        html{
+            background-color: #fff;
+        }
+    </style>
+</block>
+<!-- 头部 -->
+<block name="body">
+    <!--头部 S-->
+    <div class="login-2">
+        <div class="herder">
+            <a href="javascript:history.go(-1);" class="back"><i></i></a>
+            <h3>注册2/2</h3>
+            <a class="login" href="javascript:;">登录</a>
+        </div>
+        <div class="phone">注册帐号：{$reg_info.mobile}</div>
+        <div class="main">
+            <form action="{:U('member/savememberinfo')}" method="post" class="validate" onsubmit="validateCallback(this, dialogAjaxDone);
+                    return false;">
+                <ul>
+                    <li class="clear"><label for="">登录密码</label><input type="password" name="password" id="password" placeholder="请输入密码" /></li>
+                    <li class="clear"><label for="">确认密码</label><input type="password" name="repassword" id="repassword" placeholder="请再次输入密码" /></li>
+                    <li class="clear"><label for="">昵称</label><input type="text" name="nickname" id="nickname" placeholder="请输入昵称" /></li>
+                    <li class="clear"> <input class="next" type="submit" id="" value="立即注册" /></li>
+                </ul>
+                <p>注册即视为同意<a href="javascript:;">妙品生活协议</a>
+                    <input type="checkbox" name="agree" style="display: none;" checked="checked" id="agree" value="1" /></p>
+            </form>
+        </div>
+    </div>
+</block>
+<block name="script"> 
+    <script src="__JS__/jquery.validate.js" type="text/javascript"></script>
+    <script type="text/javascript">
+                $(function() {
+                    if ($('form.validate').length) {
+                        $('form.validate').validate({
+                            rules: {
+                                password: {
+                                    required: true,
+                                    rangelength: [6, 18]
+                                },
+                                repassword: {
+                                    required: true,
+                                    rangelength: [6, 18]
+                                },
+                                nickname:{
+                                    required: true, 
+                                },
+                                agree: {
+                                    required: true
+                                }
+
+
+                            },
+                            messages: {
+                                password: {
+                                    required: '输入登录密码',
+                                    rangelength: "密码介于{0}和{1}之间的字符串"
+                                },
+                                repassword: {
+                                    required: '请输入确认密码',
+                                    rangelength: "密码介于{0}和{1}之间的字符串",
+                                    equalTo: '#password'
+                                },
+                                 nickname:{
+                                    required: '请输入昵称', 
+                                },
+                                agree: {
+                                    required: '请阅读并同意该协议'
+                                }
+                            },
+//                            errorPlacement: function(error, element) {
+//                                // error.appendTo(element.parent().find("em"));
+//                            }
+ /* 重写错误显示消息方法,以alert方式弹出错误消息 */  
+                            showErrors : function(errorMap, errorList) {  
+                             var msg = "";  
+                             $.each(errorList, function(i, v) {  
+                              msg += (v.message +'!' + "\r\n");  
+                             });  
+                             if (msg != "")  
+                              layer.msg(msg);  
+                            },
+                        });
+                    }
+                });
+    </script>
+</block> 

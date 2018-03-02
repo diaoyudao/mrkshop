@@ -1,0 +1,255 @@
+<extend name="Base/member_common"/>
+<block name="body">
+    <!-- 内容 -->
+    <div class="wrap" style="background-color: #fafafa;">
+        <div class="guidance towp"><a href="javascript:;">首页</a><a href="javascript:;"> > 会员首页</a><a href="javascript:;"> > 评价管理</a></div>
+        <div class="content_cm towp clear">
+            <div class="content_left">
+                <include file="Member/member_menu"/>
+            </div>
+            <div class="content_right personal Address">
+                <h2 style="margin-bottom: 10px;">收货地址</h2>
+                <if condition="!$list  OR (I('flag') eq 'update') ">
+                    <div class="message_box">
+                        <!--<h3><a href="{:U('member/address',array('flag'=>'update'))}">新增收货地址</a></h3>-->
+                        <div class="write">
+                            <form method="post" name="form" action="{:U('Member/save')}" class="validate" id="addaddress" onsubmit="validateCallback(this, dialogAjaxDone);
+                                    return false;">
+                                <p><label for=""><i>*</i>收货人姓名：</label>
+                                    <input type="text" name="realname" value="{$nowaddress['realname']}" id="realname" placeholder="请输入姓名"/></p>
+                                <p><label for=""><i>*</i>身份证号码：</label>
+                                    <input type="text" name="card_no" id="card_no" value="{$nowaddress['card_no']}" placeholder="请输入身份证号码"/></p>
+                                <p class="in" id="selectaddress">
+                                    <label for=""><i>*</i>收货地址：</label>
+                                    <select id="cmbProvince"  name="province" class="prov"></select>
+                                    <em>省</em>
+                                    <select id="cmbCity" name="city" class="city"></select>
+                                    <em>市</em>
+                                    <select id="cmbArea" name="area"  class="dist"></select>	
+                                    <em>区/县</em>	
+                                </p>
+                                <p class="jd">
+                                    <input type="text" name="address" id="address"  value="{$nowaddress['address']}" placeholder="请输入街道名称" />
+                                </p>
+                                <p><label for=""><i>*</i>邮政编码：</label>
+                                    <input type="text" name="youbian" value="{$nowaddress['youbian']}" id="" placeholder="请输入邮政编码"/>
+                                </p>
+                                <p><label for=""><i>*</i>手机号：</label><input type="text" name="cellphone" value="{$nowaddress['cellphone']}" id="" placeholder="请输入手机号"/></p>
+                                <p><label for="">电话号：</label><input type="text" name="phone" value="{$nowaddress['phone']}" id="" placeholder="请输入电话号"/></p>
+                                <p class="default">
+                                <if condition="$nowaddress['isdefault'] eq 1">
+                                    <label><input name="isdefault" type="checkbox" checked="checked" class="chk"><span>设为默认地址</span></label>
+                                    <else/>
+                                    <label> <input  name="isdefault" type="checkbox" class="chk"><span>设为默认地址</span></label>
+                                </if>
+                                </p>
+                                <input type="hidden" value="{$nowaddress['id']}" name="id" class="text">
+                                <input class="save" type="submit" name="submit-add" id="submit-add" value="保存" />
+                            </form>
+                        </div>
+                    </div>
+                </if>
+
+                <div class="add" id="myaddresslist">
+                    <!--<h2>收货地址</h2>-->
+                    <div class="add2  clear" style="padding:0">
+                        <ul>
+                            <volist name="list" id="myaddress">
+                                <li  <eq name="myaddress.isdefault" value="1">class="active6"</eq> >
+                                    <h3><span class="name">{$myaddress.realname}</span><span class="phone">{$myaddress.cellphone}</span></h3>
+                                    <p>{$myaddress.province} {$myaddress.city} {$myaddress.area} {$myaddress.address}</p>
+                                    <i class="line2"></i>
+                                    <p class="user-id">身份证号：{$myaddress.card_no}</p>
+                                    <div class="edit ">
+                                        <!--<input type="radio" name="mysender" class="ra" value="{$myaddress.id}" <eq name="myaddress.isdefault" value="1"> checked="checked" </eq> />-->
+                                        <a class="b-btn edit1" href="{:U('member/address',array('id'=>$ao['id'],'flag'=>'update'))}">编辑</a>
+                                        <a  class="b-btn" href="javascript:delAddress({$myaddress.id});">删除</a>
+                                    </div>
+                                    <a  class="setDef bg" addressid='{$myaddress.id}' onclick='defaultaddress(this)' title="设置默认地址"></a>
+                                </li>
+                            </volist>
+                            <li class="toAdd">
+                                <a href="{:U('member/address',array('flag'=>'update'))}">
+                                    <i></i>
+                                    添加地址
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="address_box" style='display: none;'>
+                    <volist name="list" id="ao" empty='没有收货地址'>
+                        <div class="address_1">
+                            <h3>{$ao['realname']} ：{$ao['cellphone']}</h3>
+                            <p>{$ao['province']}{$ao['city']}{$ao['area']}{$ao['address']}</p>
+                            <p>身份证号：{$ao['card_no']}</p>
+                            <ul class="clear">
+                                <li><a <eq name="ao['isdefault']" value="1">class="setDef"</eq>  href="javascript:;">默认地址</a></li>
+                                <li><a href="javascript:;" onclick="delAddress({$ao['id']})">删除</a></li>
+                                <li><a class="edit1" href="{:U('member/address',array('id'=>$ao['id'],'flag'=>'update'))}">编辑</a></li>
+                            </ul>
+                        </div>
+                    </volist>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</block>
+<block name='script'>
+    <script src="__JS__/jquery.validate.js" type="text/javascript"></script>
+    <script src="__JS__/jquery.cityselect.js" type="text/javascript"></script>
+    <script>
+                                    function delAddress(aid) {
+                                        //判断新地址是否选中,获取地址id
+                                        if (confirm("确定要删除该地址吗？"))
+                                        {
+                                              if (aid == null) {
+                                                  alert("选择地址无效!");
+                                                return false;
+                                            } else {
+                                                $.ajax({
+                                                    type: 'post', //传送的方式,get/post
+                                                    url: '{:U("Member/deleteAddress")}', //发送数据的地址
+                                                    data: {id: aid},
+                                                    dataType: "json",
+                                                    success: function(data)
+                                                    {
+                                                        $("#message").html(data.msg).show();
+                                                        setTimeout(function() {
+                                                            $('#message').hide();
+                                                            window.location.reload();
+                                                        }, 1500);
+                                                    },
+                                                    error: function(event, XMLHttpRequest, ajaxOptions, thrownError) {
+                                                        alert(XMLHttpRequest + thrownError);
+                                                    }
+                                                });      
+                                             }
+                                        }
+                                    }
+
+
+                                    function defaultaddress(obj) {
+
+                                        var address_id = $(obj).attr("addressid");
+                                        $.ajax({
+                                            type: 'post', //传送的方式,get/post
+                                            url: '{:U("Member/defaultaddress")}', //发送数据的地址
+                                            data: {id: address_id},
+                                            dataType: "json",
+                                            success: function(data)
+                                            {
+                                                if(data.status){
+                                                    layer.msg('设置默认地址成功');
+                                                    setTimeout(function() {
+                                                        window.location.reload();
+                                                    }, 100);
+                                                }else{
+                                                    layer.msg('设置默认地址失败');
+                                                }
+                                            },
+                                            error: function(event, XMLHttpRequest, ajaxOptions, thrownError) {
+                                                alert(XMLHttpRequest + thrownError);
+                                            }
+                                        });
+
+                                    }
+
+                                    $(function() {
+                                        var prov = "{$nowaddress['province']}";
+                                        if (prov) {
+                                            $("#selectaddress").citySelect({
+                                                prov: "{$nowaddress['province']}",
+                                                city: "{$nowaddress['city']}",
+                                                nodata: "{$nowaddress['area']}"
+                                            });
+                                        } else {
+                                            $("#selectaddress").citySelect({
+                                                prov: "北京",
+                                                city: "东城区",
+                                                nodata: "none"
+                                            });
+                                        }
+
+                                        $('#addaddress').validate({
+                                            rules: {
+                                                realname: {
+                                                    required: true
+                                                },
+                                                card_no: {
+                                                    required: true,
+                                                    rangelength: [18, 18]
+                                                },
+                                                cellphone: {
+                                                    required: true,
+                                                    ismobile: true
+                                                },
+                                                address: {
+                                                    required: true
+                                                },
+                                                youbian: {
+                                                    rangelength: [6, 6]
+                                                }
+                                            },
+                                            messages: {
+                                                realname: {
+                                                    required: '收货人不能为空'
+                                                },
+                                                card_no: {
+                                                    required: '身份证不能为空',
+                                                    rangelength: "身份证格式不正确"
+                                                },
+                                                cellphone: {
+                                                    required: '手机号码不能为空'
+                                                },
+                                                address: {
+                                                    required: '收货详细地址不能为空'
+                                                },
+                                                youbian: {
+                                                    rangelength: '邮编长度为6位数字'
+                                                }
+                                            },
+                                            errorElement: 'i',
+                                            errorClass: 'ts2',
+                                            highlight: function(e) {
+                                                //   $(e).addClass('ts2');
+                                            },
+                                            success: function(e) {
+                                                $(e).removeClass('ts2');
+                                            }
+                                        });
+                                        jQuery.validator.addMethod('ismobile', function(value, element) {
+                                            var length = value.length;
+                                            var mobile = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0-9]|170|177)\d{8}$/;
+                                            return this.optional(element) || (length == 11 && mobile.test(value));
+                                        }, '请正确填写手机号码');
+
+                                    });
+
+//                                    $("#submit-add").click(function() {
+//                                        if (!$("#addaddress").valid()) {
+//                                            return false;
+//                                        }
+//                                        var url = $("#addaddress").attr("action");
+//                                        $.ajax({
+//                                            type: 'post', //传送的方式,get/post
+//                                            url: url, //发送数据的地址
+//                                            data: $("#addaddress").serialize(),
+//                                            dataType: "json",
+//                                            success: function(data) {
+//                                                if (data.status == 1) {
+//                                                    window.location.href = "{:U('member/address')}";
+//                                                } else {
+//                                                    layer.msg(data.info)
+//                                                }
+//                                            },
+//                                            error: function(event, XMLHttpRequest, ajaxOptions, thrownError) {
+//                                                alert("表单错误，" + XMLHttpRequest + thrownError);
+//                                            }
+//                                        });
+//                                        return false;
+//                                    });
+    </script>
+</block>

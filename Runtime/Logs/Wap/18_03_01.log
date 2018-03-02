@@ -1,0 +1,105 @@
+[ 2018-03-01T10:48:01+08:00 ] 127.0.0.1 /Wap/Member/index.html
+SQL: SHOW COLUMNS FROM `mrk_category` [ RunTime:0.0035s ]
+SQL: SELECT `id`,`name`,`pid`,`title`,`domainid`,`icon` FROM `mrk_category` WHERE `display` = 1 AND `ismenu` = 2 ORDER BY sort asc  [ RunTime:0.0045s ]
+SQL: SHOW COLUMNS FROM `mrk_subdomain` [ RunTime:0.0010s ]
+SQL: SELECT `id`,`name`,`url`,`mark`,`meta_title`,`icon`,`keywords` FROM `mrk_subdomain` WHERE `status` = 1 AND `id` <> 1 ORDER BY weight DESC  [ RunTime:0.0010s ]
+SQL: SELECT `id`,`name`,`pid`,`title` FROM `mrk_category` WHERE `ismenu` = 3 AND ( name in ('shouhoufuwu','xinshourumen','guanyuwomen','zhifupeisongfangshi','bangzhuzhongxin') ) AND `display` = 1 AND `status` = 1 ORDER BY sort asc  [ RunTime:0.0010s ]
+SQL: SELECT `id`,`name`,`pid`,`title` FROM `mrk_category` WHERE `ismenu` = 3 AND ( id in (38,39,35,37,36) OR pid in (38,39,35,37,36) ) AND `display` = 1 AND `status` = 1 ORDER BY sort asc  [ RunTime:0.0005s ]
+SQL: SHOW COLUMNS FROM `mrk_shopcart` [ RunTime:0.0065s ]
+SQL: SHOW COLUMNS FROM `mrk_member` [ RunTime:0.0015s ]
+SQL: SELECT * FROM `mrk_shopcart` WHERE `is_system` = 0 AND `uid` = 113 AND `goodid` > 1  [ RunTime:0.0005s ]
+SQL: SHOW COLUMNS FROM `mrk_products_group` [ RunTime:0.0010s ]
+NOTIC: [2] Missing argument 1 for Common\Model\ShopcartModel::getCntByuid(), called in D:\wamp64\www\mrkshop\Application\Wap\Controller\HomeController.class.php on line 919 and defined D:\wamp64\www\mrkshop\Application\Common\Model\ShopcartModel.class.php 第 41 行.
+SQL: SELECT * FROM `mrk_shopcart` WHERE `uid` = 113 AND `goodid` > 1  [ RunTime:0.0025s ]
+NOTIC: [2] Missing argument 1 for Common\Model\ShopcartModel::getNumByuid(), called in D:\wamp64\www\mrkshop\Application\Wap\Controller\HomeController.class.php on line 920 and defined D:\wamp64\www\mrkshop\Application\Common\Model\ShopcartModel.class.php 第 85 行.
+NOTIC: [2] Missing argument 1 for Common\Model\ShopcartModel::getCnt(), called in D:\wamp64\www\mrkshop\Application\Common\Model\ShopcartModel.class.php on line 90 and defined D:\wamp64\www\mrkshop\Application\Common\Model\ShopcartModel.class.php 第 32 行.
+SQL: SELECT * FROM `mrk_shopcart` WHERE `uid` = 113 AND `goodid` > 1  [ RunTime:0.0010s ]
+NOTIC: [2] Missing argument 1 for Common\Model\ShopcartModel::getPriceByuid(), called in D:\wamp64\www\mrkshop\Application\Wap\Controller\HomeController.class.php on line 921 and defined D:\wamp64\www\mrkshop\Application\Common\Model\ShopcartModel.class.php 第 66 行.
+NOTIC: [2] Missing argument 1 for Common\Model\ShopcartModel::getCnt(), called in D:\wamp64\www\mrkshop\Application\Common\Model\ShopcartModel.class.php on line 70 and defined D:\wamp64\www\mrkshop\Application\Common\Model\ShopcartModel.class.php 第 32 行.
+SQL: SELECT * FROM `mrk_shopcart` WHERE `uid` = 113 AND `goodid` > 1  [ RunTime:0.0010s ]
+SQL: SHOW COLUMNS FROM `mrk_channel` [ RunTime:0.0010s ]
+SQL: SELECT `id` FROM `mrk_channel` WHERE `types` = 0 AND `domainid` = 1 AND `status` = 1 ORDER BY sort asc  [ RunTime:0.0005s ]
+SQL: SELECT * FROM `mrk_channel` WHERE `id` = 51 LIMIT 1   [ RunTime:0.0005s ]
+SQL: SELECT * FROM `mrk_channel` WHERE `id` = 52 LIMIT 1   [ RunTime:0.0030s ]
+SQL: SELECT * FROM `mrk_channel` WHERE `id` = 53 LIMIT 1   [ RunTime:0.0010s ]
+SQL: SELECT * FROM `mrk_channel` WHERE `id` = 54 LIMIT 1   [ RunTime:0.0015s ]
+SQL: SELECT * FROM `mrk_channel` WHERE `id` = 55 LIMIT 1   [ RunTime:0.0015s ]
+SQL: SELECT * FROM `mrk_channel` WHERE `id` = 56 LIMIT 1   [ RunTime:0.0005s ]
+SQL: SHOW COLUMNS FROM `mrk_favortable` [ RunTime:0.0005s ]
+SQL: SELECT * FROM `mrk_favortable` WHERE ( uid='113' )  [ RunTime:0.0005s ]
+SQL: SHOW COLUMNS FROM `mrk_usercoupon` [ RunTime:0.0010s ]
+SQL: SELECT COUNT(*) AS tp_count FROM `mrk_usercoupon` WHERE ( uid='113' ) LIMIT 1   [ RunTime:0.0005s ]
+SQL: SHOW COLUMNS FROM `mrk_member` [ RunTime:0.0100s ]
+SQL: SELECT * FROM `mrk_member` WHERE `uid` = 113 LIMIT 1   [ RunTime:0.0020s ]
+SQL: SHOW COLUMNS FROM `mrk_ucenter_member` [ RunTime:0.0010s ]
+SQL: SELECT * FROM `mrk_ucenter_member` WHERE `id` = 113 LIMIT 1   [ RunTime:0.0035s ]
+SQL: SHOW COLUMNS FROM `mrk_member_wx` [ RunTime:0.0010s ]
+SQL: SELECT * FROM `mrk_member_wx` WHERE `uid` = 113 LIMIT 1   [ RunTime:0.0015s ]
+SQL: SHOW COLUMNS FROM `mrk_document` [ RunTime:0.0005s ]
+SQL: SHOW COLUMNS FROM `mrk_document_product` [ RunTime:0.0005s ]
+SQL: SELECT COUNT(*) AS tp_count FROM mrk_document document LEFT JOIN mrk_document_product document_product ON document_product.id=document.id LEFT JOIN mrk_subdomain subdomain ON document.domainid=subdomain.id WHERE document.status >= 0 AND document.id IN ('1905') LIMIT 1   [ RunTime:0.0005s ]
+SQL: SELECT document.id AS id,document.uid AS uid,document.name AS name,document.title AS title,document.category_id AS category_id,document.description AS description,document.root AS root,document.pid AS pid,document.model_id AS model_id,document.type AS type,document.position AS position,document.link_id AS link_id,document.cover_id AS cover_id,document.display AS display,document.deadline AS deadline,document.attach AS attach,document.view AS view,document.comment AS comment,document.extend AS extend,document.level AS level,document.create_time AS create_time,document.update_time AS update_time,document.status AS status,document.price AS price,document.tuan_price AS tuan_price,document.qg_price AS qg_price,document.ms_price AS ms_price,document.brand AS brand,document.sales AS sales,document.percent AS percent,document.domainid AS domainid,document.brandid AS brandid,document.keywords AS keywords,document.ifcheck AS ifcheck,document.collectionnum AS collectionnum,document.ishot AS ishot,document.meta_title AS meta_title,document.meta_keyword AS meta_keyword,document.meta_description AS meta_description,document_product.issales AS issales,document_product.totalsales AS totalsales,document_product.marketprice AS marketprice,document_product.member_level_price AS member_level_price,document_product.warehouse AS warehouse,document_product.product_type AS product_type,document_product.iszhiyou AS iszhiyou,document_product.affilite_a AS affilite_a,document_product.affilite_b AS affilite_b,document_product.product_unit AS product_unit,document_product.haiguan_rate AS haiguan_rate,document_product.weight AS weight,document_product.storage_alarm AS storage_alarm,document_product.yprice AS yprice,document_product.stock AS stock,document_product.content AS content,document_product.unionarticle AS unionarticle,document_product.volumedes AS volumedes,document_product.pcode AS pcode,document_product.pics AS pics,subdomain.mark AS channelname FROM mrk_document document LEFT JOIN mrk_document_product document_product ON document_product.id=document.id LEFT JOIN mrk_subdomain subdomain ON document.domainid=subdomain.id WHERE document.status >= 0 AND document.id IN ('1905') ORDER BY document.id desc LIMIT 0,16   [ RunTime:0.0010s ]
+SQL: SHOW COLUMNS FROM `mrk_picture` [ RunTime:0.0005s ]
+SQL: SELECT `id`,`path` FROM `mrk_picture` WHERE `id` = 4364  [ RunTime:0.0005s ]
+SQL: SELECT `id`,`name`,`pid`,`title`,`domainid` FROM `mrk_category` WHERE `display` = 1 AND `ismenu` = 2 ORDER BY sort asc  [ RunTime:0.0005s ]
+SQL: SELECT `id`,`name`,`url`,`mark`,`meta_title`,`icon`,`keywords` FROM `mrk_subdomain` WHERE `status` = 1 AND `id` <> 1 ORDER BY weight DESC  [ RunTime:0.0005s ]
+SQL: SELECT `id`,`name`,`pid`,`title` FROM `mrk_category` WHERE `ismenu` = 3 AND ( name in ('shouhoufuwu','xinshourumen','guanyuwomen','zhifupeisongfangshi','bangzhuzhongxin') ) AND `display` = 1 AND `status` = 1 ORDER BY sort asc  [ RunTime:0.0015s ]
+SQL: SELECT `id`,`name`,`pid`,`title` FROM `mrk_category` WHERE `ismenu` = 3 AND ( id in (38,39,35,37,36) OR pid in (38,39,35,37,36) ) AND `display` = 1 AND `status` = 1 ORDER BY sort asc  [ RunTime:0.0005s ]
+SQL: SELECT * FROM `mrk_shopcart` WHERE `is_system` = 0 AND `goodid` > 1 AND `uid` = 113  [ RunTime:0.0005s ]
+NOTIC: [2] Missing argument 1 for Common\Model\ShopcartModel::getCntByuid(), called in D:\wamp64\www\mrkshop\Application\Web\Controller\HomeController.class.php on line 922 and defined D:\wamp64\www\mrkshop\Application\Common\Model\ShopcartModel.class.php 第 41 行.
+SQL: SELECT * FROM `mrk_shopcart` WHERE `uid` = 113 AND `goodid` > 1  [ RunTime:0.0005s ]
+NOTIC: [2] Missing argument 1 for Common\Model\ShopcartModel::getNumByuid(), called in D:\wamp64\www\mrkshop\Application\Web\Controller\HomeController.class.php on line 923 and defined D:\wamp64\www\mrkshop\Application\Common\Model\ShopcartModel.class.php 第 85 行.
+NOTIC: [2] Missing argument 1 for Common\Model\ShopcartModel::getCnt(), called in D:\wamp64\www\mrkshop\Application\Common\Model\ShopcartModel.class.php on line 90 and defined D:\wamp64\www\mrkshop\Application\Common\Model\ShopcartModel.class.php 第 32 行.
+SQL: SELECT * FROM `mrk_shopcart` WHERE `uid` = 113 AND `goodid` > 1  [ RunTime:0.0005s ]
+NOTIC: [2] Missing argument 1 for Common\Model\ShopcartModel::getPriceByuid(), called in D:\wamp64\www\mrkshop\Application\Web\Controller\HomeController.class.php on line 924 and defined D:\wamp64\www\mrkshop\Application\Common\Model\ShopcartModel.class.php 第 66 行.
+NOTIC: [2] Missing argument 1 for Common\Model\ShopcartModel::getCnt(), called in D:\wamp64\www\mrkshop\Application\Common\Model\ShopcartModel.class.php on line 70 and defined D:\wamp64\www\mrkshop\Application\Common\Model\ShopcartModel.class.php 第 32 行.
+SQL: SELECT * FROM `mrk_shopcart` WHERE `uid` = 113 AND `goodid` > 1  [ RunTime:0.0000s ]
+SQL: SELECT `id` FROM `mrk_channel` WHERE `types` = 0 AND `domainid` = 1 AND `status` = 1 ORDER BY sort asc  [ RunTime:0.0005s ]
+SQL: SELECT * FROM `mrk_channel` WHERE `id` = 51 LIMIT 1   [ RunTime:0.0005s ]
+SQL: SELECT * FROM `mrk_channel` WHERE `id` = 52 LIMIT 1   [ RunTime:0.0005s ]
+SQL: SELECT * FROM `mrk_channel` WHERE `id` = 53 LIMIT 1   [ RunTime:0.0020s ]
+SQL: SELECT * FROM `mrk_channel` WHERE `id` = 54 LIMIT 1   [ RunTime:0.0010s ]
+SQL: SELECT * FROM `mrk_channel` WHERE `id` = 55 LIMIT 1   [ RunTime:0.0005s ]
+SQL: SELECT * FROM `mrk_channel` WHERE `id` = 56 LIMIT 1   [ RunTime:0.0010s ]
+SQL: SHOW COLUMNS FROM `mrk_order` [ RunTime:0.0015s ]
+SQL: SELECT COUNT(*) AS tp_count FROM `mrk_order` WHERE `uid` = 113 LIMIT 1   [ RunTime:0.0005s ]
+SQL: SELECT `id`,`orderid`,`tag`,`pricetotal`,`create_time`,`status`,`assistant`,`update_time`,`uid`,`shipprice`,`display`,`isover`,`order_type`,`ispay`,`total`,`tool`,`addressid`,`toolid`,`isdefault`,`info`,`shipway`,`invoice`,`message`,`backinfo`,`score`,`codeid`,`codemoney`,`send_name`,`send_contact`,`send_address`,`complete_time`,`send_time`,`domainid`,`distribution`,`payment_time`,`iscomment`,`refund_status`,`haiguan_rate_total`,`discount_amount`,`cancel_time`,`store_id`,`weight`,`pay_type`,`transaction_id`,`o_total`,`o_pricetotal`,`o_shipprice` FROM `mrk_order` WHERE `uid` = 113 ORDER BY id DESC LIMIT 0,16   [ RunTime:0.0010s ]
+SQL: SHOW COLUMNS FROM `mrk_shoplist` [ RunTime:0.0005s ]
+SQL: SELECT COUNT(*) AS tp_count FROM `mrk_order` WHERE ( uid=113 and status=-1 ) LIMIT 1   [ RunTime:0.0005s ]
+SQL: SELECT COUNT(*) AS tp_count FROM `mrk_order` WHERE ( uid='113' and status=1 ) LIMIT 1   [ RunTime:0.0000s ]
+SQL: SELECT COUNT(*) AS tp_count FROM `mrk_order` WHERE ( uid='113' and status='2' ) LIMIT 1   [ RunTime:0.0005s ]
+SQL: SELECT COUNT(*) AS tp_count FROM `mrk_order` WHERE ( uid='113' and status='3' ) LIMIT 1   [ RunTime:0.0005s ]
+SQL: SELECT COUNT(*) AS tp_count FROM `mrk_order` WHERE ( uid='113' and status='-2' ) LIMIT 1   [ RunTime:0.0010s ]
+SQL: SELECT COUNT(*) AS tp_count FROM `mrk_order` WHERE `uid` = 113 AND `status` = 3 AND `iscomment` = 0 LIMIT 1   [ RunTime:0.0005s ]
+SQL: SELECT COUNT(*) AS tp_count FROM `mrk_order` WHERE `uid` = 113 AND `status` = 3 AND `iscomment` = 1 LIMIT 1   [ RunTime:0.0005s ]
+SQL: SELECT COUNT(*) AS tp_count FROM `mrk_order` WHERE ( uid=113 ) LIMIT 1   [ RunTime:0.0005s ]
+SQL: SELECT * FROM `mrk_order` WHERE `create_time` < 1519613276 AND `status` = -1 AND `ispay` = 1  [ RunTime:0.0010s ]
+SQL: SELECT * FROM `mrk_order` WHERE `send_time` < 1519786076 AND `status` = 2 AND `ispay` = 2  [ RunTime:0.0010s ]
+SQL: SELECT * FROM `mrk_order` WHERE `complete_time` < 1519267676 AND `status` = 3 AND `iscomment` = 0  [ RunTime:0.0010s ]
+SQL: SHOW COLUMNS FROM `mrk_personenvelope` [ RunTime:0.0010s ]
+SQL: SELECT COUNT(*) AS tp_count FROM `mrk_personenvelope` WHERE `uid` = 113 AND `group` = 2 AND `status` = 1 LIMIT 1   [ RunTime:0.0005s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+NOTIC: [8] Undefined index: level_n D:\wamp64\www\mrkshop\Runtime\Cache\Wap\37ebb2b7b638f19f2ec2ee3b6875784f.php 第 48 行.
+NOTIC: [8] Undefined index: level D:\wamp64\www\mrkshop\Runtime\Cache\Wap\37ebb2b7b638f19f2ec2ee3b6875784f.php 第 48 行.
+NOTIC: [8] Undefined variable: guid D:\wamp64\www\mrkshop\Runtime\Cache\Wap\37ebb2b7b638f19f2ec2ee3b6875784f.php 第 240 行.
+NOTIC: [8] Undefined index: query D:\wamp64\www\mrkshop\Application\Common\Common\function.php 第 2236 行.
+NOTIC: [8] Undefined index: scheme D:\wamp64\www\mrkshop\Application\Common\Common\function.php 第 2237 行.
+NOTIC: [8] Undefined index: fragment D:\wamp64\www\mrkshop\Application\Common\Common\function.php 第 2247 行.
+NOTIC: [8] curl_setopt(): CURLOPT_SSL_VERIFYHOST no longer accepts the value 1, value 2 will be used instead D:\wamp64\www\mrkshop\ThinkPHP\Library\Vendor\Wxpay\WechatJSAPI.php 第 88 行.
+NOTIC: [8] Trying to get property of non-object D:\wamp64\www\mrkshop\ThinkPHP\Library\Vendor\Wxpay\WechatJSAPI.php 第 73 行.
+NOTIC: [2] unlink(./Runtime/Temp/2fb958b277ef2c80e43012ee8559807c.php): No such file or directory D:\wamp64\www\mrkshop\ThinkPHP\Library\Think\Cache\Driver\File.class.php 第 157 行.
+NOTIC: [8] curl_setopt(): CURLOPT_SSL_VERIFYHOST no longer accepts the value 1, value 2 will be used instead D:\wamp64\www\mrkshop\ThinkPHP\Library\Vendor\Wxpay\WechatJSAPI.php 第 88 行.
+NOTIC: [8] Trying to get property of non-object D:\wamp64\www\mrkshop\ThinkPHP\Library\Vendor\Wxpay\WechatJSAPI.php 第 59 行.
+NOTIC: [2] unlink(./Runtime/Temp/d41d8cd98f00b204e9800998ecf8427e.php): No such file or directory D:\wamp64\www\mrkshop\ThinkPHP\Library\Think\Cache\Driver\File.class.php 第 157 行.
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:3.225910s ]
+INFO: [ view_parse ] --END-- [ RunTime:3.225910s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.000500s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.000500s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.000500s ]
+INFO: [ app_end ] --END-- [ RunTime:0.000500s ]
+

@@ -1,0 +1,102 @@
+<extend name="Base/store_common"/>
+<block name="body">
+    <div class="wrap" style="background-color: #f5f5f5;">	
+        <div class="content_agency towp clear user_center user_center_pay">
+            <div class="content_left">
+                <include file="Member/member_menu"/>
+            </div>
+            <div class="content_right" style="border: 0;">
+                <h2><a href="#">订单管理</a> > 添加订单</h2>
+                <div class="step step2">
+
+                </div>
+                <form method="post" id='submit_order' action="{:U('Agent/order_step3')}">
+                    <table class="table table2">
+                        <tr>
+                            <td class="colum">选择支付方式</td>
+                            <td colspan="3">						                                    
+                                <div class="para">
+                                    <label for="100"><input type="radio" checked="checked" name="payment" id="100" value="现金支付" />现金支付</label>
+                                    <label for="101"><input type="radio" name="payment" id="101" value="刷卡" />刷卡</label>
+                                    <volist name="paymentlist" id="payment">
+                                        <label for="{$payment.id}"><input type="radio" name="payment" id="{$payment.id}" value="{$payment.payname}" />{$payment.payname}</label>
+                                    </volist>
+                                </div>
+                            </td>										
+                        </tr>
+                        <tr>
+                            <td class="colum">实际支付金额</td>
+                            <td colspan="3">
+                                <div class="para"> 
+                                    <input type="text" style="line-height: 30px; width: 100px; border: 1px salmon solid;" name='order_total' value="{$orderdetail.pricetotal}" class="tex" />
+                                    <span>订单时间支付金额可以老板与客户协商。</span>
+                                </div>
+                            </td>										
+                        </tr>
+                    </table>
+                    <table  class="table">
+                        <caption>商品信息</caption>
+                        <tr>
+                            <th>商品名称</th>
+                            <th>规格</th>
+                            <!--<th>商品编码</th>-->	
+                            <!--<th>货号</th>-->
+                            <!--<th>原价（元）</th>-->
+                            <th>会员价（元）</th>			
+                            <th>数量</th>
+                            <th>总价（元）</th>					
+                        </tr>
+                        <volist name='orderdetail.goodslist' id='goods' key='k'>
+                            <tr>
+                                <td>
+                                    <a href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}" style="float: left;">
+                                        <img src="{$goods['pics_img'][$goods['cover_id']]}"/>
+                                    </a>
+                                    <a style='border:none; width: 100%'  href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}">{$goods.goodid|get_good_name}</a>
+                                </td>
+                                <td>{$goods.parameters}</td>
+                                <!--<td>￥{$goods.price}</td>-->
+                                <td>￥{$goods.price}</td>
+                                <td>{$goods.num}</td>
+                                <td rowspan="{$orderdetail.productnum}">￥{$goods.total}</td>
+                            </tr>
+                        </volist>
+                        <tr>
+                            <td colspan="8">
+                                <div class="add_in">
+                                    <div class=" coun">
+                                        商品总金额：<span>￥{$orderdetail.total}</span>
+                                    </div>&nbsp;&nbsp;
+                                    <div class=" coun">
+                                        订单应付总金额：<span>￥{$orderdetail.pricetotal}</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="pag">
+                        <!--<a href="#">上一步</a>-->
+                        <input type="hidden" name='orderid' value="{$orderdetail.orderid}" />
+                        <input type="hidden" name='id' value="{$orderdetail.id}" />
+                        <a href="javascript:;;" onclick='submitform()'>下一步</a>
+                        <a class="cancel" href="{:U('Agent/orderlist')}">取消</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</block>
+<block name='script'>
+    <script>
+        // 提交表单
+        function submitform() {
+            var order_total = $("input[name=order_total]").val();
+            if (order_total <= 0) {
+                layer.msg("实际支付金额为空");
+                return false;
+            }
+            $("#submit_order").submit();
+
+        }
+    </script>
+</block>

@@ -1,0 +1,52 @@
+<if condition="session('memberinfo.member_type') eq 2">
+    <span class="centre_box"><a class="centre" href="javascript:;">管理中心</a></span>
+    <div class="menu">
+        <!--<div class="tit"><a href="javascript:;">管理中心</a></div>-->
+        <dl>
+            <dd><a <if condition="ACTION_NAME eq 'goodsmanage' and CONTROLLER_NAME eq Agent">class="current"</if>  href="{:U('Agent/goodsmanage')}">商品管理</a></dd>
+            <dd><a <if condition="in_array(ACTION_NAME,array('orderlist','orderdetail','ordership','orderpay')) and CONTROLLER_NAME eq Agent">class="current"</if>  href="{:U('Agent/orderlist')}">订单管理</a></dd>
+            <dd><a <if condition="ACTION_NAME eq 'membermanage' and CONTROLLER_NAME eq Agent">class="current"</if>  href="{:U('Agent/membermanage')}">会员管理</a></dd>
+            <dd><a <if condition="ACTION_NAME eq 'goodsmanage' and CONTROLLER_NAME eq Agent">class="current"</if>  href="{:U('Agent/goodsmanage')}">评价管理</a></dd>
+            <dd><a <if condition="ACTION_NAME eq 'refundmanage' and CONTROLLER_NAME eq Agent">class="current"</if>  href="{:U('Agent/refundmanage')}">退货管理</a></dd>
+            <dd><a <if condition="in_array(ACTION_NAME,array('statics','statclasses','statorder','statmember')) and CONTROLLER_NAME eq Agent">class="current"</if> href="{:U('Agent/statics')}">数据统计</a></dd>
+            <dd><a <if condition="ACTION_NAME eq 'storeinfo' and CONTROLLER_NAME eq Agent">class="current"</if>  href="{:U('Agent/storeinfo')}">门店资料</a></dd>
+            <dd><a <if condition="ACTION_NAME eq 'billmanage' and CONTROLLER_NAME eq Agent">class="current"</if>  href="{:U('Agent/billmanage',array('type'=>'log'))}">提成管理</a></dd>
+            <!--<dd <eq name='CONTROLLER_NAME' value='Express'> class="current"</eq>><a href="{:U('express/index')}">快件管理</a></dd>-->
+        </dl>
+    </div>
+</if>
+<if condition="session('memberinfo.member_type') eq 1">
+    <span class="centre_box"><a class="centre" href="javascript:;">管理中心</a></span>
+    <div class="menu">
+        <!--<div class="tit"><a href="javascript:;">管理中心</a></div>-->
+        <dl>
+            <dd><a <if condition="ACTION_NAME eq 'membermanage' and CONTROLLER_NAME eq Agent">class="current"</if>  href="{:U('Agent/membermanage')}">会员管理</a></dd>
+            <dd><a <if condition="ACTION_NAME eq 'billmanage' and CONTROLLER_NAME eq Agent">class="current"</if> href="{:U('Agent/billmanage',array('type'=>'log'))}">提成管理</a></dd>
+            <dd><a <if condition="in_array(ACTION_NAME,array('statics','statclasses','statorder','statmember')) and CONTROLLER_NAME eq Agent">class="current"</if> href="{:U('Agent/statics')}">数据统计</a></dd>
+        </dl>
+    </div>
+
+</if>
+
+
+<span class="centre_box"><a class="centre" href="{:U('member/index')}">会员中心</a></span>
+<div class="menu">
+    <!--<div class="tit"><a href="javascript:;">管理中心</a></div>-->
+    <dl>
+        <dd><a  <if condition="ACTION_NAME eq 'index' and CONTROLLER_NAME eq Member">class="current"</if> href="{:U('member/index')}">会员中心</a></dd>
+        <dd><a <eq name='ACTION_NAME' value='mycollection'> class="current"</eq> href="{:U('member/mycollection')}">我的收藏</a></dd>
+        <!--        <if condition="session('memberinfo.member_type') eq 1">
+                    <dd <eq name='CONTROLLER_NAME' value='Agent'> class="current"</eq>><a href="{:U('agent/index')}">代理管理</a></dd>
+                </if>-->
+        <!--        <if condition="session('memberinfo.member_type') eq 2">
+                    <dd <eq name='CONTROLLER_NAME' value='Agent'> class="current"</eq>><a href="{:U('agent/index')}">代理管理</a></dd>
+                    <dd <eq name='CONTROLLER_NAME' value='Express'> class="current"</eq>><a href="{:U('express/index')}">快件管理</a></dd>
+                </if>-->
+        <dd><a <eq name='CONTROLLER_NAME' value='Order'> class="current"</eq> href="{:U('order/index')}">订单管理</a></dd>
+        <dd><a <eq name='CONTROLLER_NAME' value='Comment'> class="current"</eq> href="{:U('Comment/index')}">评价管理</a></dd>
+        <dd><a <eq name='ACTION_NAME' value='address'> class="current"</eq> href="{:U('member/address')}">地址管理</a></dd>
+        <dd><a <eq name='CONTROLLER_NAME' value='Safety'> class="current"</eq> href="{:U('Safety/safety')}">安全验证</a></dd>
+        <dd><a <eq name='CONTROLLER_NAME' value='Refund'> class="current"</eq> href="{:U('refund/index')}">售后服务</a></dd>
+        <dd><a <eq name='CONTROLLER_NAME' value='Message'> class="current"</eq> href="{:U('Message/index')}">建议投诉</a></dd>
+    </dl>
+</div>

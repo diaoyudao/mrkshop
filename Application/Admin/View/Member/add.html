@@ -1,0 +1,179 @@
+<extend name="Public/base"/>
+
+<block name="body">
+    <div class="main-title">
+        <h2>新增用户</h2>
+    </div>
+    <div class="tab-wrap">
+        <ul class="tab-nav nav"> 
+            <li data-tab="tab1" class="current"><a href="javascript:void(0);">账号信息</a></li>
+            <li data-tab="tab2"><a href="javascript:void(0);">基本信息</a></li>
+            <!--<li data-tab="tab3"><a href="javascript:void(0);">财务信息</a></li>-->
+        </ul>
+        <div class="tab-content">
+            <form action="{:U()}" method="post" class="form-horizontal">
+                <div id="tab1" class="tab-pane in tab1">
+                    <div class="form-item">
+                        <label class="item-label">会员名<span class="check-tips">（会员名会作为默认的昵称）</span></label>
+                        <div class="controls">
+                            <input type="text" class="text input-large" name="username" value="{$member_info.username}">
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <label class="item-label">密码<span class="check-tips">（用户密码不能少于6位）</span></label>
+                        <div class="controls">
+                            <input type="password" class="text input-large" name="password" value="">
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <label class="item-label">确认密码</label>
+                        <div class="controls">
+                            <input type="password" class="text input-large" name="repassword" value="">
+                        </div>
+                    </div>
+
+                    <div class="form-item">
+                        <label class="item-label">手机号码<span class="check-tips">（用户手机号码）</span></label>
+                        <div class="controls">
+                            <input type="text" class="text input-large" name="mobile" value="{$member_info.mobile}">
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <label class="item-label">会员类型<span class="check-tips">（默认为终端消费者-C）</span></label>
+                        <div class="controls">
+                            <select name="member_type" id="member_type">
+                                <volist name="member_type" id="vo">
+                                    <option <eq name="info['member_type']" value="$vo.id">selected</eq> value="{$vo.id}">{$vo.name}-{$vo.alias}</option>
+                                </volist>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="tab-member-nav" >
+                        <div class="form-item">
+                            <label class="item-label">绑定<span class="member-type-name"></span><span class="check-tips">（门店或终端消费者可以选择自己的上级或会员等级）</span></label>
+                            <div class="controls" id="getmemberagentlist">
+                                </div>
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <label class="item-label">是否测试账号</label>
+                        <div class="controls">
+                            <label class="inline radio"><input type="radio" checked="" value="0" name="istestuser">否</label>
+                            <label class="inline radio"><input type="radio" value="1" name="istestuser">是</label>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab2" class="tab-pane tab2">
+                    <div class="form-item">
+                        <label class="item-label">邀请码<span class="check-tips"></span></label>
+                        <div class="controls">
+                            <input type="text" class="text input-large" name="code" value="{$member_info.code}">
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <label class="item-label">真实姓名<span class="check-tips"></span></label>
+                        <div class="controls">
+                            <input type="text" class="text input-large" name="realname" value="{$member_info.realname}">
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <label class="item-label">后台自动生成二维码<span class="check-tips"></span></label>
+                    </div>
+                    <div class="form-item">
+                        <label class="item-label">邮箱<span class="check-tips">（用户邮箱，用于找回密码等安全操作）</span></label>
+                        <div class="controls">
+                            <input type="text" class="text input-large" name="email" value="{$member_info.email}">
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <label class="item-label">地址信息<span class="check-tips"></span></label>
+                        <div class="controls">
+                            <input type="text" class="text input-large" name="address" value="{$member_info.address}">
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <label class="item-label">备注</label>
+                        <div class="controls">
+                            <input type="text" class="text input-large" name="memo" value="{$member_info.memo}">
+                        </div>
+                    </div>
+                </div>
+                <div id="tab3" class="tab-pane tab3">
+                    <div class="form-item">
+                        <label class="item-label">开户银行<span class="check-tips">（开户银行 ：农业银行）</span></label>
+                        <div class="controls">
+                            <input type="text" class="text input-large" name="bankname" value="">
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <label class="item-label">开户名称<span class="check-tips">（开户名称，必须与银行账户一致）</span></label>
+                        <div class="controls">
+                            <input type="text" class="text input-large" name="bankuser" value="">
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <label class="item-label">银行账号</label>
+                        <div class="controls">
+                            <input type="text" class="text input-large" name="bankcode" value="">
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <div class="form-item">
+            <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+            <button class="btn btn-return" onclick="javascript:history.back(-1);
+                    return false;">返 回</button>
+        </div>
+        </form>
+    </div>
+</block>
+
+<block name="script">
+    <script type="text/javascript">
+        //导航高亮
+        highlight_subnav('{:U('Member/add')}');
+        showTab();
+        // 选择会员类型 显示不同的区块
+        $("#member_type").change(function(){
+            var $member_type = $(this).val();
+            if($member_type == 1){
+                $(".tab-member-nav").hide(); 
+            }else if($member_type == 2){  // 门店 绑定区域代理
+                $(".member-type-name").html('区域代理');
+                getMember_agent($member_type);
+                $(".tab-member-nav").show();
+            }else if($member_type == 3){ // 终端消费者绑定门店
+                $(".member-type-name").html('门店');
+                getMember_agent($member_type);
+                $(".tab-member-nav").show();
+            }
+        })
+        
+        /**
+         * 获取会员等级或会员上级ID
+         */
+        function getMember_agent(member_type = 3){
+            var url ='{:U("Member/getMemberAgent")}';
+            	$.ajax({
+		type:'post', //传送的方式,get/post
+		url:url, //发送数据的地址
+		data:{member_type:member_type},
+		dataType: "json",
+		success:function(data)
+		{
+		    if(data.status){
+			    alert(data.error);return false;
+		    } else {
+                        $("#getmemberagentlist").html(data.info);
+		    }
+		}
+	    }); 
+        }
+        
+        $(function(){
+            getMember_agent();
+        })
+        
+        
+    </script>
+</block>

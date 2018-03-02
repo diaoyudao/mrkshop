@@ -1,0 +1,96 @@
+<extend name="Public/base"/>
+
+<block name="body">
+    <div class="main-title">
+        <h2>新增用户</h2>
+    </div>
+    <div class="tab-wrap">
+        <ul class="tab-nav nav"> 
+            <li data-tab="tab1" class="current"><a href="javascript:void(0);">财务信息</a></li>
+        </ul>
+        <div class="tab-content">
+            <form action="{:U()}" method="post" class="form-horizontal">
+             <div id="tab1" class="tab-pane in tab1">
+                 <div class="form-item">
+                        <label class="item-label">会员信息：<span class="check-tips">{$member_info.nickname}</span></label>
+                 </div>
+                    <div class="form-item">
+                        <label class="item-label">开户银行<span class="check-tips">（开户银行 ：农业银行）</span></label>
+                        <div class="controls">
+                            <input type="text" class="text input-large"  name="bankname" value="{$member_bank.bankname}">
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <label class="item-label">开户名称<span class="check-tips">（开户名称，必须与银行账户一致）</span></label>
+                        <div class="controls">
+                            <input type="text" class="text input-large" name="bankuser" value="{$member_bank.bankuser}">
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <label class="item-label">银行账号</label>
+                        <div class="controls">
+                            <input type="text" class="text input-large" name="bankcode" value="{$member_bank.bankcode}">
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <div class="form-item">
+            <input type="hidden" value="{$member_info.uid}" name="member_id" >
+            <input type="hidden" value="{$member_bank.id}" name="id" >
+            <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+            <button class="btn btn-return" onclick="javascript:history.back(-1);
+                    return false;">返 回</button>
+        </div>
+        </form>
+    </div>
+</block>
+
+<block name="script">
+    <script type="text/javascript">
+        //导航高亮
+        highlight_subnav('{:U('Member/add')}');
+        showTab();
+        // 选择会员类型 显示不同的区块
+        $("#member_type").change(function(){
+            var $member_type = $(this).val();
+            if($member_type == 1){
+                $(".tab-member-nav").hide(); 
+            }else if($member_type == 2){  // 门店 绑定区域代理
+                $(".member-type-name").html('区域代理');
+                getMember_agent($member_type);
+                $(".tab-member-nav").show();
+            }else if($member_type == 3){ // 终端消费者绑定门店
+                $(".member-type-name").html('门店');
+                getMember_agent($member_type);
+                $(".tab-member-nav").show();
+            }
+        })
+        
+        /**
+         * 获取会员等级或会员上级ID
+         */
+        function getMember_agent(member_type = 3){
+            var url ='{:U("Member/getMemberAgent")}';
+            	$.ajax({
+		type:'post', //传送的方式,get/post
+		url:url, //发送数据的地址
+		data:{member_type:member_type},
+		dataType: "json",
+		success:function(data)
+		{
+		    if(data.status){
+			    alert(data.error);return false;
+		    } else {
+                        $("#getmemberagentlist").html(data.info);
+		    }
+		}
+	    }); 
+        }
+        
+        $(function(){
+            getMember_agent();
+        })
+        
+        
+    </script>
+</block>

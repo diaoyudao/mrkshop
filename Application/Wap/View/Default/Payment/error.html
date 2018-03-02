@@ -1,0 +1,23 @@
+<extend name="Base/common_index"/>
+
+<block name="body">
+    <!--头部 S-->
+    <div class="herder">
+        <a href="javascript:history.go(-1);" class="back"><i></i></a>
+        <h3>支付失败</h3>
+    </div>
+    <div class="t_line"></div>
+    <div class="pay-failure">
+        <div class="success">
+            <img src="__IMG__/failure.png" />
+            <p>对不起，支付失败！</p>
+        </div>
+        <ul>
+            <li>订单号：{$orderid}</li>
+            <li>本次支付：<span>￥{$order_amount} </span></li>
+        </ul>
+        <a class="dd" href="{:U('Order/details',array('orderid'=>$orderid))}">查看订单</a>
+        <a class="return" href="{:U('Index/index')}">返回首页</a>
+    </div>
+
+</block>

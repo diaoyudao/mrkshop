@@ -1,0 +1,206 @@
+<extend name="Base/member_common"/>
+<block name="body">
+    <div class="wrap" style="background-color: #f5f5f5;">
+        <div class="guidance towp"><a href="javascript:;">首页</a><a href="javascript:;"> > 会员首页</a></div>
+        <div class="content_mc towp clear">
+            <div class="content_left">
+                <include file="Member/member_menu"/>
+            </div>
+            <div class="content right-con2 order-mana">
+                <div class="con-tit"><h2 class="">订单管理</h2>
+                    <div class="sear  fr search-form">
+                        <i class="bg" id="search" url="{:U('Order/index')}" style="cursor:pointer;"></i>
+                        <input type="text" class="bor3" name='ordersn' value="{:I('ordersn')}" placeholder="商品编号/订单号">
+                        <!--                                                <div class="sear-date fr">
+                                                                        日期：<span><input type="text" class="bor2"  /><i class="bg"></i></span><em class="big-font">_</em><span><input type="text" class="bor2"  /><i class="bg"></i></span>
+                                                                        </div>-->
+                    </div>
+                </div>
+
+                <!--导航 E-->
+                <!--列表 S-->
+
+                <div class="order-table">
+                    <div class="order-tit order-tit2">
+                        <span <eq name='state_type' value='all'> class="active9" </eq> ><a href="{:U('order/index')}">全部订单<span class="colo6">（{$ordernum.ordersum}）</span></a></span>
+                        <span <eq name='state_type' value='state_new'> class="active9" </eq> ><a href="{:U('order/index',array('state_type'=>'state_new'))}">待付款<span class="colo6">（{$ordernum.nopaynum}）</span></a></span>
+                        <span <eq name='state_type' value='state_pay'> class="active9" </eq> ><a href="{:U('order/index',array('state_type'=>'state_pay'))}">待发货<span class="colo6">（{$ordernum.paynum}）</span></a></span>
+                        <span <eq name='state_type' value='state_send'> class="active9" </eq> ><a href="{:U('order/index',array('state_type'=>'state_send'))}">待收货<span class="colo6">（{$ordernum.shipnum}）</span></a></span>
+                        <span <eq name='state_type' value='state_noeval'> class="active9" </eq> ><a href="{:U('order/index',array('state_type'=>'state_noeval'))}">待评价<span class="colo6">（{$ordernum.noevalnum}）</span></a></span>
+                        <span <eq name='state_type' value='state_eval'> class="active9" </eq> ><a href="{:U('order/index',array('state_type'=>'state_eval'))}">已评价<span class="colo6">（{$ordernum.evalnum}）</span></a></span>
+                        <span <eq name='state_type' value='state_cancel'> class="active9" </eq> ><a href="{:U('order/index',array('state_type'=>'state_cancel'))}">已取消<span class="colo6">（{$ordernum.cancelordernum}）</span></a></span>
+                        <span <eq name='state_type' value='state_success'> class="active9" </eq> ><a href="{:U('order/index',array('state_type'=>'state_success'))}">已完成<span class="colo6">（{$ordernum.completenum}）</span></a></span>
+                        <div class="tables">
+                            <table width="100%">
+                                <colgroup span="8">
+                                    <col width="33%" />
+                                    <col width="8%" />
+                                    <col width="8%" />
+                                    <col width="8%" />
+                                    <col width="8%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="15%" />
+                                </colgroup>
+                                <tr><th>商品</th><th>价格（元）</th><th>数量</th><th>税费</th><th>运费</th><th>总价</th><th>订单状态</th><th>操作</th></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <notempty name="orderlist">
+                        <volist name='orderlist' id='order' empty='没有订单'>
+                            <div class="tables_1">
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            <!--<input type="checkbox" name="" id="" value="" />-->
+
+                                            <span>订单编号：{$order.orderid}</span>
+                                            <span>下单时间：{$order.create_time|date="Y-m-d H:i:s",###}</span>
+                                            <a href="{$order.detail_url}">查看订单详情</a>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <table class="cp" width="100%">
+                                    <colgroup span="8">
+                                        <col width="33%" />
+                                        <col width="8%" />
+                                        <col width="8%" />
+                                        <col width="8%" />
+                                        <col width="8%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="15%" />
+                                    </colgroup>
+                                    <volist name='order.goodslist' id='goods' key='k'>
+                                        <if condition="$k eq 1">
+                                            <tr>
+                                                <td class="clear">
+                                                    <!--<input type="checkbox" name="" id=""/>-->
+                                                    <a class="im" href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}"><img src="{$goods['pics_img'][$goods['cover_id']]}"/></a>
+                                                    <div class="xinx">
+                                                        <p><a target="_blank" href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}">{$goods.goodid|get_good_name}</a></p>
+                                                        <notempty name='goods.parameters'><em>规格：{$goods.parameters|default="无"}</em></notempty>
+                                                        <if condition="$order.status eq 3 "><!--and $order.refund_status eq 0 and $goods.iscomment eq 0--->
+                                                            <php>
+                                                                $completetime =$order['complete_time'] ;
+                                                                $refundtime =(C("ORDER_AUTO_REFUND") ? : 1 ) * 24*60*60;
+                                                                if($completetime+$refundtime > time()){
+                                                            </php>
+                                                            <if condition="$goods.refund_id gt 0">
+                                                            <a class='sc' href="{:U('Refund/detail',array('id'=>$goods['refund_id']))}">查看售后</a>
+                                                            <else />
+                                                            <a class='sc' href="{:U('Refund/apply_refund',array('orderid'=>$order['id'],'goods_id'=>$goods['goodid'],'id'=>$goods['id']))}">申请售后</a>
+                                                            </if>
+                                                            <php>}</php>
+                                                        </if>
+                                                    </div>
+                                                </td>
+                                                <td>￥{$goods.price}</td>
+                                                <td>x{$goods.num}</td>
+                                                <td>&yen;{$goods.haiguan_rate}</td>
+                                                <td rowspan="{$order.productnum}">￥{$order.shipprice}</td>
+                                                <td  rowspan="{$order.productnum}">￥{$order.pricetotal}</td>
+                                                <td  rowspan="{$order.productnum}">{$order.orderStatus.status_txt}</td>
+                                                <td rowspan="{$order.productnum}">
+                                            <notempty name='order.balanceString'>
+                                                <span>{$order.balanceString}</span>
+                                            </notempty>
+                                            {$order.handle}
+                                            <notempty name='order.tool'><a class="qx" href="javascript:;">（{$order.tool}）</a></notempty>
+                                            </td>
+                                            </tr>
+                                            <else />
+                                            <tr>
+                                                <td class="clear">
+                                                    <!--<input type="checkbox" name="" id=""/>-->
+                                                    <a class="im" href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}"><img src="{$goods['pics_img'][$goods['cover_id']]}"/></a>
+                                                    <div class="xinx">
+                                                        <p><a target="_blank" href="{:U('Goods/detail',array('channelname'=>$goods['channelname'],'id'=>$goods['goodid'] ))}">{$goods.goodid|get_good_name}</a></p>
+                                                        <notempty name='goods.parameters'><em>规格：{$goods.parameters|default="无"}</em></notempty>
+                                                        <if condition="$order.status eq 3"> <!-- and $goods.iscomment eq 0   and $order.refund_status eq 0--->
+                                                            <php>
+                                                                $completetime =$order['complete_time'] ;
+                                                                $refundtime =(C("ORDER_AUTO_REFUND") ? : 1 ) * 24*60*60;
+                                                                if($completetime+$refundtime > time()){
+                                                            </php>
+                                                            <if condition="$goods.refund_id gt 0">
+                                                            <a class='sc' href="{:U('Refund/detail',array('id'=>$goods['refund_id']))}">查看售后</a>
+                                                            <else />
+                                                            <a class='sc' href="{:U('Refund/apply_refund',array('orderid'=>$order['id'],'goods_id'=>$goods['goodid'],'id'=>$goods['id']))}">申请售后</a>
+                                                            </if>
+                                                            <php>}</php>
+                                                        </if>
+                                                    </div>
+                                                </td>
+                                                <td>{$goods.price}</td>
+                                                <td>x{$goods.num}</td>
+                                                <td>0.00</td>
+                                            </tr>
+                                        </if>
+                                    </volist>
+                                </table>
+                            </div>
+                        </volist>
+                        <else/>
+                        <div class="no_data">
+                            <h3>
+                                <i class=""> <img src="__IMG__/confirmGoods/ts.png"/> </i> 最近没有购买记录！
+                            </h3>						        	
+                        </div>
+                    </notempty>
+                    <div class="page_box clear clear">
+                        {$_page}
+                    </div>
+                </div> <!--列表 E-->
+            </div>
+        </div>
+</block>
+<block name='script'>
+    <script>
+
+        $(function() {
+            //搜索功能
+            $("#search").click(function() {
+                var url = $(this).attr('url');
+                var status = $("#sch-sort-txt").attr("data");
+                var query = $('.search-form').find('input').serialize();
+                query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g, '');
+                query = query.replace(/^&/g, '');
+//                if (status != '') {
+//                    query = 'status=' + status + "&" + query;
+//                }
+                if (url.indexOf('?') > 0) {
+                    url += '&' + query;
+                } else {
+                    url += '?' + query;
+                }
+                window.location.href = url;
+            });
+
+            //回车自动提交
+            $('.search-form').find('input').keyup(function(event) {
+                if (event.keyCode === 13) {
+                    $("#search").click();
+                }
+            });
+
+
+            $("a.confirm").click(function() {
+                var msg = $(this).attr("data-msg");
+                var href = $(this).attr('href');
+                layer.confirm(msg, {icon: 3, title: '提示信息'}, function(index) {
+                    if (index) {
+                        layer.close(index);
+                        window.location.href = href;
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
+                return false;
+            });
+        });
+
+    </script>
+</block>

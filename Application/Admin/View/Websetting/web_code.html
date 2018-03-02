@@ -1,0 +1,115 @@
+<extend name="Public/base"/>
+<block name="style">
+    <link rel="stylesheet" type="text/css" href="__JS__/web_code/base.css" media="all">
+    <link rel="stylesheet" type="text/css" href="__JS__/web_code/index-admin.css" media="all">
+
+</block>
+<block name="body">
+    	<script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script> 
+    <div class="web_code">
+        <div class="main-title">
+            <h2>{$meta_title} <a href="javascript:;;">{$info.name}</a></h2>
+
+        </div>
+        <div class="classfy1 clear towp">
+            <div class="sideNaiv">
+                <div class="sN-tit">
+                    <p class="yd_edit" onclick="show_dialog('标题编辑','350px', '450px','web-code-title','{$code_info.tit.code_id}');">编辑</p>
+                    <p class="floor">
+                        {$code_info.tit.code_info.floor|default='F'}</p>
+                    <div  class="img ">
+                            <empty name="code_info['tit']['code_info']['icon']">
+                            <img src="__JS__/web_code/cal-1.png" />
+                                <else /> 
+                            <img src="__PICURL__/1/{$code_info.tit.code_info.icon|get_cover='path'}" />
+                            </empty>
+                    </div>
+                    <p>{$code_info.tit.code_info.en_name}</p>
+                    <h4><span>{$code_info.tit.code_info.name}</span></h4>
+                </div>
+                <div class="yd_parent yd_parent1">
+                    <p class="yd_edit" onclick="show_dialog('左边广告编辑','450px', '480px','web-code-left-ads','{$code_info.left_ad.code_id}');">编辑</p>
+                        <empty name="code_info['left_ad']['code_info']['icon']">
+                            <a href="#"><img src="__JS__/web_code/cal1.jpg" > </a>
+                            <else /> 
+                        <a href="{$code_info.left_ad.code_info.ad_url}" title='{$code_info.left_ad.code_info.ad_name}'><img src="__PICURL__/1/{$code_info.left_ad.code_info.icon|get_cover='path'}" /></a>
+                        </empty>
+                </div>
+                <div class="w100 yd_parent2">
+                      <p class="yd_edit" onclick="show_dialog('分类列表编辑','530px', '450px','web-code-left-category','{$code_info.cate_list.code_id}');">编辑</p>
+                    <div class="li-naiv ">                  
+                        <ul class="li-naiv-list">
+                             <volist name="code_info.cate_list.code_info.goods_class" id="class" offset="0" length='6'>
+                                 <li><span><a href="{$class.id}">{$class.gc_name}</a></span></li>
+                            </volist>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-container cla-swi">
+                <p class="yd_edit" onclick="show_dialog('中间广告编辑','450px', '550px','web-code-mid-ads','{$code_info.left_ad.code_id}');">编辑</p>
+                <ul class="swiper-wrapper">
+                    <empty name="code_info['mid_ad']['code_info']['icon']">
+                            <li class="swiper-slide"><a href="#"><img src="__JS__/web_code/cla1.jpg" /> </a></li>
+                            <else /> 
+                        <a href="{$code_info.mid_ad.code_info.ad_url}" title='{$code_info.mid_ad.code_info.ad_name}'><img src="__PICURL__/1/{$code_info.mid_ad.code_info.icon|get_cover='path'}" /></a>
+                    </empty>
+                    
+                </ul>
+            </div>
+            <div class="cla-pro fl">
+                <p class="yd_edit" onclick="show_dialog('商品列表','800px', '650px','web-code-mid-goods','{$code_info.mid_goods.code_id}');">编辑</p>
+                <ul class="pro-list ">
+                    <volist name="code_info.mid_goods.code_info.goods_list" id="goods" offset="0" length='6' empty="暂时没有数据">
+                         <li>
+                        <a href="{$goods.id}">
+                            <img style="width:120px;" src="__PICURL__/{$goods.cover_id|get_cover='path'}" />
+                            <strong>{$goods.title}</strong>
+                        </a>
+                        <div class="pric"><span class="price">￥<span class="bigFont">{$goods.price}</span>.</span><a href="#"><i class="bg "></i></a></div>
+                    </li>
+                        </volist>
+                </ul>
+            </div>
+            <div class="xlph fl">
+                <p class="yd_edit" onclick="show_dialog('一周热卖商品编辑','800px', '650px','web-code-right-hotgoods','{$code_info.hot_goods.code_id}');">编辑</p>
+                <h3><i class="bg"></i>一周热卖TOP6</h3>
+                <ul class="xlph-list">
+                    <volist name="code_info.hot_goods.code_info.goods_list" id="goods" key="k" offset="0" length='5'  empty="暂时没有数据">
+                     <eq name="k" value="1">
+                    <li class="active">
+                        <span><i class="bg num{$k}">{$k}</i></span>
+                        <a class="img" href="{$goods.id}">
+                            <img width="100" src="__PICURL__/{$goods.cover_id|get_cover='path'}"/>
+                            <strong>{$goods.title}</strong>
+                        </a>
+                        <div class="pric"><span class="price">￥<span class="bigFont">{$goods.price}</span></span></div>
+                    </li>
+                    <else/>
+                     <li class="">
+                        <span><i class="bg num{$k}">{$k}</i></span>
+                        <a class="img" href="{$goods.id}">
+                            <img width="100" src="__PICURL__/{$info.id}/{$goods.cover_id|get_cover='path'}"/>
+                            <strong>{$goods.title}</strong>
+                        </a>
+                        <div class="pric"><span class="price">￥<span class="bigFont">{$goods.price}</span></span></div>
+                    </li>
+                    </eq>
+                    </volist>
+                </ul>
+            </div>
+        </div>
+        <div class="form-item cf" style='margin-top:20px;'>
+            <a class="btn btn-return" href="{:U('Websetting/index')}">返 回</a>
+            <input type="hidden" name="subdomain_id" value="2">
+        </div>
+    </div>
+ 
+    <include file="Websetting/module_code"/>
+</block>
+<block name="script">
+    <script>
+            //导航高亮
+        highlight_subnav('{:U("Websetting/index")}');
+    </script>
+</block>

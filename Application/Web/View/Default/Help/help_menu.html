@@ -1,0 +1,13 @@
+<span class="centre_box"><a class="centre" href="{:U('help/index')}">客服中心</a></span>
+<div class="menu">
+    <dl>
+        <volist name='helpcatelist' id='list'>
+            <dt <eq name="list.name" value="$curl_parent">class="actives"</eq> ><a <eq name="list.name" value="$curl_parent">class="active"</eq>  href="javascript:;;">{$list.title}</a></dt>
+            <volist name='list.child' id='child'>
+                <dd><a <php>if($child['id'] == $cur_cateid){echo 'class="current"'; }</php> 
+                        href="{:U('help/detail',array('id'=>$child['name']))}">{$child.title}</a></dd>
+            </volist>
+        </volist>
+    </dl>
+</div>
+

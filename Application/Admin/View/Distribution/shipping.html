@@ -1,0 +1,328 @@
+<extend name="Public/base"/>
+
+<block name="body">
+    <link href="__CSS__/shipping.css" rel="stylesheet" type="text/css">
+    <form action="{:U()}" method="post" class="form-horizontal validate">
+        <div class="form-item">
+            <label class="item-label">配送方式<span class="check-tips">（用于显示的文字）</span></label>
+            <div class="controls">
+                <input type="text" class="text input-large" name="title" value="{$shipping.title|default=''}">
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="item-label">{$shipping.description}</label>
+        </div>
+        <!--trans-line-->
+        <div class="trans-line">
+            <div data-delivery="kd" class="ncsu-trans-type">
+                <div class="entity">
+                    <div class="default J_DefaultSet">
+                        默认运费：
+                        <input type="text" name="default[kd][start]" value="{$default.snum|default='1'}" data-field="start" autocomplete="off" maxlength="4" aria-label="默认运费件数" class="w30 mr5 text">
+                        千克内，
+                        <input type="text" data-field="postage" name="default[kd][postage]" value="{$default.sprice|default='10'}" autocomplete="off" maxlength="6" aria-label="默认运费价格" class="w60 text"><em class="add-on"><i class="icon-renminbi">元</i></em>， 每增加
+                        <input type="text" name="default[kd][plus]" data-field="plus" value="{$default.xnum|default='1'}" autocomplete="off" maxlength="4" aria-label="每加件" class="w30 ml5 mr5 text">
+                        千克， 增加运费
+                        <input type="text" name="default[kd][postageplus]" data-field="postageplus" value="{$default.xprice|default='2'}" autocomplete="off" maxlength="6" aria-label="加件运费" class="w50 ml5 text"><em class="add-on"><i class="icon-renminbi">元</i></em>
+                        <div class="J_DefaultMessage"></div>
+                    </div>
+                    <div class="tbl-except">
+                        <table cellspacing="0" cellpadding="0" border="0" class="ncsc-table-style">
+                            <colgroup>
+                                <col class="col-area">
+                                <col class="col-start">
+                                <col class="col-postage">
+                                <col class="col-plus">
+                                <col class="col-postageplus">
+                                <col class="col-action">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th style="width:400px;">运送到</th>
+                                    <th class="w60">首重(千克)</th>
+                                    <th class="w110">首费(元)</th>
+                                    <th class="w60">续重(千克)</th>
+                                    <th class="w110">续费(元)</th>
+                                    <th class="w110">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <notempty name="shipping_extend">
+                                <volist name="shipping_extend" id="item" key="key">
+                                <tr data-group="n{$key}" class="bd-line">
+                                    <td class="cell-area">
+                                        <span class="area-group">
+                                            <input type="checkbox" name="kd_n{$key}" value="" style="width:15px; display:none" class="J_BatchField">
+                                            <p style="display:inline-block">{$item.area_name}</p></span>
+                                        <input type="hidden" name="areas[kd][{$key}]" value="{$item.area_name}">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="special[kd][{$key}][start]" data-field="start" value="{$item.snum}" autocomplete="off" maxlength="4" aria-label="首重" class="text w30">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="special[kd][{$key}][postage]" data-field="postage" value="{$item.sprice}" autocomplete="off" maxlength="6" aria-label="首费" class="text w60"><em class="add-on">
+                                            <i class="icon-renminbi">元</i>
+                                        </em>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="special[kd][{$key}][plus]" data-field="plus" value="{$item.xnum}" autocomplete="off" maxlength="4" aria-label="续重" class="text w30">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="special[kd][{$key}][postageplus]" data-field="postageplus" value="{$item.xprice}" autocomplete="off" maxlength="6" aria-label="续费" class="text w60"><em class="add-on">
+                                            <i class="icon-renminbi">元</i>
+                                        </em>
+                                    </td>
+                                    <td class="nscs-table-handle">
+                                        <span>
+                                            <a href="JavaScript:void(0);" ncnum="n{$key}" class="btn-red J_DeleteRule">
+                                                <i class="icon-trash"></i><p>删除</p>
+                                            </a>
+                                        </span>
+                                        <span>
+                                            <a href="JavaScript:void(0);" data-acc="event:enter" entype="J_EditArea" area-controls="J_DialogArea" area-haspopup="true" title="编辑运送区域" data-group="n{$key}" class="btn-blue">
+                                                <i class="icon-edit"></i><p>编辑</p>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                </volist>
+                            <else/>
+                                <tr data-group="n1" class="bd-line">
+                                    <td class="cell-area">
+                                        <span class="area-group">
+                                            <input type="checkbox" name="kd_n1" value="" style="width:15px; display:none" class="J_BatchField">
+                                            <p style="display:inline-block">未添加地区</p></span>
+                                        <input type="hidden" name="areas[kd][1]" value="">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="special[kd][1][start]" data-field="start" value="1" autocomplete="off" maxlength="4" aria-label="首重" class="text w30">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="special[kd][1][postage]" data-field="postage" value="" autocomplete="off" maxlength="6" aria-label="首费" class="text w60"><em class="add-on">
+                                            <i class="icon-renminbi">元</i>
+                                        </em>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="special[kd][1][plus]" data-field="plus" value="1" autocomplete="off" maxlength="4" aria-label="续重" class="text w30">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="special[kd][1][postageplus]" data-field="postageplus" value="" autocomplete="off" maxlength="6" aria-label="续费" class="text w60"><em class="add-on">
+                                            <i class="icon-renminbi">元</i>
+                                        </em>
+                                    </td>
+                                    <td class="nscs-table-handle">
+                                        <span>
+                                            <a href="JavaScript:void(0);" ncnum="n1" class="btn-red J_DeleteRule">
+                                                <i class="icon-trash"></i><p>删除</p>
+                                            </a>
+                                        </span>
+                                        <span>
+                                            <a href="JavaScript:void(0);" data-acc="event:enter" entype="J_EditArea" area-controls="J_DialogArea" area-haspopup="true" title="编辑运送区域" data-group="n1" class="btn-blue">
+                                                <i class="icon-edit"></i><p>编辑</p>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </notempty>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="display:none" class="batch">
+                        <label><input type="checkbox" name="" value="" aria-label="全选" class="J_BatchCheck">
+                            全选</label>
+                        &nbsp;<a href="JavaScript:void(0);" class="J_BatchSet ncsc-btn-mini">批量设置</a>
+                        <a href="JavaScript:void(0);" class="J_BatchDel ncsc-btn-mini">批量删除</a>
+                    </div>
+                    <div class="tbl-attach">
+                        <div class="J_SpecialMessage"></div>
+                        <a href="JavaScript:void(0);" class="J_AddRule ncsc-btn-mini ml5"><i class="icon-map-marker"></i>为指定地区城市设置运费</a>
+                        <!--<a href="JavaScript:void(0);" style="" class="J_ToggleBatch ncsc-btn-mini">批量操作</a>-->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--trans-line--->
+
+        <div class="form-item">
+            <input type="hidden" name="shipping_id" value="{$shipping.id|default=''}">
+            <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+            <button class="btn btn-return" onclick="javascript:history.back(-1);
+                    return false;">返 回</button>
+        </div>
+    </form>
+</block>
+<block name="script">
+    <script type="text/javascript" src="__STATIC__/layer/layer.js"></script>
+    <script type="text/javascript" src="__JS__/jquery.validate.js"></script>
+    <script>
+                $(document).ready(function() {
+                    $('form.validate').validate({
+                        rules: {
+                            default: {
+                                required: true
+                            }
+                        },
+                        messages: {
+                            default: {
+                                required: '<i class="icon-exclamation-sign"></i>模板名称必须填写'
+                            }
+                        }
+                    });
+                });
+    </script>
+    <script>
+        var RuleCell = '';
+        var StartNum = '';
+        var nCurNum = '';
+        //单行内容模板
+//	RuleCell += "<tr class=\"bd-line\" data-group="+StartNum+">\n";
+        RuleCell += "<tr class=\"bd-line\" data-group=\"nCurNum\">\n";
+        RuleCell += "<td class=\"cell-area\">\n";
+//	RuleCell += "<a class=\"ncu-btn2\" title=\"编辑运送区域\" area-haspopup=\"true\" area-controls=\"J_DialogArea\" entype=\'J_EditArea\' data-acc=\"event:enter\" href=\"JavaScript:void(0);\">编辑<\/a>\n";
+        RuleCell += "<span class=\"area-group\">\n";
+        RuleCell += "<input class=\"J_BatchField\" style=\"width:15px; display:none\" type=\"checkbox\" value=\"\" name=\"TRANSTYPE_nCurNum\">\n";
+        RuleCell += "<p style=\"display:inline-block\">未添加地区<\/p><\/span>\n";
+        RuleCell += "<input type=\"hidden\" value=\"\" name=\"areas[TRANSTYPE][CurNum]\">\n";
+        RuleCell += "<\/td>\n";
+        RuleCell += "<td>\n";
+        RuleCell += "<input class=\"text w30\" type=\"text\" aria-label=\"首重\" maxlength=\"4\" autocomplete=\"off\" value=\"1\" data-field=\"start\" name=\"special[TRANSTYPE][CurNum][start]\">\n";
+        RuleCell += "<\/td>\n";
+        RuleCell += "<td>\n";
+        RuleCell += "<input class=\"text w60\" type=\"text\" aria-label=\"首费\" maxlength=\"6\" autocomplete=\"off\" value=\"\" data-field=\"postage\" name=\"special[TRANSTYPE][CurNum][postage]\"><em class=\"add-on\">\n";
+        RuleCell += "<i class=\"icon-renminbi\">元<\/i>\n";
+        RuleCell += "<\/em>\n";
+        RuleCell += "<\/td>\n";
+        RuleCell += "<td>\n";
+        RuleCell += "<input class=\"text w30\" type=\"text\" aria-label=\"续重\" maxlength=\"4\" autocomplete=\"off\" value=\"1\" data-field=\"plus\" name=\"special[TRANSTYPE][CurNum][plus]\">\n";
+        RuleCell += "<\/td>\n";
+        RuleCell += "<td>\n";
+        RuleCell += "<input class=\"text w60\" type=\"text\" aria-label=\"续费\" maxlength=\"6\" autocomplete=\"off\" value=\"\" data-field=\"postageplus\" name=\"special[TRANSTYPE][CurNum][postageplus]\"><em class=\"add-on\">\n";
+        RuleCell += "<i class=\"icon-renminbi\">元<\/i>\n";
+        RuleCell += "<\/em>\n";
+        RuleCell += "<\/td>\n";
+        RuleCell += "<td class=\"nscs-table-handle\">\n";
+        RuleCell += "<span>\n";
+        RuleCell += "<a class=\"btn-red J_DeleteRule\" ncNum=\"nCurNum\" href=\"JavaScript:void(0);\">\n";
+        RuleCell += "<i class=\"icon-trash\"><\/i><p>删除<\/p>\n";
+        RuleCell += "<\/a>\n";
+        RuleCell += "<\/span>\n";
+        RuleCell += "<span>\n";
+        RuleCell += "<a class=\"btn-blue\" data-group=\"nCurNum\" title=\"编辑运送区域\" area-haspopup=\"true\" area-controls=\"J_DialogArea\" entype=\'J_EditArea\' data-acc=\"event:enter\" href=\"JavaScript:void(0);\">\n";
+        RuleCell += "<i class=\"icon-edit\"><\/i><p>编辑<\/p>\n";
+        RuleCell += "<\/a>\n";
+        RuleCell += "<\/span>\n";
+        RuleCell += "<\/td>\n";
+        RuleCell += "<\/tr>\n";
+
+        //删除当前行的唯一标识
+        var curDelNum;
+        $(".J_AddRule").click(function() {
+//            alert(RuleCell);
+            StartNum = ($('table>tbody>tr').size() + 1);
+//            nCurNum = StartNum;
+//            var trnum = "<tr class=\"bd-line\" data-group=" + StartNum + ">\n" + RuleCell;
+//            trnum += RuleCell;
+            cell = RuleCell.replace(/CurNum/g, StartNum);
+            cell = cell.replace(/TRANSTYPE/g, 'kd');
+            $(".ncsc-table-style tbody").append(cell);
+        });
+
+
+        $(function() {
+            var address_layer = '';
+            var curTransType = '';
+            var curIndex;       // 当前编辑的行
+            /*	删除一行运费规则*/
+            $('.trans-line').on('click', '.J_DeleteRule', function() {
+                var curDelNum = $(this).parents("tr").attr('data-group');
+                $('tr[data-group="' + curDelNum + '"]').remove();
+                return false;
+            });
+
+            /*	选择运送区域*/
+            $('.trans-line').on('click', 'a[entype="J_EditArea"]', function() {
+                //记录当前行的标识n1,n2,n3....
+                curIndex = $(this).attr('data-group');
+
+                $.ajax({
+                    url: '{:U("Distribution/getshipping_area")}', //发送数据的地址
+                    type: "post",
+                    dataType: "json",
+                    data: {curIndex: curIndex},
+                    success: function(json) {
+                        address_layer = layer.open({
+                            title: '选择配送区域',
+                            type: 1,
+                            skin: 'layui-layer-rim', //加上边框
+                            area: ['1040px', '640px'], //宽高
+                            content: json.info
+                        });
+                        return false;
+                    }
+                });
+
+                curTransType = 'kd';
+                //取消所有已选择的checkbox
+                $('#J_CityList').find('input[type="checkbox"]').attr('checked', false).attr('disabled', false);
+
+                //取消显示所有统计数量
+                $('#J_CityList').find('.check_num').html('');
+
+                //记录当前行的标识n1,n2,n3....
+                curIndex = $(this).attr('data-group');
+                //记录当前操作的行，选择完地区会向该区域抛出值
+                objCurlArea = $('tr[data-group="' + curIndex + '"]').children(1);
+                //记录已选择的所有省及市的value，SelectArea下标为value值，值为true，如江苏省SelectArea[320000]=true,南京市SelectArea[320100]=true
+                SelectArea = new Array();
+
+            });
+
+            /**
+             * 获取选中的checkbox
+             */
+            $('body').on('click', '.J_Submit', function() {
+                var CityText = "";
+//            $('.dialog-areas>input[type=checkbox]:checked').each(function(i) {
+                $('input:checkbox:checked').each(function(i) {
+                    if (0 == i) {
+                        CityText = $(this).val();
+                    } else {
+                        CityText += ("," + $(this).val());
+                    }
+                });
+                if (CityText.length <= 0) {
+                    layer.msg('请选择配送区域');
+                    return false;
+                } else {
+                    //返回选择的文本内容
+                    if (CityText == '') {
+                        CityText = '未添加地区';
+                    }
+
+                    $(objCurlArea).find('.area-group>p').html(CityText);
+                    //返回选择的值到隐藏域
+                    $('input[name="areas[' + curTransType + '][' + curIndex.substring(1) + ']"]').val(CityText);
+                    $.ajax({
+                        url: '{:U("Distribution/temp_savearea")}', //临时保存地址
+                        type: "post",
+                        dataType: "json",
+                        data: {area: CityText, curIndex: curIndex},
+                        success: function() {
+
+                        }
+                    });
+                    layer.close(address_layer);
+                }
+
+            });
+
+
+
+        });
+
+
+
+
+    </script>
+</block>

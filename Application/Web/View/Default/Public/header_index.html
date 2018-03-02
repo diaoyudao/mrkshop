@@ -1,0 +1,144 @@
+<!-- 头部 -->
+<header>
+    <!-- 顶部 -->
+    <div class="top">
+        <include file="Public/public_top"/>
+    </div>
+    <!-- 搜索 -->
+    <div class="search-box">
+        <div class="towp ">
+            <!-- LOGO -->  
+            <php>$logo = C('SITE_LOGO');
+            </php>
+            <div class="logo fl"><a href="http://<php>echo $_SERVER['HTTP_HOST'];</php>"><img src="__PICURL__logo/{$logo|get_cover='path'}"/> </a></div>
+            <!-- 搜索框 -->
+            <div class="search-wrap fr">
+                <div class="search-con ">
+                    <div class="search search-form">
+                        <input type="text" class="sear-txt" id="keywords" name="keywords" value="{:I('keywords')}" placeholder="输入关键词" />
+                        <input type="button" id='search' url="{:U('Goods/lists')}" value="" class="sear-btn bor" >
+                        <ul class="sear-naiv">
+                            <volist name="hotSearch" id="hotwords">
+                                <li><a href="{:U('goods/lists',array('domainid'=>$domainid,'keywords'=>$hotwords))}" class="active">{$hotwords}</a></li>
+                            </volist>
+                        </ul>
+                    </div>
+                    <div class="add-car  ">
+                        <div class="car"><a href="{:U('Cart/index')}" class="bg"><i class="cart_goods_num"><span class="cart_sum">{$cart_list.goods_count}</span></i></a> </div>
+                        <!--购物车 S-->
+                        <div class="shopcar">
+                            <h4>最新加入的商品</h4>
+                            <ul id='head_cart'>
+                                <volist name='cart_list.cart_list' id='cart' empty='购物车空空如也'>
+                                    <li >
+                                        <div style="width: 20%"><img src="{$cart.goodid|get_cover_picture_url}" alt="{$cart.goodid|get_good_name}" /></div>
+                                        <div style="width: 54%" class="intr ">{$cart.goodid|get_good_name}</div>
+                                        <div style=" width:18%" class="price"><p>￥{$cart[price]}x{$cart.num}</p> 
+                                            <a href="javascript:;;" onclick="delcart2(this);" class="delcart2" rel="{$cart.sort}">&nbsp;&nbsp;删除</a></div>
+                                    </li>
+                                </volist>
+                            </ul>
+                            <div class="count">共<span class="cart_sum">{$cart_list.goods_count}</span>件商品</span> <b>共计￥<span id='total' >{$cart_list.goods_total}</span></b> <a class="topay " href="{:U('cart/index')}">去购物车结算<i class="bg"></i></a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<script>
+
+    $(function() {
+        //搜索功能
+        $("#search").click(function() {
+            var url = $(this).attr('url');
+            var status = $("#sch-sort-txt").attr("data");
+            var query = $('.search-form').find('input').serialize();
+            query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g, '');
+            query = query.replace(/^&/g, '');
+//                if (status != '') {
+//                    query = 'status=' + status + "&" + query;
+//                }
+            if (url.indexOf('?') > 0) {
+                url += '&' + query;
+            } else {
+                url += '?' + query;
+            }
+            window.location.href = url;
+        });
+
+        //回车自动提交
+        $('.search-form').find('input').keyup(function(event) {
+            if (event.keyCode === 13) {
+                $("#search").click();
+            }
+        });
+    });
+
+
+    $(".add-car").mouseenter(function() {
+        $.ajax({
+            type: 'post', //传送的方式,get/post
+            url: '{:U("Cart/ajax_cart")}', //发送数据的地址
+            dataType: "json",
+            success: function(data) {
+//                $(".shopcar").empty();
+                $(".shopcar").html(data.info);
+            }
+        });
+    })
+
+    function delcart2(obj) {
+//        var obj = $(this);
+        var string = $(obj).attr("rel");
+        $.ajax({
+            type: 'post', //传送的方式,get/post
+            url: '{:U("Cart/delItemheader")}', //发送数据的地址
+            data: {sort: string},
+            dataType: "json",
+            success: function(data) {
+                $(obj).parents("li").slideUp().remove();
+                //$("span.cart_count").text(data.count);
+                //$(".cart_price").text(data.price);
+//                regoodsprice();
+                $("span.cart_sum").text(data.goods_count);
+                $("#total" + string).text(data.goods_total);
+                var a = data.sum;
+                if (a == "0") {
+                    $(".head_cart").html('没有数据');
+                }
+            },
+            error: function(event, XMLHttpRequest, ajaxOptions, thrownError) {
+                alert(XMLHttpRequest + thrownError);
+            }
+        });
+        return false;
+    }
+    //点击删除购物车中商品
+    $(".delcart222").click(function() {
+        var obj = $(this);
+        var string = $(obj).attr("rel");
+        $.ajax({
+            type: 'post', //传送的方式,get/post
+            url: '{:U("Cart/delItem")}', //发送数据的地址
+            data: {sort: string},
+            dataType: "json",
+            success: function(data) {
+                $(obj).parents("li").slideUp().remove();
+                //$("span.cart_count").text(data.count);
+                //$(".cart_price").text(data.price);
+//                regoodsprice();
+                $("span.cart_sum").text(data.sum);
+                $("#total" + string).text(data.nowgoodtotal);
+                var a = data.sum;
+                if (a == "0") {
+                    $(".head_cart").html('没有数据');
+                }
+            },
+            error: function(event, XMLHttpRequest, ajaxOptions, thrownError) {
+                alert(XMLHttpRequest + thrownError);
+            }
+        });
+        return false;
+    });
+</script>

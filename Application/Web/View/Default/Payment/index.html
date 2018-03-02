@@ -1,0 +1,106 @@
+<extend name="Base/common_cart"/>
+<block name='style'>
+    <style>
+        .all-naiv{display:none;}
+        .m-nav-fix{position: fixed;top:0;width: 100%;background-color:#F5F5F5;}
+    </style>
+</block>
+<block name="body">
+    <div class="towp">
+        <div class="cash">
+            <i class="cash_ico"></i>
+            <h2>收银台 </h2>
+            <span>{:C('CONTACT')}</span>
+        </div>
+    </div>
+    <div class="paySuc">
+        <p class="p1">订单提交成功，请您及时付款，以便尽快为您发货!</p>
+        <p class="p2"> 
+            <span>订单号：{$orderid}
+                (<a href="{:U('order/details',array('orderid'=>$orderid))}">订单详情</a>)
+            </span>
+            <span>收款方：{:C('SITENAME')}</span>
+        </p>
+        <div class="de-price2">应付金额 : ￥    <span class="big-font">{$order_total}</span>        元</div>
+    </div>
+    <form action='{:U("Payment/pay")}' id="payform" method="post"  name="myform"  class="payform" target="_blank">
+        <input type="hidden" name="orderid" value="{$orderid}" />
+        <input type="hidden" name="order_total" value="{$order_total}">
+
+        <div class="chose-way towp bor"> 
+            <h2>支付方式</h2>
+            <div class="chose">
+                <div class="way paymentlist">
+                    <volist name="paymentlist" id="payment" key="key" >
+                        <eq name="key" value="1">
+                        <input type="hidden" name="paycode" value="{$payment.paycode}" />
+                        <input type="hidden" name="payid" value="{$payment.id}">
+                        <span title='{$payment.payname}' payname="{$payment.payname}" paycode='{$payment.paycode}' payid='{$payment.id}'  style="background: url('__IMG__/payment/{$payment.paycode}.jpg') no-repeat scroll center center;" class="pay1 pay_way active" ><i class="bg"></i></span>
+                        <else/>
+                        <span title='{$payment.payname}' payname="{$payment.payname}" paycode='{$payment.paycode}' payid='{$payment.id}'  style="background: url('__IMG__/payment/{$payment.paycode}.jpg') no-repeat scroll center center;" class="pay1 pay_way" ><i class="bg"></i></span>
+                        </eq>
+                    </volist>
+                </div>
+                <div class="way1" style="display:none;">
+                    <h3>支付平台</h3>
+                    <span class="pay1 ">支付宝接口</span>
+                </div>
+                <!-- 微信支付 -->
+                <div class="payWecCon bor" style="display:none;">
+                    <div class="pay-intr ">
+                        <p>二维码将在<span class="dead-time">3分4秒</span>后过期，请尽快完成支付，
+                            支付完成钱不要关闭该窗口</p>
+                        <div class="code bor">
+                            <img src="__IMG__/code.png" />
+                            <div> <span>请使用微信扫一扫扫描二维码支付</span></div>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="__IMG__/to-pay1.png">
+                    </div>
+                </div>
+                <!-- 银联支付 -->
+                <div class="payBank" style="display: none;">
+                    <div >
+                        <span class=" "><img src="__IMG__/bank1.jpg" /> </span>
+                        <span class=" active15"><img src="__IMG__/bank2.jpg" /> </span>
+                        <span class=" "><img src="__IMG__/bank2.jpg" /> </span>
+                        <span class=" "><img src="__IMG__/bank1.jpg" /> </span>
+                        <span class=" "><img src="__IMG__/bank2.jpg" /> </span>
+                        <span class=" "><img src="__IMG__/bank1.jpg" /> </span>
+                    </div>
+                    <!-- 展开更多银行 -->
+                    <div class="zanK "><em class="morBank active">展开更多银行<i class="bg"></i></em></div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="towp to-pay">
+        <input type="button" onclick="submitpay();" class="a-btn" value="立即去支付" />
+        <a href="{:U('order/index')}">返回我的订单</a>
+    </div>
+
+</block>
+<block name='script'>
+    <script>
+        $(function() {
+            $(".pay_way").click(function() {
+                $(".paymentlist").find(".pay_way").removeClass("active");
+                $(this).addClass("active");
+                $("input[name=payid]").val($(this).attr('payid'));
+                $("input[name=paycode]").val($(this).attr('paycode'));
+            });
+
+        });
+
+        function submitpay() {
+            var codeid = $("input[name=payid]").val();
+            var orderid = $("input[name=orderid]").val();
+            if (codeid.length <= 0 || orderid.length <= 0) {
+                layer.msg('请选择支付方式！');
+                return false;
+            }
+            $("#payform").submit();
+        }
+    </script>
+</block>

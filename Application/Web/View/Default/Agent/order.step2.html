@@ -1,0 +1,144 @@
+<extend name="Base/store_common"/>
+<block name="body">
+    <div class="wrap" style="background-color: #f5f5f5;">	
+        <div class="content_agency towp clear user_center">
+            <div class="content_left">
+                <include file="Member/member_menu"/>                
+            </div>
+            <div class="content_right" style="border: 0;">
+                <h2><a href="#">订单管理</a> > 添加订单</h2>
+                <div class="step step1">
+
+                </div>
+                <div class="pro_sear">
+                    <div class="sear_box clear">
+                        <span>按商品名称搜索</span>
+                        <!--                        <div class="select_1">
+                                                    <a href="">某商品（商品名称）<i class="triangle" ></i></a>
+                                                    <ul>
+                                                        <li>列表值1</li>
+                                                        <li class="current">列表值2</li>
+                                                        <li>列表值3</li>
+                                                        <li>列表值4</li>
+                                                    </ul>
+                                                </div>-->
+                        <form method="post" action="{:U('Agent/order_step2')}" >
+                            <div class="sear_box2">
+                                <input class="txt w200" type="text" id="" name='goods_name' value="" placeholde='请输入商品名称' />
+                                <input class="s_btn" type="submit" id="" value="" />
+                            </div>	
+                        </form>
+                    </div>
+
+                    <div class="sear_box clear " >
+                        <span>选择要添加的商品</span>
+                        <select name="goodsitem">
+                            <option value="0">请选择商品</option>
+                            <volist name='lists' id='item' key='k'>
+                                <option value="{$item.goods_id}">{$item.title}</option>
+                            </volist>
+                        </select>
+                        <!--<div class="select_1">-->
+                        <!--<a href="javascript:;"><i class="show-goods_name">某商品（商品名称）</i><i class="triangle" ></i></a>-->
+                        <!--                            <ul>
+                                                        <volist name='lists' id='item' key='k'>
+                                                            <li class='goodsitem' goods_id="{$item.goods_id}" >{$item.title}</li>
+                                                        </volist>
+                                                        <li class="current">列表值2</li>
+                                                    </ul>-->
+                        <!--</div>-->
+                    </div>
+                    <div class="goodsinfo">
+                        选择商品
+                    </div>
+
+                </div>
+                <form action='{:U("Agent/store_createOrder")}' method="post" name="createorderform" id="createorderform" onsubmit=" return checkCartlist();">
+                    <div class="cartlist">
+
+                    </div>
+                </form>
+                <div class="pag">
+                    <a href="{:U('Agent/order_step1')}" class="prev">上一步</a>
+                    <a href="javascript:;" class="next" onclick="orderconfirm();
+                            return false">下一步</a>
+                    <a class="cancel" href="{:U('Agent/order_step1')}">取消</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="mask-black" style="display: none">
+        <div class="add-address add-address2 mask2" style="display: block;">
+            <div class="add-table">
+                <h2>添加成功</h2>  
+                <a href="#" class="a-btn">确定</a>
+            </div>
+            <div class="colse  bg"></div>
+        </div>
+    </div>
+</block>
+<block name="script">
+    <script>
+        $(function() {
+            $("select[name=goodsitem]").change(function() {
+                var goods_id = $(this).val();
+                if (goods_id <= 0) {
+                    layer.msg('请选择商品');
+                    return false;
+                }
+                url = "{:U('Agent/goods_detail')}";
+                $.ajax({
+                    url: url,
+                    data: {goods_id: goods_id},
+                    dataType: "json",
+                    type: "post",
+                    success: function(res) {
+                        if (res.status) {
+                            $(".goodsinfo").html(res.info);
+                        } else {
+                            layer.msg(res.info);
+                        }
+                    }
+                });
+
+            });
+
+            getcart_list();
+        });
+
+        // 获取购物车列表
+        function getcart_list() {
+            url = "{:U('Agent/cartlist')}";
+            $.ajax({
+                url: url,
+                dataType: "json",
+                type: "post",
+                success: function(res) {
+                    if (res.status) {
+                        $(".cartlist").html(res.info);
+                    } else {
+                        layer.msg(res.info);
+                    }
+                }
+            });
+        }
+        function checkCartlist() {
+            var carts = $(".cartlist .cartitem").size();
+            if (carts <= 0) {
+                layer.msg('请添加商品');
+                return false;
+            }
+        }
+        // 提交订单
+        function orderconfirm() {
+
+            if ($('input.chk:checked').length > 0) {
+                $("#createorderform").submit();
+            } else {
+                layer.msg("请选择结算的商品");
+            }
+            return false;
+        }
+    </script>
+</block>

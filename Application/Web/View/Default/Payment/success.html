@@ -1,0 +1,13 @@
+<extend name="Base/common_shopcart_success"/>
+<block name="body">
+    <div class=" towp  shop-step shop-step3"></div>
+    <div class="towp payS-con">
+        <div class="payTxt">
+            <p class="fon20">提交成功，请耐心等待，我们将尽快为您发货！</p>
+            <p class="fon16"><span class="order-num fon16 ">订单号：{$orderid} </span> 订单金额：<span class="col3 fon16">{$money}元</span></p>
+        </div>
+        <div class="tiJiao ">
+            你可以：<span><a href="{:U('Center/allorder')}">查看订单详情</a> </span> <span><a href="{:U('Index/index')}">继续购物</a> </span>
+        </div>
+    </div>
+</block>

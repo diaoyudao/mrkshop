@@ -1,0 +1,110 @@
+<script type="text/javascript">
+    var ThinkPHP = window.Think = {
+        "MID": "{$guid}",
+        "UID": "{$uid}",
+        "IMG": "__IMG__", //项目公共目录地址
+        "ROOT": "__ROOT__", //当前网站地址
+        "JS": "__JS__", //当前项目地址
+        "APP": "__APP__", //当前项目地址
+        "PUBLIC": "__PUBLIC__", //项目公共目录地址
+        'SITE_URL': "{:SITE_URL}",
+        "DEEP": "{:C('URL_PATHINFO_DEPR')}", //PATHINFO分割符
+        "MODEL": ["{:C('URL_MODEL')}", "{:C('URL_CASE_INSENSITIVE')}", "{:C('URL_HTML_SUFFIX')}"],
+        "VAR": ["{:C('VAR_MODULE')}", "{:C('VAR_CONTROLLER')}", "{:C('VAR_ACTION')}"],
+        "searchUrl": '{:U("Web/Goods/lists")}',
+        "commentUrl": '{:U("Web/Comment/getCommentListById")}',
+        "diggUrl": '{:U("Web/Document/digg")}',
+        "undiggUrl": '{:U("Web/Document/digg")}',
+        "collectiontUrl": '{:U("Web/MyCollection/addcollection")}',
+        "messageUrl": '{:U("Web/Message/insert")}',
+        "replyUrl": '{:U("Web/Message/reply")}',
+        "countUrl": '{:U("Web/Message/saveMessageCount")}',
+        "deleUrl": '{:U("Web/Message/deleMessage")}',
+        "unfollowUrl": '{:U("Web/Follow/unFollow")}',
+        "dofollowUrl": '{:U("Web/Follow/doFollow")}',
+        "docollectionURL": '{:U("Web/Member/doCollection")}',
+        "delcommentUrl": '{:U("Web/Comment/delcomment")}',
+        "denounceUrl": '{:U("Web/Denounce/adddenounce")}',
+        "getMoreCommentUrl": '{:U("Web/Comment/getMoreComment")}',
+        "searchUser": '{:U("Web/Member/searchUser")}',
+        "ajaxComment": '{:U("Web/Comment/ajaxComment")}',
+        "login": '{:U("Web/Member/login")}',
+        "indexUrl": '{:U("Web/Index/changestyle")}'
+    };
+    var _CART_URL = "{:U('Cart/addItem')}";
+    var _FAVORTABLE_URL = "{:U('Favortable/addfavortable')}";
+    var LOGIN_URL = "{:U('member/login')}";
+    function U(url, params, rewrite) {
+        if (window.Think.MODEL[0] == 2) {
+            var website = window.Think.ROOT + '/';
+            url = url.split('/');
+            if (url[0] == '' || url[0] == '@')
+                url[0] = '';
+            if (!url[1])
+                url[1] = 'Index';
+            if (!url[2])
+                url[2] = 'index';
+            website = website + url[1] + '/' + url[2];
+
+            if (params) {
+                params = params.join('/');
+                website = website + '/' + params;
+            }
+            if (!rewrite) {
+                website = website + '.html';
+            }
+
+        } else {
+            var website = window.Think.ROOT + '/index.php';
+            url = url.split('/');
+            if (url[0] == '' || url[0] == '@')
+                url[0] = APPNAME;
+            if (!url[1])
+                url[1] = 'Index';
+            if (!url[2])
+                url[2] = 'index';
+            website = website + '?s=/' + url[0] + '/' + url[1] + '/' + url[2];
+            if (params) {
+                params = params.join('/');
+                website = website + '/' + params;
+            }
+            if (!rewrite) {
+                website = website + '.html';
+            }
+        }
+
+        if (typeof (window.Think.MODEL[1]) != 'undefined') {
+            website = website.toLowerCase();
+        }
+        return website;
+    }
+
+    function search() {
+        var keywords = $('#keywords').val();
+        var urlnew = $('#search_form').attr('action');
+        if (keywords == '' || urlnew == '') {
+            return false;
+        } else {
+            var arr = [];
+            arr[0] = keywords;
+            arr[1] = 1;
+            var urlhref = U(urlnew, arr, false);
+            window.location.href = urlhref;
+        }
+        return false;
+    }
+    function search2() {
+        var keywords = $('#keywords').val();
+        var urlnew = $('#search_form').attr('action');
+        if (keywords == '' || urlnew == '') {
+            return false;
+        } else {
+            url = urlnew.split('/');
+            var website = window.Think.ROOT + '/';
+            website = website + url[1] + '/Goods/lists/keywords/' + keywords + '.html';
+            window.location.href = website;
+        }
+        return false;
+    }
+</script>
+{$share_arr|wap_wx_share}

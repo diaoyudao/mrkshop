@@ -1,0 +1,26 @@
+<extend name="Base/common_index"/>
+<block name='style'>
+<style>
+.all-naiv{display:none;}
+</style>
+</block>
+<block name="body">
+<!-- 内容 -->
+<div class="wrap" style="background-color: #fafafa;">
+    <div class="guidance towp"><a href="{:U('index/index')}">首页</a>
+        <a href="{:U('help/index')}"> > 客服中心</a>
+        <a href="javascript:;;"> > {$article.title}</a>
+    </div>
+	<div class="content_ge towp clear">
+		<div class="content_left">
+			<include file="Help/help_menu"/>
+		</div>
+		<div class="content_right">
+			<h2>{$article.title}</h2>
+			<div class="r_guide">
+				{$article.content}
+			</div>
+		</div>
+	</div>
+</div>
+</block>

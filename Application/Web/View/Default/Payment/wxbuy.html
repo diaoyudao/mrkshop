@@ -1,0 +1,70 @@
+<extend name="Base/common_index"/>
+<block name='style'>
+    <style>
+        .all-naiv{display:none;}
+        .m-nav-fix{position: fixed;top:0;width: 100%;background-color:#F5F5F5;}
+    </style>
+</block>
+<block name="body">
+
+    <div class="paySuc">
+        <p class="p1">订单提交成功，请您及时付款，以便尽快为您发货!</p>
+        <p class="p2"> 
+            <span>订单号：{$orderid}
+                (<a href="{:U('order/details',array('orderid'=>$orderid))}">订单详情</a>)
+            </span>
+            <span>收款方：{:C('SITENAME')}</span>
+        </p>
+        <div class="de-price2">应付金额 : ￥    <span class="big-font">{$order_total}</span>        元</div>
+    </div>
+    <div class="chose-way towp bor"> 
+        <!-- 微信支付 -->
+        <div class="payWecCon bor" style="display:block; padding-top:0">
+            <div class="pay-intr ">
+                <p>二维码将在<span class="dead-time">2分00秒</span>后过期，请尽快完成支付，
+                    支付完成前不要关闭该窗口</p>
+                <div class="code bor">
+                    <img src="{$orderinfo['img_url']}" />
+                    <!--<img src="__IMG__/code.png" />-->
+                    <div> <span>请使用微信扫一扫扫描二维码支付</span></div>
+                </div>
+            </div>
+            <div>
+                <img src="__IMG__/to-pay1.png">
+            </div>
+        </div>
+    </div>
+    <!--    <div class="g" style="text-align: center;">
+            <img src="__IMG__/weix.jpg"/>
+            <p>微信扫描支付</p>
+        </div>-->
+</block>
+<block name="script">
+    <script type="text/javascript">
+        var end_time = Date.parse(new Date()) + 200000;
+        var now_time = Date.parse(new Date());
+        function check_pay_timer() {
+
+            if (end_time > now_time) {
+                var ajax_url = '{:U("Payment/check_order_status")}';
+                $.post(ajax_url, {orderId: "{$orderid}", amt: "{$order_total}"}, function(data) {
+                    if (data.status == 1) {
+                        window.location.href = data.url;
+                    } else {
+                        setTimeout(function() {
+                            check_pay_timer()
+                        }, 3000);
+                    }
+                });
+                now_time += 3000;
+                console.log(now_time);
+            } else {
+                window.location.href = "{:U('Payment/index/',array('id'=>$orderid))}";
+            }
+
+        }
+        setTimeout(function() {
+            check_pay_timer();
+        }, 3000);
+    </script>
+</block>

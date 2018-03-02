@@ -1,0 +1,67 @@
+<extend name="Base/common_index"/>
+<block name="body">
+
+    <!--头部 S-->
+    <div class="herder herder_search">
+        <form id="search_form" action="#">
+            <div class="btnWrap"><input name="" type="reset" value="清除"> </div>
+            <a href="javascript:history.go(-1);" class="back"><i></i></a>
+            <div class="search"><i></i>
+                <input name="keywords" type="text" id="keywords" class="keyword" name='keywords' value="{$keywords}" placeholder="搜索商品" x-webkit-speech="x-webkit-speech">
+            </div>
+        </form>
+    </div>
+    <div class="t_line"></div>
+
+    <!--头部 E--> 
+    <div class="search_hot">
+        <h3>热门搜索</h3>
+        <ul> 
+            <volist name='hotSearch' id='item'>
+                <li><a href="{:U('Goods/lists',array('keywords'=>$item))}">{$item}</a></li>
+            </volist>
+        </ul>
+    </div>
+    <div class="search_ls">
+        <h3>搜索历史</h3>
+        <ul>  
+            <notempty name="historykeywords">
+                <volist name='historykeywords' id='keyword' empty='没有搜索记录'>
+                    <li><a href="{:U('Goods/lists',array('keywords'=>$keyword))}">{$keyword}</a></li>
+                </volist>
+                <else/>
+                <li class="no_data" style="min-height: 1rem; line-height: 1rem;">
+                    <h3>
+                        <i class=""> <img src="__IMG__/ts.png"/> </i> 没有搜索记录
+                    </h3>						        	
+                </li>
+            </notempty>
+        </ul>
+        <a href="javascript:clear_s_history();" class="clearItem">清除历史记录</a>
+    </div>
+</block>
+<block name='script'>
+    <script>
+//        function checkSearchForm() {
+////            search2();
+//        }
+
+        document.onkeydown = function(event) {
+            var e = event || window.event || arguments.callee.caller.arguments[0];
+            if (e && e.keyCode == 13) { // enter 键
+                var keywords = $('#keywords').val();
+                var urlnew = "{:U('Goods/lists')}";
+                if (keywords == '' || urlnew == '') {
+                    return false;
+                } else {
+                    url = urlnew.split('/');
+                    var website = window.Think.ROOT + '/';
+                    website = website + url[1] + '/lists/keywords/' + keywords + '.html';
+//                    alert(website);return false;
+                    window.location.href = website;
+                }
+                return false;
+            }
+        };
+    </script>
+</block>

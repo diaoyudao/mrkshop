@@ -1,0 +1,97 @@
+<div class="comment">
+    <if condition="$commentlist">
+        <h4 class="bgc2">
+            <span class="active5">商品评价</span>
+<!--            <span class="active5">全部评价(6586)</span><span>好评(4576)</span><span>中评(565)</span><span>差评(56)</span><span>晒单（575）</span>-->
+        </h4>
+        <ul class="com_list">
+            <volist name="commentlist" id="commentinfo">
+                <li>
+                    <div class="head-pro ">
+                        <a href="#">
+                            <php>
+                                $impath = get_face($commentinfo["uid"]);
+                                $random = time();
+                            </php>
+                            <notempty name="impath">
+                                <img src="__PICURLFACE__{$commentinfo.uid}/face.jpg?r={$random}" alt="{$commentinfo['uid']|get_username}">
+                                <else/>
+                                <img src="__IMG__/head.jpg" alt="">
+                            </notempty>
+                            {$commentinfo['uid']|get_username}
+                        </a>
+                    </div>
+                    <div class="com-right">
+                        <p class="com-nr">{$commentinfo.content}</p>
+                        <div class="sai clear">
+                            <ul class="clear  saitu">
+                                <foreach name="commentinfo['picss']" item="pic">
+                                    <li><img src="{$pic}" width="60" heigth="60" alt="{$commentinfo.content}"></li>
+				</foreach>
+<!--                                <li><img src="__IMG__/pro-Detail/show-pro.jpg" alt=""></li>
+                                <li><img src="__IMG__/pro-Detail/show-pro.jpg" alt=""></li>
+                                <li><img src="__IMG__/pro-Detail/show-pro.jpg" alt=""></li>-->
+                            </ul>
+                            <div class="img_zomm">
+                                	<img src="" />
+                            </div>
+                            <div class="ping ">
+                                <div class="pingfen pingfen{$commentinfo.score}"><img src="__IMG__/commstar.jpg" /> </div>
+                                <div class="colo9">
+                                    <!--<span class="guigei">规格：150g</span>-->
+                                    <span class="date">评论时间：{$commentinfo['create_time']|date='Y-m-d H:i:s',###}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </volist>
+        </ul>
+
+        <div class="page_box clear">
+            {$_page}
+        </div>
+        <script type="text/javascript">
+            //	图片的放大缩小
+            $(".saitu img").click(function(){				
+                    var url=$(this).attr("src");
+                    console.log(url);
+                    $(this).parents(".saitu").siblings(".img_zomm").show().find("img").attr("src",url);			
+                    $(this).parent("li").addClass("active").siblings().removeClass("active");
+            })
+            $(".img_zomm img").click(function(){
+                    $(".img_zomm").hide(400);
+                    $(".saitu li").removeClass("active")
+            })
+            function getcomments(p) {
+                var gid = '{$gid}';
+                $.get('{:U("Comment/ajaxlists")}', {p: p, gid: gid}, function(data) {
+                    $("#aboutcommentlist").html(data.info);
+                    $("html,body").animate({scrollTop: $("#good_other_info").offset().top}, 500);
+                });
+            }
+        </script>
+        <else />
+<!--        <div class="nonecomment" >
+            暂无评论
+        </div>-->
+    </if>
+
+
+    <form style="display: none;" action="{:U('Comment/addajax')}" class="comment_info" method="post" name="commentform" id="commentform" onsubmit="return commentValidate();">
+        <h3 class="qbpl-tit-a">发表评价</h3>
+        <div id="commentmessage" style="display:none;"></div>
+        <div class="textarea-c">
+            <input type="hidden" id="score" name="score" value="3">
+            <input type="hidden" class="goodid" name="goodid" value="{$gid}">
+            <input type="hidden" class="shopid" name="shopid" value="">
+            <input type="hidden" class="orderid" name="orderid" value="">
+            <input type="hidden" class="good" name="goodscore" value="5">
+            <input type="hidden" class="service" name="servicescore" value="5">
+            <input type="hidden" class="delivery" name="deliveryscore" value="5">
+            <textarea rows="4" cols="90" maxlength="200" id="goodscomment" name="content" placeholder="请输入5-200字评论内容"></textarea>
+        </div>
+        <div class="btn-pinglun">
+            <input type="submit" class="sub" name="submit" value="提交">
+        </div>
+    </form>
+</div>

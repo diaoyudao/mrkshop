@@ -1,0 +1,33 @@
+
+<volist name='lists' id='item'>
+    <li>
+    <dt>
+    <div class="img">
+        <php>
+            $impath = get_face($item["uid"]);
+            $random = time();
+        </php>
+        <notempty name="impath">
+            <img src="__PICURLFACE__{$item.uid}/face.jpg?r={$random}" alt="{$item['uid']|get_username}">
+            <else/>
+            <img src="__IMG__/head.jpg" alt="">
+        </notempty>
+    </div>
+    <!--<img src="__IMG__/head.jpg" alt="" /></div>-->
+    <h4>{$item['uid']|get_username}</h4>
+    </dt>
+    <dd>
+        <div class="reviews_nr">
+            {$item.content}
+        </div>
+    <notempty name="item.picss">
+        <div class="reviews_img">
+            <foreach name="item['picss']" item="pic">
+                <span class="img"><img src="{$pic}" alt="{$item.content}"></span>
+            </foreach>
+        </div>
+    </notempty>
+    <a href="javascript:;"><div class="reviews_xj"><span>{$item.create_time|date="Y-m-d H:i:s",###}</span><i class="grade grade_{$item.score}"><em></em></i>{$item.score}分</div></a>
+</dd>
+</li>
+</volist>

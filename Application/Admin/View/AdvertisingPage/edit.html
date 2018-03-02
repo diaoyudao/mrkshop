@@ -1,0 +1,209 @@
+<extend name="Public/base" />
+<!-- 子导航 -->
+<block name="sidebar">
+    <include file="sidemenu" />
+</block> 
+<block name="body">
+	<script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+	<script type="text/javascript" src="__STATIC__/UploadImages.js"></script>
+	<div class="main-title cf">
+		<h2><if condition="$_GET['_action'] eq 'add'">新增<else/>编辑</if>广告位</h2>
+	</div>
+	<!-- 表单 -->
+	<form id="form" action="{:U(ACTION_NAME)}" method="post" class="form-horizontal">
+		<!-- 基础文档模型 -->
+		<div id="advimgcontent">
+		    <div class="form-item cf">
+			<label class="item-label item-label_f">所属</label> 
+			<present name="info.id">
+			<php>
+				$domainid= $info['domainid'];
+				$brandid= $info['brandid'];
+				if(!$domainid){
+				    $channellist[$domainid]="所有频道";
+				}
+				if(!$brandid){
+				    $channelbrandlist[$brandid]="所有品牌";
+				}
+			</php>
+			<input type="text" class="text input-large" disabled="disabled" value="{$channellist[$domainid]}——>{$channelbrandlist[$brandid]}"/>
+			<input type="hidden" name="domainid" id="domainid" value="{$domainid}"/>
+			<input type="hidden" name="brandid" value="{$brandid}"/>
+			<else /> 
+			<div class="form-item cf">
+			    <div class="controls">
+			    <select name="domainid" id="domainid" onchange="choosebrand(this.options[this.options.selectedIndex].value)"> 
+				<option value="0">无频道</option>
+				<volist name="channellist" id="dlist">
+				    <option value="{$key}" <eq name='key' value="$domainid"> selected </eq>>{$dlist}</option>
+				</volist>
+			    </select>  
+			    <select name="brandid" id="brandid">
+				<option value="0">无品牌</option> 
+			    </select>
+			    <span class="check-tips">(广告所属的频道或品牌)</span>
+			    </div> 
+			</div> 
+			<script>
+				$(document).ready(function(){
+					choosebrand( '{$domainid}' );
+				});
+				function choosebrand(domainid){
+					var url='__URL__/getbrandbydomain';
+					$.ajax({
+						type: 'POST', 
+						url: url , 
+						data:{domainid:domainid}, 
+						success: function(json){
+							var data=json.info;
+							var html="<option value='0'>无品牌</option>";
+							if( data ){
+								for(i=0;i< data.length;i++){
+								    html+="<option value='"+data[i].id+"'>"+data[i].name+"</option>";
+								}
+							}
+							$("#brandid").html(html);
+							return false;
+						} 
+					});
+				}  
+			</script>
+			</present>
+		    </div>
+			<div class="form-item cf">
+				<label class="item-label item-label_f">页面名称</label>
+				<div class="controls">
+				    <input type="text" class="text input-large" name="title" value="{$info.title}">
+				    <span class="check-tips">（请输入前台广告页面标签）</span>
+				</div>
+			</div>
+			<div class="form-item cf">
+				<label class="item-label item-label_f">广告页面图<span class="check-tips"></span></label>
+				<div class="controls">
+				    <input type="file" id="upload_picture_imgs">
+				    <input type="hidden" name="imgs" value="{$info.imgs}" class="icon imgs" />
+				    <div class="upload-img-box">
+					<notempty name="info.imgs"> 
+					    <div class="upload-pre-item">
+						<img src="{:__UPLOADS__}Adimgpage/{$info.domainid}/{$info.imgs}" data-id="{$v}"/>
+						<span class='btn-close btn-close-imgs' title='删除图片'></span>
+					    </div> 
+					</notempty>
+				    </div>
+				    <script type="text/javascript">
+					//多图上传图片
+					$(function(){
+					    /* 初始化上传插件*/ 
+					    $("#upload_picture_imgs").uploadify({
+						"height"          : 30,
+						"swf"             : "__STATIC__/uploadify/uploadify.swf",
+						"fileObjName"     : "download",
+						"buttonText"      : "上传图片",
+						"uploader"        : "{:U('uploadImg',array('session_id'=>session_id()))}",
+						"width"           : 120,
+						'removeTimeout'   : 1,
+						'fileTypeExts'    : '*.jpg; *.png; *.gif;',
+						"onUploadSuccess" : uploadPictureimgs,
+						'onSelect' : function(file) {
+						    if ( $("#domainid").val() ) { 
+						    }else{
+							alert("请先选择频道");
+							$('#upload_picture_imgs').uploadify('cancel', '*'); 
+						    }
+						    return false;
+						},
+						'onUploadStart':function(file){ 
+						    var domainid= $("#domainid").val();
+						    $('#upload_picture_imgs').uploadify('settings',"formData", { 'domainid': domainid });
+						},
+						'onFallback' : function() {
+						    alert('未检测到兼容版本的Flash.');
+						}
+					    });
+					    $(document).delegate('.btn-close-imgs', 'click', function(event) { 
+						event.preventDefault();
+						$(this).parent().remove(); 
+						$('.icon.imgs').val('');
+					    });
+					});
+					function uploadPictureimgs(file, dd){
+					    var data = $.parseJSON(dd);
+					    var src = '';
+					    if(data.status){
+						var domainid= $("#domainid").val();
+						src = data.url || '{:__UPLOADS__}'+ data.path;
+						upload_img = "<div class='upload-pre-item'><img src=" + src +" title='点击显示大图' > <span class='btn-close btn-close-imgs' title='删除图片'></span></div>";
+						picsbox = $("#upload_picture_imgs").siblings('.upload-img-box');
+						picsbox.append(upload_img)
+						$('.icon.imgs').val(data.savename);
+					    } else {
+						updateAlert(data.info);
+						setTimeout(function(){
+						    $('#top-alert').find('button').click();
+						    $(that).removeClass('disabled').prop('disabled',false);
+						},1500);
+					    }
+					}
+				    </script>
+				</div>
+			</div>
+			<if condition="$info['content']">
+			    <volist name="info.content" id="advss">
+				<div class="form-item cf">
+				    <if condition="$key eq 0">
+					<a class="attr_add_spec" href="javascript:;">[+]</a> 
+				    <else />
+					<a href="javascript:;" class="attr_remove_spec">[-]&nbsp;</a>
+				    </if>
+				    <label class="item-label item-label_f">位置标示</label> 
+				    <input type="text" class="text" style="width: 50px" value="{$advss['icon']}" name="advpositionicon[]">
+				    热区位置<input type="text" class="text" value="{$advss['map']}" name="advposition[]">
+				    <if condition="$key eq 0"><span class="check-tips">位置标示是图片上A1,B1,C1符号，热区位置是图片上对应标示的坐标位置）</span></if>
+				</div>
+			    </volist>
+			<else />
+			    <div class="form-item cf">
+			    <a class="attr_add_spec" href="javascript:;">[+]</a>
+			    <label class="item-label item-label_f">位置标示</label> 
+			    <input type="text" class="text" style="width: 50px" value="" name="advpositionicon[]">
+			    热区位置<input type="text" class="text" value="" name="advposition[]">
+			    <span class="check-tips">位置标示是图片上A1,B1,C1符号，热区位置是图片上对应标示的坐标位置）</span> 
+			</div>
+			</if>
+		</div>
+		<input type="hidden" name="id" value="{$info.id}"/>
+		<div class="form-item cf">
+		    <button class="btn submit-btn ajax-post hidden" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+		    <input class="btn btn-return" type="reset" value="重置" />
+		    <button class="btn btn-return" onclick="javascript:history.back(-1);return false;">返 回</button>
+		</div>
+	</form>
+</block>
+
+<block name="script">
+<script type="text/javascript">
+$(function(){
+    $('#submit').click(function(){
+	$('#form').submit();
+    });
+    //属性添加
+    $("a.attr_add_spec").click(function(){
+	addSpec(this);
+    });
+    $(document).delegate('a.attr_remove_spec', 'click', function(event) {
+	removeSpec(this);
+    }); 
+});
+function addSpec(obj) {
+    var h=$(obj).parent().clone();
+    $(h).find("a.attr_add_spec").replaceWith("<a class=\"attr_remove_spec\" href=\"javascript:;\">[-]&nbsp;</a>");
+    $(h).find("input[name='advpositionicon[]']").val("");
+    $(h).find("input[name='advposition[]']").val("");
+    $(h).find("span.check-tips").remove();
+    $("#advimgcontent").append(h);
+}
+function removeSpec(obj) {
+    var h=$(obj).parent().remove(); 
+}
+</script>
+</block>

@@ -1,0 +1,98 @@
+<switch name="show_page">
+<case value="banner">
+    <if condition="$list['type'] eq 2"><!-- type eq one is index advs -->
+        <volist name="list.res" id="lo" key="k">
+            <div class="swiper-slide">
+                <a href="{$lo.link}" target="_blank" title="{$lo.title}">
+                    <img src="{$lo.path}" alt="{$lo.title}" />
+                    <if condition="$lo['showtitle'] gt 0"><span>{$lo.title}</span></if>
+                </a>
+            </div>
+        </volist> 
+        <elseif condition="$list['type'] eq 1" />
+        <notempty name="list['path']">
+            <a href="{$list.link}" target="_blank" title="{$list.title}" style="width:{$list['width']}px;height:{$list['height']}px;" >
+                <img alt="{$list.title}" src="{$list.path}"  style="width:{$list['width']}px;height:{$list['height']}px;" />
+            </a>
+        </notempty>
+    </if>
+</case>
+<case value="pc_banner">
+    <!--<script type="text/javascript" src="__JS__/jdSlide.js"></script>-->
+    <if condition="$list['type'] eq 2"><!-- type eq one is index advs -->
+        <div class="index_nav">
+	<ul class="slides">
+            <volist name="list.res" id="lo" key="k">
+                <li style="background:url('{$lo.path}') 50% 0 no-repeat;"><a href="{$lo.link}" title="{$lo.title}"></a></li>
+            </volist>
+	</ul>
+	</div>
+ 
+        <elseif condition="$list['type'] eq 1" />
+        <notempty name="list['path']">
+           <div class="index_nav">
+            <ul class="slides">
+                <volist name="list.res" id="lo" key="k">
+                    <li style="background:url('{$lo.path}') 50% 0 no-repeat;"><a href="{$lo.link}" title="{$lo.title}"></a></li>
+                </volist>
+            </ul>
+            </div>
+            <a href="{$list.link}" target="_blank" title="{$list.title}" style="width:{$list['width']}px;height:{$list['height']}px;" >
+                <img alt="{$list.title}" src="{$list.path}"  style="width:{$list['width']}px;height:{$list['height']}px;" />
+            </a>
+        </notempty>
+    </if>
+</case>
+<case value="cate">
+    <if condition="$list['type'] eq 2"><!-- type eq one is index advs -->
+       <div class="tui_jian">
+        <volist name="list.res" id="lo" key="k">
+         <div class="">
+                <a href="{$lo.link}" title="{$lo.title}">
+                    <img src="{$lo.path}" alt="{$lo.title}"/>
+                </a>
+            </div>
+        </volist> 
+        </div> 
+        <elseif condition="$list['type'] eq 1" />
+        <notempty name="list['path']">
+            <div class="tui_jian">
+                <div class="">
+                    <a href="{$list.link}"  target="_blank" title="{$list.title}">
+                        <img src="{$list.path}" alt="{$list.title}"/>
+                    </a>
+                </div>
+            </div>
+        </notempty>
+    </if>
+</case>
+<default />
+<if condition="$list['type'] eq 2"><!-- type eq one is index advs -->
+    <div class="bd">
+        <ul>
+            <volist name="list.res" id="lo" key="k">
+                <li>
+                    <a href="{$lo.link}" target="_blank" title="{$lo.title}">
+                        <img src="{$lo.path}" alt="{$lo.title}" />
+                        <!--style="width:{$list.width}px;height:{$list.height}px;"--> 
+                        <!--<if condition="$lo['showtitle'] gt 0"><span>{$lo.title}</span></if>-->
+                    </a>
+                </li>
+            </volist> 
+        </ul>
+    </div>
+    <elseif condition="$list['type'] eq 3" />
+    <div style="width:{$list['width']}px;height:{$list['height']}px;background: #cecece;">
+        <div style="margin:0px auto;width:150px;line-height: 30px;">{$list.advstext}</div></div>
+    <elseif condition="$list['type'] eq 1" />
+    <notempty name="list['path']">
+        <a href="{$list.link}" target="_blank" title="{$list.title}" style="width:{$list['width']}px;height:{$list['height']}px;" >
+            <img alt="{$list.title}" src="{$list.path}"  style="width:{$list['width']}px;height:{$list['height']}px;" />
+        </a>
+    </notempty>
+    <elseif condition="$list['type'] eq 4" />
+    联系管理员
+</if>
+</switch>
+
+<!-- add more -->

@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<include file="Public/head"/>
+</head>
+<body>
+<div class="header" id="header"> 
+<!-- 头部 -->
+<include file="Public/header"/>
+<!-- /头部 -->
+</div>
+<!-- 主体 -->
+<include file="Public/body"/>
+<!-- /主体 -->
+
+<!-- 底部 -->
+<include file="Public/footer"/>
+<!-- /底部 -->
+<block name="bottom"></block>
+    <script src="__JS__/idangerous.swiper.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="__JS__/jquery-1.11.2.min.js"></script>
+    <script src="__JS__/selectivizr.js" type="text/javascript" charset="utf-8"></script>
+    <script src="__JS__/mrk.js" type="text/javascript" charset="utf-8"></script>
+<block name="script"></block>
+<script>
+        $('.allClassfy').click(function() {
+            $('.all-naiv').fadeToggle();
+        });
+    
+    var _CART_URL = "{:U('Cart/addItem')}";
+    var _FAVORTABLE_URL = "{:U('Favortable/addfavortable')}";
+    var LOGIN_URL = "{:U('member/login')}";    
+        
+/*判断浏览器版本是否过低*/
+
+	
+  var Sys = {};
+
+        var ua = navigator.userAgent.toLowerCase();
+
+        if (window.ActiveXObject){
+
+            Sys.ie = ua.match(/msie ([\d.]+)/)[1];			
+			//$(".tdivbg,.browser").css({"dislay":"block"});
+            if (Sys.ie<=7){
+
+          document.getElementById("tdivbg").style.display="block";
+		  document.getElementById("browser").style.display="block";
+		  document.body.style.overflow="hidden";
+
+            }
+
+        }
+</script>
+</body>
+</html>
+

@@ -1,0 +1,57 @@
+<extend name="Public/base"/>
+
+<block name="body">
+	<div class="main-title">
+		<h2>支付方式管理</h2>
+	</div>
+
+	<div class="cf">
+		<a class="btn" href="{:U('add','pid='.$pid)}">新 增</a>
+		<a class="btn" href="javascript:;">删 除</a>
+	</div>
+
+	<div class="data-table table-striped">
+		<table>
+			<thead>
+				<tr>
+					<th class="row-selected">
+						<input class="checkbox check-all" type="checkbox">
+					</th>
+					<th>ID</th>
+					<th>支付名称</th>
+          <th>支付标识</th>
+					<th>支付描述</th>
+          <th>排序</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<notempty name="list">
+				<volist name="list" id="payment">
+					<tr>
+						<td><input class="ids row-selected" type="checkbox" name="" id="" value="{$payment['id']}"> </td>
+						<td>{$payment.id}</td>
+						<td><a href="{:U('edit?id='.$payment['id'])}">{$payment.payname}</a></td>
+            <td>{$payment.paycode}</td>
+						<td>{$payment.paydec}</td>
+             <td>{$payment.weight}</td>
+						<td>
+							<a title="编辑" href="{:U('edit?id='.$payment['id'])}">编辑</a>
+							<a href="{:U('setStatus?ids='.$payment['id'].'&status='.abs(1-$payment['status']))}" class="ajax-get">{$payment.status|show_status_op}</a>
+							<a class="confirm ajax-get" title="删除" href="{:U('del?id='.$payment['id'])}">删除</a>
+						</td>
+					</tr>
+				</volist>
+				<else/>
+				<td colspan="6" class="text-center"> aOh! 暂时还没有内容! </td>
+				</notempty>
+			</tbody>
+		</table>
+	</div>
+</block>
+
+<block name="script">
+<script type="text/javascript">
+
+</script>
+</block>

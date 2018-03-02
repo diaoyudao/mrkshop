@@ -1,0 +1,400 @@
+<extend name="Base/common_index"/>
+<block name="style">
+    <style>
+        
+        body{
+            max-width: 640px;min-width: 320px; position: relative; height:100%; overflow: hidden;
+        }
+    </style>
+    
+</block>
+<block name='body'>
+    <div class="warp_1">
+        <!-- page1 s--->
+        <div class="c_page1">
+            <!--头部 S-->
+            <div class="herder">
+                <a href="javascript:history.go(-1);" class="back"><i></i></a>
+                <h3>商品结算</h3>
+            </div>
+            <div class="t_line"></div>
+            <!--头部 E-->
+            <!--地址信息 S--> 
+            <form action='{:U("Checkout/createorder")}' method="post" name="createorderform" id="createorderform" onsubmit=" return checkaddress();"> 
+                <div class="address">
+                    <div class="flow_Address_line"></div>
+                    <a href="javascript:;">
+                        <ul class="clear">
+                            <li>{$address.realname}</li>
+                            <li>{$address.cellphone|set_start_phone}</li>
+                            <li>{$address.card_no|set_start_card}</li>
+                        </ul>
+                        <p><eq name='address.isdefault' value='1'><i>默认</i></eq>{$address.province}{$address.city}{$address.area},{$address.address}</p>       
+                    </a>
+                    <div class="flow_Address_line"></div>
+                </div>
+                <!--地址信息 E-->
+                <!--商品信息 S-->
+                <div class="commodity">
+                    <ul>
+                        <volist name="shoplist" id="vo">
+                            <if condition="$vo['type'] eq 0">
+                                <li>
+                                    <a href="{:U('Goods/detail',array('channelname'=>$vo['channelname'],'id'=>$vo['goodid']))}" target="_blank" >
+                                        <dt class="img">
+                                        <img src="{$vo.goodid|get_cover_picture_url}">
+                                        </dt>
+                                        <dd>
+                                            <h3>{$vo.goodid|get_good_name}</h3>
+                                            <div class="saixuan_sx">
+                                                <div class="jiage">
+                                                    ￥<span id="total{$vo.sort}">{$vo.total}</span>
+                                                    <if condition='$vo.haiguan_rate GT 0'>
+                                                        <span class="taxes">税费<i>￥{$vo.haiguan_rate}</i></span>
+                                                    </if>
+                                                </div>
+                                                {$vo.parameters}<em>X{$vo.num}</em>
+                                            </div>
+                                        </dd>
+                                    </a>
+                                </li>
+                            </if>
+                        </volist>
+                    </ul>	
+                </div>
+                <!--商品信息 E-->
+
+                <!--配送方式 S-->
+                <div id="shippinglist">
+
+                </div>
+                <!--配送方式 E-->
+                <!--买家留言 S-->
+                <div class="psxx">
+                    <dl><dt>买家留言</dt><dd><input name="order_message" type="text" placeholder="选填，给商家留言(45字以内)" class="text"></dd></dl>
+                </div>
+                <!--买家留言 E-->
+                <!--商品总额 S--> 
+                <div class="spdd_jg">
+                    <ul>
+                        <li><span>￥<span id="allproduct">{$total}元 </span></span>商品总额</li>
+                        <if condition="$orderType EQ 2  or $orderType  eq 3">
+                            <li><span>￥<span id="haiguan_rate_total">{$haiguan_rate_total}元 </span></span>   税费 </li>
+                        </if>
+                        <li>商品总重量<span id="goods_weight">{$goodsTotalWeight}千克</span>   </li>
+                        <li><span>+ ￥<span id="pricedis">{$shipping_fee} </span></span>运费</li>
+
+                    </ul>
+                </div>
+                <!--商品总额 E--> 
+                <!--底部 S-->
+                <div class="flow_footer" style="bottom:0;">
+                    <input type="hidden" name="senderid" value='{$address.id}' id="senderid" >
+                    <input type="hidden" name="tag" value="{$tag}"> 
+                    <input type="hidden" name="orderType" value="{$orderType}"> 
+                    <input type="hidden" name="iscart" value="{$iscart}"> 
+                    <input type="hidden" name="shipping_fee" value="{$shipping_fee}"> 
+                    <div class="flow_footer_cz"> 
+                        <!--<a href="flow_Payment.html" class="jiesuan">提交订单</a>-->
+                        <input type="submit" name="submit" value='提交订单' class='jiesuan' />
+                    </div>
+                    <h3 class="flow_sfk">实付款：<span><strong id="allprice">￥{$all}</strong></span></h3>
+                </div>
+            </form>
+            <div class="b_line"></div>
+            <!--底部 E--> 
+            <style>
+                .footer{display: none;}
+            </style>
+        </div>
+        <!-- page1 end--->
+    </div>
+    <!--地址管理 page2 s-->
+    <div class="c_page2" style="display: none;" id="myaddresslist">
+
+    </div>
+    <!--地址管理 page2 e-->
+
+    <!-- page3 s-->
+    <div class="c_page3" style="display:none">
+        <!--头部 S-->
+        <div class="herder">
+            <a href="javascript:;" class="back back_pre3"><i></i></a>
+            <h3>编辑地址</h3>
+            <!-- <div class="herd_r"><a href="search.html" class="search"><i></i></a></div>-->
+        </div>
+        <div class="t_line"></div>
+        <!--头部 E--> 
+        <!--地址列表 S--> 
+        <div class="edit_address">
+
+        </div>
+        <!--地址列表 E-->  
+        <!--底部 S-->
+        <div class="b_line"></div>
+        <!--底部 E-->
+    </div>
+    <!-- page3 e-->
+    <div class="tdivbg" style="display:none"></div>
+
+</block>
+<block name='script'>
+    <script>
+        function back_pre2() {
+            $(".tdivbg").css({"z-index": "100"});
+            $(".c_page1,.tdivbg").css({"display": "block"});
+            $(".c_page2").addClass("lrmove animated");
+            setTimeout(removeClass, 1000);
+            function removeClass() {
+                $(".c_page2").removeClass("lrmove animated");
+                $(".c_page2,.tdivbg").css({"display": "none"});
+            }
+        }
+        $(function() {
+            $(".address").click(function() {
+                $(".tdivbg").css({"z-index": "100"});
+                $(".c_page2,.tdivbg").css({"display": "block"});
+                $(".c_page2").addClass("fadeInRightBig animated");
+                setTimeout(removeClass, 1000);
+                //});
+                function removeClass() {
+                    $(".c_page2").removeClass("fadeInRightBig animated");
+                    $(".c_page1,.tdivbg").css({"display": "none"});
+                }
+            });
+//            $("body").on('click', '.edi,.add_loginbtn', function() {
+////            $(".edi,.add_loginbtn").click(function() {
+//                $(".tdivbg").css({"z-index": "102"});
+//                $(".c_page3,.tdivbg").css({"display": "block"});
+//
+//                $(".c_page3").addClass("fadeInRightBig animated");
+//                setTimeout(removeClass, 1000);
+//                //});
+//                function removeClass() {
+//                    $(".c_page3").removeClass("fadeInRightBig animated");
+//                    $(".c_page2,.tdivbg").css({"display": "none"});
+//                }
+//            });
+            $("body").on('click', '.back_pre2', function() {
+//            $(".back_pre2").click(function() {
+                back_pre2();
+            });
+
+
+
+            $(".back_pre3").click(function() {
+                $(".c_page2,.tdivbg").css({"display": "block"});
+                $(".c_page3").addClass("lrmove animated");
+                setTimeout(removeClass, 1000);
+                function removeClass() {
+                    $(".c_page3").removeClass("lrmove animated");
+                    $(".c_page3,.tdivbg").css({"display": "none"});
+                }
+            });
+            $(".btn_save").click(function() {
+                console.log("...");
+                $(".c_page2,.c_page3,.tdivbg").css({"display": "none"});
+                $(".c_page1").css({"display": "block"});
+            });
+
+        })
+
+
+
+
+
+
+
+        $(".Radio_yhj").click(function() {
+            $(".yhjsyye").toggle();
+        });
+
+        var address_layer = '';
+        //地址编辑
+        function open_address(address_id) {
+
+            $.ajax({
+                url: "{:U('Checkout/ajaxaddress')}",
+                type: "post",
+                dataType: "json",
+                data: {id: address_id},
+                success: function(json) {
+                    if (json.status) {
+                        $(".edit_address").html(json.info);
+                    }
+                    return false;
+                }
+            });
+
+            $(".tdivbg").css({"z-index": "102"});
+            $(".c_page3,.tdivbg").css({"display": "block"});
+
+            $(".c_page3").addClass("fadeInRightBig animated");
+            setTimeout(removeClass, 1000);
+            //});
+            function removeClass() {
+                $(".c_page3").removeClass("fadeInRightBig animated");
+                $(".c_page2,.tdivbg").css({"display": "none"});
+            }
+
+        }
+
+        /**
+         * 异步获取配送方式
+         * @returns {undefined}
+         */
+        function shippinglist(address_id) {
+             var orderType = "{$orderType}";
+            $.ajax({
+                url: "{:U('Checkout/ajaxshipping')}",
+                type: "post",
+                dataType: "json",
+                data: {address_id: address_id,orderType:orderType},
+                success: function(json) {
+                    if (json.status) {
+                        $("#shippinglist").html(json.info);
+                        $('#pricedis').text(json.money);   // 运费
+                        $("input[name=shipping_fee]").val(json.money);
+                        if (json.disable == false) {
+                            $("input[type=submit]").attr('disabled', 'disabled').css({'background': '#ccc', 'cursor': 'not-allowed'});
+                        } else {
+                            $("input[type=submit]").removeAttr("disabled").css({'background': '', 'cursor': 'pointer'});
+                        }
+                        clacOrderFee(); // 计算订单金额
+                        return false;
+                    }
+
+                    layer.msg('加载地址错误');
+                    return false;
+                }
+            });
+        }
+
+        /**
+         * 获取我的地址列表
+         * @returns {undefined}
+         */
+        function myaddresslist() {
+            $.ajax({
+                url: "{:U('Checkout/ajaxaddresslist')}",
+                type: "post",
+                dataType: "json",
+//                data: {id: address_id},
+                success: function(json) {
+                    if (json.status) {
+                        $("#myaddresslist").html(json.info);
+                        return false;
+                    }
+                    layer.msg('加载地址错误');
+                    return false;
+                }
+            });
+        }
+        function delAddress(aid) {
+            //判断新地址是否选中,获取地址id
+            var con_index = layer.confirm('确定要删除该地址吗？', {icon: 3, title: '提示'}, function(index) {
+                if (index) {
+                    if (aid == null) {
+                          alert("选择地址无效!");
+                        return false;
+                    } else {
+                        $.ajax({
+                            type: 'post', //传送的方式,get/post
+                            url: '{:U("Member/deleteAddress")}', //发送数据的地址
+                            data: {id: aid},
+                            dataType: "json",
+                            success: function(data)
+                            {
+                                layer.msg(data.info);
+                                myaddresslist();
+                                shippinglist(0);
+                            },
+                            error: function(event, XMLHttpRequest, ajaxOptions, thrownError) {
+                                alert(XMLHttpRequest + thrownError);
+                            }
+                        });      
+                     }
+                    layer.close(con_index);
+                }
+            });
+
+        }
+
+
+        $(function() {
+            myaddresslist();    // 加载我的地址列表
+            shippinglist(0);     // 加载配送方式
+            /*重新计算运费及总金额*/
+            $("#shippinglist").delegate(".peisong", "change", function() {
+//                var yunfei = parseFloat($(this).attr('money'));
+               var yunfei = parseFloat($('.peisong option:selected') .attr('money'));
+//               alert(yunfei);
+//                yunfei =  isNaN(yunfei) ? yunfei : 0;
+                var yfsump = yunfei.toFixed(2);
+                $('#pricedis').text(yfsump);   // 运费
+                clacOrderFee();
+            });
+
+        });
+
+        /**
+         * 计算订单价格
+         * @returns {undefined}
+         */
+        function clacOrderFee() {
+
+            var yunfei = parseFloat($('#pricedis').text());  // 运费
+            yunfei = yunfei.toFixed(2);
+            var allproduct = parseFloat($('#allproduct').text());  // 商品价格
+            var haiguan_rate_total = parseFloat($('#haiguan_rate_total').text());  // 海关费
+            if (isNaN(haiguan_rate_total)) {
+                haiguan_rate_total = 0;
+            }
+            var allprice = parseFloat(eval(allproduct) + eval(yunfei) + eval(haiguan_rate_total));       // 订单总价
+            var sump = allprice.toFixed(2);
+
+            $('#allprice').text(sump);
+        }
+//        选择地址
+        function  chooseaddress(obj) {
+            var address_id = $(obj).attr("addressid");
+            shippinglist(address_id);
+            $("#senderid").val(address_id);
+//            $(obj).parents('li').siblings().addClass('active6').removeClass('active6')
+//            $(obj).parents('li').addClass('active6');
+            $('.check').removeClass('checked');
+            $(obj).find('i').addClass('checked');
+            $.ajax({
+                type: 'post', //传送的方式,get/post
+                url: '{:U("Checkout/getaddressinfo")}', //发送数据的地址
+                data: {addressid: address_id},
+                dataType: "json",
+                success: function(data)
+                {
+                    $(".address").html(data.info);
+                    back_pre2();
+                }
+            });      
+//          $(obj).parents('li').toggleClass('active6');
+        }
+
+        /*
+         *检查地址是否选择 
+         */
+        function checkaddress() {
+            //判断默认地址是否选中,获取地址id
+            var addressid = $("#senderid").val();
+//            $("#senderid").val(addressid);
+//            alert(addressid);
+            if (typeof (addressid) == "undefined") {
+                document.getElementById('myaddresslist').scrollIntoView();
+                layer.msg("请选择一个收货地址");
+                return false;
+            } else {
+                return true;
+            }
+            return false;
+        }
+
+    </script>
+</block>

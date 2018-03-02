@@ -1,0 +1,3 @@
+<?php
+//000000000000a:15:{s:2:"id";s:1:"5";s:4:"name";s:12:"厨房用品";s:3:"url";s:25:"http://www.mrk.com/elder/";s:9:"bindgroup";s:4:"Home";s:4:"mark";s:14:"chufangyongpin";s:10:"meta_title";s:0:"";s:8:"keywords";s:0:"";s:11:"description";s:0:"";s:4:"icon";s:4:"4169";s:11:"create_time";s:10:"1438574331";s:11:"update_time";s:10:"1465971848";s:6:"status";s:1:"1";s:6:"weight";s:1:"3";s:4:"sort";s:1:"5";s:4:"show";s:1:"1";}
+?>

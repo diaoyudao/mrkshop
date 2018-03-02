@@ -1,0 +1,92 @@
+<extend name="Base/common_index"/>
+
+<block name="body">
+
+    <!--头部 S-->
+    <div class="herder">
+        <a href="javascript:history.go(-1);" class="back"><i></i></a>
+        <h3>快捷支付</h3>
+    </div>
+    <!--<div class="t_line"></div>-->
+    <if condition="$orderinfo['jsApiParameters']">
+
+        <script type="text/javascript">
+            //调用微信JS api 支付 
+            function jsApiCall()
+            {
+                WeixinJSBridge.invoke(
+                        'getBrandWCPayRequest',
+                        <php> echo $orderinfo['jsApiParameters']; </php> ,
+                        function(res) {
+                          //  WeixinJSBridge.log(res.err_msg);
+                          //  alert(res.err_code+res.err_desc+res.err_msg);
+                            if (res.err_msg == "get_brand_wcpay_request:ok") {
+                                window.location.href = "{$orderinfo['success_page']}";
+                            } else {
+                                window.location.href = "{$orderinfo['error_page']}";
+                            }
+                        }
+                );
+            }
+
+
+            function callpay()
+            {
+                if (typeof WeixinJSBridge == "undefined") {
+                    if (document.addEventListener) {
+                        document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+                    } else if (document.attachEvent) {
+                        document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+                        document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+                    }
+                } else {
+                    jsApiCall();
+                }
+            }
+            callpay();
+        </script> 
+        <else />
+        <div  class="g" style="text-align: center; margin: auto; margin-top: 1rem; width: 80%;">
+            <img src="{$orderinfo['img_url']}" />
+            <!--<img src="__IMG__/er-code.jpg" />-->
+            <span style="padding: 10px; display: block;">长按二维码识别扫码</span>
+            
+            <script type="text/javascript">
+                var end_time = Date.parse(new Date()) + 100000;
+                var now_time = Date.parse(new Date());
+                function check_pay_timer() {
+
+                    if (end_time > now_time) {
+                        var ajax_url = '{:U("Payment/check_order_status")}';
+                        $.post(ajax_url, {orderId: "{$orderid}", amt: "{$order_total}"}, function(data) {
+                            if (data.status == 1) {
+                                window.location.href = data.url;
+                            } else {
+                                setTimeout(function() {
+                                    check_pay_timer()
+                                }, 3000);
+                            }
+                        });
+                        now_time += 3000;
+                        console.log(now_time);
+                    } else {
+                        window.location.href = "{:U('Payment/index/',array('id'=>$orderid))}";
+                    }
+
+                }
+                setTimeout(function() {
+                    check_pay_timer();
+                }, 3000);
+            </script>
+        </div>
+    </if>
+    <div class="t_line"></div>
+    <div class="pay-failure pay-success">
+        <ul>
+            <li>订单号：{$orderid}</li>
+            <li>本次支付：<span>￥{$order_total} </span></li>
+        </ul>
+        <!--        <a class="dd" href="{:U('Order/details',array('orderid'=>$orderid))}">查看订单</a>
+                <a class="return" href="{:U('Index/index')}">返回首页</a>-->
+    </div>
+</block>

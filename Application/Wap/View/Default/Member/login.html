@@ -1,0 +1,101 @@
+<extend name="Base/common_login"/>
+<block name='style'>
+    <style>
+        html{
+            background-color: #fff;
+        }
+        .footer{display:none}
+        body{background:url(__IMG__/login/bg.jpg) no-repeat center top;background-size:100% auto;min-height:100%}
+    </style>
+</block>
+<block name="body" >
+    <!--article start-->
+    <div class="logins">
+        <form action="{:U('member/login')}" method="post" class="validate"  onsubmit="validateCallback(this, dialogAjaxDone);
+                return false;">
+            <ul class="login">
+                <li><input type="text" name="username" id="" class="name" placeholder="请输入用户名/手机号" value=""  /></li><!---错误提示：placeholder="aa"　这样写--->
+                <li><input type="password" name="password" class="psw" id="" placeholder="请输入密码"  value="" /></li>
+                <li><input type="submit" class="button" name="" id="" value="登录" /></li>
+                <li class="clear">
+                    <a href="{:U('Member/register')}">注册账号</a>
+                    <a href="{:U('Member/forgotpassword')}">忘记密码</a>
+                </li>
+            </ul>
+        </form>
+    </div>
+    <div class="logins_three" style="display:block">
+        <h3>其他方式登录</h3>
+        <div>
+            <!--            <a href="javascript:;" class="i_qq"></a>
+                        <a href="javascript:;" class="i_wb"></a>-->
+            <a href="{:U('Member/wx_login')}" class="i_wx"></a>
+        </div>
+    </div>
+    <!--article end-->
+</block>
+<block name="script"> 
+    <script src="__JS__/jquery.validate.js" type="text/javascript"></script>
+    <script type="text/javascript">
+            $(function() {
+                if ($('form.validate').length) {
+//	    var mobyzurl = "{:U('member/checkMobile')}";
+                    $('form.validate').validate({
+                        rules: {
+                            username: {
+                                required: true,
+//                                        ismobile: true
+                                rangelength: [3, 11]
+                            },
+                            password: {
+                                required: true,
+                                rangelength: [5, 15]
+
+                            }
+                        },
+                        messages: {
+                            username: {
+                                required: '请输入手机号',
+                                rangelength: "账号介于 {0} 和 {1} 之间用户名或账号"
+                            },
+                            password: {
+                                required: '请输入密码',
+                                rangelength: "密码介于 {0} 和 {1} 之间的字符串"
+                            }
+                        },
+//                        errorPlacement: function(error, element) {
+//                            error.appendTo(element);
+//                            console.log(error);
+//                        }
+                            /* 重写错误显示消息方法,以alert方式弹出错误消息 */  
+                            showErrors : function(errorMap, errorList) {  
+                             var msg = "";  
+                             $.each(errorList, function(i, v) {  
+                              msg += (v.message +'!' + "\r\n");  
+                             });  
+                             if (msg != "")  
+                              layer.msg(msg);  
+                            }, 
+                    });
+                    jQuery.validator.addMethod('ismobile', function(value, element) {
+                        var length = value.length;
+                        var mobile = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0-9]|170|177)\d{8}$/;
+                        return this.optional(element) || (length == 11 && mobile.test(value));
+                    }, '请正确填写手机号码');
+                }
+
+
+                $(".name,.psw").focus(function() {
+                    $(".logins_three").slideUp();
+                });
+                $(".name,.psw").blur(function() {
+                    $(".logins_three").show();
+                });
+
+
+            });
+
+
+
+    </script>
+</block> 

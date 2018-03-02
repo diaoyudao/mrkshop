@@ -1,0 +1,217 @@
+<extend name="Base/member_common"/>
+<block name='style'>
+
+</style>
+</block>
+<block name="body">
+    <!-- 内容 -->
+    <div class="wrap" style="background-color: #f5f5f5;">
+        <div class="guidance towp clear"><a href="javascript:;">首页</a><a href="javascript:;"> > 会员首页</a></div>
+        <div class="content_agency towp clear user_center complete_order">
+            <div class="content_left">
+                <include file='Member/member_menu' />
+            </div>
+            <div class="content content_right" style="border: 0;">
+                <h2><a href="{:U('Member/index')}">会员中心</a> &gt; 投诉建议 <a href="{:U('Message/index')}" class="a-btn8 fr" > 返回 </a> </h2>		
+                <form action="{:U()}" method="post" class='validate' name="actform" enctype="multipart/form-data" onsubmit="validateCallback(this, dialogAjaxDone);
+                        return false;">
+                    <div class="sug_con">	
+                        <div class="tips">
+                            您的建议我们将全力处理，如有咨询或疑问需要解决，请联系我们人工服务
+                        </div>
+                        <dl>
+                            <dt>类型：</dt>
+                            <dd>
+                                <div class="select_1 select_3">
+                                    <select name='message_type' style='width:100%; height: 100%;border: none;' class='select '>
+                                        <eq name="detail.message_type" value="1">
+                                        <option value='2'>建议</option>
+                                        <option value='1' selected="selected">投诉</option>
+                                        <else/>
+                                        <option value='2' selected="selected">建议</option>
+                                        <option value='1'>投诉</option>
+                                        </eq>
+
+                                    </select>
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>对象：</dt>
+                            <dd>
+                                <div class="select_1 select_3">
+                                    <select name='object' style='width:100%; height: 100%;border: none;' class='select '>
+                                        <eq name="detail.object" value="门店">
+                                        <option value='商家'>商家</option>
+                                        <option value='门店' selected="selected">门店</option>
+                                        <else/>
+                                        <option value='商家' selected="selected">商家</option>
+                                        <option value='门店'>门店</option>
+                                        </eq>
+
+                                    </select>
+                                    <!--<input type="text" placeholder="" value="" id="" name="object" class="txt5">-->
+                                </div>
+                                <em class="warn"></em>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>标题：</dt>
+                            <dd>
+                                <input type="text" placeholder="请输入投诉或建议标题" value="{$detail.title}" id="" name="title" class="txt5">
+                                <em class="warn"></em>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>内容：</dt>
+                            <dd>
+                                <textarea name="content" rows="" cols="" class="textare" placeholder="为便于更好的获取信息，请输入您要投诉或建议的具体描述，及该对象的具体信息" >{$detail.content}</textarea>
+                            </dd>						
+                        </dl>
+                        <dl>
+                            <dt>您的姓名：</dt>
+                            <dd>
+                                <input type="text" class="txt5" name="username" id="" value="{$detail.username}" placeholder="请输入您的姓名" />
+                                <em class="warn"></em>
+
+                            </dd>						
+                        </dl>
+                        <dl>
+                            <dt>您的手机号：</dt>
+                            <dd>
+                                <input type="text" class="txt5" name="userphone" id="" value="{$detail.userphone}" placeholder="请输入您的联系手机号码" />	
+                                <em class="warn"></em>
+                            </dd>
+                        </dl>	
+                        <dl>
+                            <dt> &nbsp; </dt>
+                            <dd>
+                                <div class="tijia">	
+                                    <input type="hidden" name="id" value="{$detail.id}"/>
+                                    <input type="submit" name="" id="" value="提交" class="a-btn" />
+                                    <input type="reset" name="" id="" value="取消"  class="a-btn3" />
+                                </div>
+                            </dd>
+                        </dl>					
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</block>
+<block name='script'>
+    <script src="__JS__/jquery.validate.js" type="text/javascript"></script>
+    <script type="text/javascript">
+                    $(function() {
+
+                        if ($('form.validate').length) {
+                            $('form.validate').validate({
+                                rules: {
+                                    message_type: {
+                                        required: true,
+                                    },
+                                    title: {
+                                        required: true,
+                                    },
+                                    content: {
+                                        required: true,
+                                    },
+                                    username: {
+                                        required: true
+                                    },
+                                    userphone: {
+                                        required: true,
+                                        rangelength: [11, 11]
+                                    }
+                                },
+                                messages: {
+                                    message_type: {
+                                        required: '请选择类型'
+                                    },
+                                    title: {
+                                        required: '请输入投诉或建议标题'
+                                    },
+                                    content: {
+                                        required: '请输入您要投诉或建议的具体描述'
+                                    },
+                                    username: {
+                                        required: '请输入您的姓名'
+                                    },
+                                    userphone: {
+                                        required: '请输入您的联系手机号码',
+                                        rangelength: '手机号格式错误'
+                                    }
+                                },
+                                errorPlacement: function(error, element) {
+                                    error.appendTo(element.parent().find("em"));
+                                }
+                            });
+                        }
+                    });
+    </script>
+    <script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+    <script type="text/javascript">
+                    //多图上传图片
+                    $(function() {
+                        /* 初始化上传插件*/
+                        $("#pics").uploadify({
+                            "height": 30,
+                            "swf": "__STATIC__/uploadify/uploadify.swf",
+                            "fileObjName": "download",
+                            "buttonText": "",
+                            "uploader": "{:U('File/uploadPicture',array('session_id'=>session_id()))}",
+                            "width": 120,
+                            'removeTimeout': 1,
+                            'fileTypeExts': '*.jpg; *.png; *.gif;',
+                            'multi': true,
+                            'queueSizeLimit': 3,
+                            "onUploadSuccess": uploadPicturepics,
+                            'formData': {'pagefrom': 'comments'},
+                            'onFallback': function() {
+                                alert('未检测到兼容版本的Flash.');
+                            }
+                        });
+                    });
+                    function uploadPicturepics(file, datas) {
+                        console.log()
+                        if (file.index > 2 && $("#comments_imgs").children("li").length > 2) {
+                            return false;
+                        }
+                        var data = $.parseJSON(datas);
+                        var src = '';
+                        if (data.status) {
+                            src = data.url || '__PICURL__' + data.path;
+                            var html = "<li><a href=\"javascript:void(0);\"><img class=\"preview-imgli\"  src=\"" + src + "\" width=\"60\" data-id=\"" + data.id + "\"></a><div class=\"picli-mask btn-close-del\" ></div></li>";
+                            picsbox = $("#comments_imgs");
+                            picsbox.append(html)
+                            picArr = [];
+                            for (var i = 0; i < picsbox.children("li").length; i++) {
+                                var data_id = picsbox.children('li:eq(' + i + ')').find('img').attr('data-id');
+                                if (data_id) {
+                                    picArr.push(data_id);
+                                }
+                            }
+                            ;
+                            picStr = picArr.join(',');
+                            $('#pics_id').val(picStr);
+                            $('.btn-close-del').click(function(event) {
+                                event.preventDefault();
+                                $(this).parent().remove();
+                                picsbox = $("#comments_imgs");
+                                picArr = [];
+                                for (var i = 0; i < picsbox.children("li").length; i++) {
+                                    var data_id = picsbox.children('li:eq(' + i + ')').find('img').attr('data-id');
+                                    if (data_id) {
+                                        picArr.push(data_id);
+                                    }
+                                }
+                                ;
+                                picStr = picArr.join(',');
+                                $('#pics_id').val(picStr);
+                            });
+                        } else {
+                            alert("上传出错");
+                        }
+                    }
+    </script>
+</block>

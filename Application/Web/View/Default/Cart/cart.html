@@ -1,0 +1,309 @@
+<extend name="Base/common_cart"/>
+<block name='style'>
+    <style>
+        .all-naiv{display:none;}
+        .m-nav-fix{position: fixed;top:0;width: 100%;background-color:#F5F5F5;}
+        .position{display: none;}
+    </style>
+</block>
+<block name="body">
+    <!-- 位置 -->
+    <div class="towp  position">
+        您的位置：<span><a href="{:U('Goods/lists',array('type'=>1))}">商品分类</a></span><span class="fonS"> > </span><span class="colo1">商品详情</span>
+    </div>
+    <!--购物流程-->
+    <div class="towp step">    	
+    </div>
+    <!--我的购物车-->
+    <div class="myShopCar quRen towp">
+        <!--<h2><i class="bg"></i>我的购物车</h2>-->
+        <div class="proClassfy" style="display:none;">
+            <include file="Cart/cart.menu"/>
+        </div>
+        <div class="proClass1">
+            <form action='{:U("Checkout/buystep1")}' method="post" name="cartform" id="cartform">
+                <div class="proClass1-con">
+                    <table width="100%" border="0" cellpadding="0" style="border-collapse:collapse">
+                        <thead>
+                        <th width="60">
+                            <input type="checkbox" class="chk_all" id="all" style="vertical-align:middle" checked="checked" />
+                            <label for="all">全选</label></th>
+                        <th colspan="2" style="text-align: center;padding-left: 20px;">商品名称</th>
+                        <th width="70">单价</th><th width="140">数量 </th><th width="140">小计 </th><th width="70">操作</th>
+                        </thead>
+                        <tbody>
+                        <volist name='usercart' id='vo' key='k'>
+                            <tr>
+                                <td> <input type="checkbox" <if condition="$vo.handle_status eq true"> checked="checked" </if> class="chk" name="sort[]" value="{$vo.sort}" <if condition="$vo.handle_status eq false"> disabled='disabled' </if> /> </td>
+                            <td width="80px"><img style='width: 80px; height: 80px' src="{$vo.goodid|get_cover_picture_url}" alt='{$vo.goodid}' /> 
+                            </td>
+                            <td width="340" class="pro-intr4">
+                                <a href="{:U('Goods/detail',array('channelname'=>$vo['channelname'],'id'=>$vo['goodid']))}" target="_blank" class="pic">{$vo.goodid|get_good_name}</a>
+                                <div class="attr"><span>{$vo.parameters}</span>
+                                    <span style="color:red;">{$vo.promsg}</span>
+                                </div>
+                            </td>
+                            <td>￥{$vo.price}</td>
+                            <td>
+                            <if condition="$vo.handle_status eq true"> 
+                                <span class="min num_jian" rel="{$vo.sort}">-</span>
+                                <input type="text" id="coun-num" rel="{$vo.sort}" name="num[{$vo.sort}]" maxlength="3" readonly="readonly" class="add-min num_val" value="{$vo.num}">
+                                <span class="add-num num_jia" rel="{$vo.sort}">+</span>
+                                <else/>
+                                <span style="cursor:pointer;color: #F78B83;">失效商品</span>
+                            </if>
+                            </td>
+                            <td>￥<span class="sorttotal" id="total{$vo.sort}"><?php echo ncPriceFormat( $vo[price]*$vo[num])  ?></span>
+                                <input type="hidden" value="{$vo.price}" name="price[{$vo.sort}]"/>
+                                <input type="hidden" value="{$vo.goodid}" name="goodid[{$vo.sort}]"/>
+                                <input type="hidden" value="{$vo.type}" name="type[{$vo.sort}]"/>
+                                <input type="hidden" value="{$vo.parameters}" name="parameters[{$vo.sort}]"/>
+                                <input type="hidden" value="{$vo.promsg}" name="promsg[{$vo.sort}]"/>
+                                <input type="hidden" value="{$vo.proid}" name="proid[{$vo.sort}]"/>
+                                <input type="hidden" id="goodprice{:($k-1)}" class="hiddentotal{$vo.sort}" value="{:($vo[price]*$vo[num])}">
+                            </td>
+                            <td class="caozuo">
+                            <if condition="$vo['type'] eq 0">
+                                <br />
+                                <if condition="$vo.favor eq 1">
+                                    <span>已收藏</span>
+                                    <else/>
+                                    <a href="javascript: addfavortable(this ,{$vo.goodid});">收藏</a>
+                                </if>
+                            </if>
+
+                            <a href="javascript: ;;" class='delcart' rel="{$vo.sort}" >删除</a>
+                            </td>
+                            </tr>
+                        </volist>
+                        </tbody>
+                    </table>
+                    <div class="quan"><span class="all">
+                            <input type="checkbox" class="chk_all" id='chk_all' style="vertical-align:middle" checked="checked" />
+                            <!--<input type="checkbox" id="checkALL" />-->
+                            <label for="chk_all">全选</label></span><span class="del" style='cursor:pointer;' onclick='batchDelete()' ><i class="bg"></i>批量删除</span>
+                        <span><a href="{:U('goods/lists')}"> 继续购物</a></span>
+                    </div>
+                    <div class="toCount">
+                        <p>已选择 <span class="cart_count">{$count}</span> 件商品    共计（不含运费）：￥<span class="color2 cart_price">{$price}</span></p>
+                        <a href="javascript:;;" onclick="orderconfirm();
+                                return false"  class="a-btn">去结算</a>
+                        <!--<a href="{:U('checkout/checkout')}" onclick="orderconfirm(); return false"  class="a-btn">去结算</a>-->
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- 猜你喜欢 -->
+    <div class="rmsp  picScroll-left  towp">
+        <div class="jx"><h4><i class="bg"></i>猜你喜欢</h4></div>
+        <div class="hd">
+            <a class="next"></a>
+            <a class="prev"></a>
+        </div>
+        <div class="bd" style="width: 1130px;overflow: hidden;margin-left: 34px;">
+            <ul class="picList">
+                <volist name="aboutproduct" id="vo" empty='没有数据'>
+                    <li>
+                        <a href="{:U('Goods/detail',array('channelname'=>$vo['channelname'],'id'=>$vo['id']))}">
+                            <img src="{$vo.id|get_cover_picture_url}" /> </a>
+                        <strong><a href="#">{$vo['title']}</a></strong>
+                        <span class="cost">￥<span class="big-font">{$vo['show_price']}</span>  </span>
+                    </li>
+                </volist>
+            </ul>
+        </div>
+    </div>
+</block>
+<block name='script'>
+    <script type="text/javascript" src="__JS__/jquery.SuperSlide.2.1.1.js"></script>
+    <script>
+                            $(function() {
+
+                                // 增加数量
+                                $(".num_jia").click(function() {
+                                    var numArea = $(this).siblings(".num_val");
+                                    var numVal = numArea.val();
+                                    var numberva = /^\d+$/;
+                                    if (!numberva.test(numVal)) {
+                                        numVal = 1;
+                                    }
+                                    numVal++;
+                                    var obj = $(this);
+                                    var string = $(obj).attr("rel");
+                                    $.ajax({
+                                        type: 'post', //传送的方式,get/post
+                                        url: '{:U("Cart/incNum")}', //发送数据的地址
+                                        data: {sort: string},
+                                        dataType: "json",
+                                        success: function(data) {
+                                             if(data.status){
+                                            $("span.cart_sum").text(data.goodsType);
+                                            $("#total" + string).text(data.goodsitemTotal);
+                                            numArea.val(numVal);
+                                            }else{
+                                                layer.msg(data.msg);
+                                                return false;
+                                            }
+                                            regoodsprice();
+                                        },
+                                        error: function(event, XMLHttpRequest, ajaxOptions, thrownError) {
+                                            alert(XMLHttpRequest + thrownError);
+                                        }
+                                    });
+                                });
+
+                                //减少数据
+                                $(".num_jian").click(function() {
+                                    var numArea = $(this).siblings(".num_val");
+                                    var numVal = numArea.val();
+                                    var numberva = /^\d+$/;
+                                    if (!numberva.test(numVal)) {
+                                        numVal = 1;
+                                    }
+                                    if (numVal <= 1) {
+                                        return;
+                                    }
+                                    numVal--;
+                                    numArea.val(numVal);
+                                    var obj = $(this);
+                                    var string = $(obj).attr("rel");
+                                    $.ajax({
+                                        type: 'post', //传送的方式,get/post
+                                        url: '{:U("Cart/decNum")}', //发送数据的地址
+                                        data: {sort: string},
+                                        dataType: "json",
+                                        success: function(data) {
+                                            $("span.cart_sum").text(data.goodsType);
+                                            $("#total" + string).text(data.goodsitemTotal);
+                                            regoodsprice();
+                                        },
+                                        error: function(event, XMLHttpRequest, ajaxOptions, thrownError) {
+                                            alert(XMLHttpRequest + thrownError);
+                                        }
+                                    });
+                                });
+
+                                //点击删除购物车中商品
+                                $(".delcart").click(function() {
+                                    var obj = $(this);
+                                    var string = $(obj).attr("rel");
+                                    $.ajax({
+                                        type: 'post', //传送的方式,get/post
+                                        url: '{:U("Cart/delItem")}', //发送数据的地址
+                                        data: {sort: string},
+                                        dataType: "json",
+                                        success: function(data) {
+                                            $(obj).parents("tr").slideUp().remove();
+                                            //$("span.cart_count").text(data.count);
+                                            //$(".cart_price").text(data.price);
+                                            regoodsprice();
+                                            $("span.cart_sum").text(data.goodsType);
+                                            $("#total" + string).text(data.goodsTotal);
+                                            var a = data.goodsNum;
+                                            if (a == "0") {
+                                                $("#cartform").remove();
+                                            }
+                                        },
+                                        error: function(event, XMLHttpRequest, ajaxOptions, thrownError) {
+                                            alert(XMLHttpRequest + thrownError);
+                                        }
+                                    });
+                                    return false;
+                                });
+
+                                //chk_all 全选
+                                $(".chk_all").click(function() {
+
+                                    $(".chk").prop("checked", this.checked);
+                                    regoodsprice();
+                                });
+                                $(".chk").click(function() {
+                                    regoodsprice();
+                                });
+
+                            });
+
+                            // 批量删除
+                            function batchDelete() {
+                                if ($('input.chk:checked').length > 0) {
+                                    layer.confirm('确定要批量删除购物车的商品吗？', {icon: 3, title: '提示'}, function(index) {
+                                        if (index) {
+                                            var sortArr = [];
+                                            var objo = $('input.chk:checked');
+                                            for (var i = 0; i < objo.length; i++) {
+                                                sortArr.push(objo[i].value);
+                                            }
+                                            var sorts = sortArr.join(',');
+                                            $.ajax({
+                                                type: 'post', //传送的方式,get/post
+                                                url: '{:U("Cart/delItem")}', //发送数据的地址
+                                                data: {sort: sorts},
+                                                dataType: "json",
+                                                success: function(data) {
+                                                    $.each(sortArr, function(i, item) {
+                                                        $("a[rel=" + item + "]").parents("tr").slideUp().remove();
+                                                    });
+
+                                                    $("span.cart_sum").text(data.goodsType);
+                                                    regoodsprice();
+                                                    var a = data.goodsNum;
+                                                    if (a == "0") {
+                                                        window.location.reload();
+                                                    }
+                                                },
+                                                error: function(event, XMLHttpRequest, ajaxOptions, thrownError) {
+                                                    layer.msg(XMLHttpRequest + thrownError);
+                                                }
+                                            });
+                                        } else {
+                                            return false;
+                                        }
+                                    });
+//                                    $(".chk").prop("checked", this.checked);
+
+                                } else {
+                                    layer.msg("请勾选商品");
+                                }
+                            }
+
+
+                            // 提交订单
+                            function orderconfirm() {
+                                if ($('input.chk:checked').length > 0) {
+                                    $("#cartform").submit();
+                                } else {
+                                    layer.msg("请选择结算的商品");
+                                }
+                                return false;
+                            }
+
+                            function regoodsprice() {
+                                var option = $(".chk");
+                                var productsum = 0;
+                                var productsumprice = 0, pd = 0;
+                                var checkall = true;
+                                option.each(function(i) {
+                                    if (!$(this).prop("checked")) {
+                                        checkall = false;
+                                    }
+                                    if ($(this).prop("checked")) {
+                                        productsum = productsum + 1;
+                                        var t = $(this).parents("tr").find("span.sorttotal").text();
+                                        pd = parseFloat(t);
+                                        productsumprice = parseFloat(productsumprice + pd);
+                                    }
+                                });
+                                $(".chk_all").prop("checked", checkall);
+
+                                var sump = productsumprice.toFixed(2);
+                                $(".cart_price").text(sump);
+                                $("span.cart_count").text(productsum);
+                            }
+
+                            $(function() {
+                                jQuery(".picScroll-left").slide({titCell: ".hd ul", scroll: 1, mainCell: ".bd ul", autoPage: true, effect: "leftLoop", autoPlay: true, vis: 5});
+                            })
+    </script>
+
+</block>

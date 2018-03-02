@@ -1,0 +1,47 @@
+<extend name="Base/member_common"/>
+<block name="body">
+    <!-- 内容 -->
+    <div class="wrap" style="background-color: #fafafa;">
+        <div class="guidance towp"><a href="javascript:;">首页</a><a href="javascript:;"> > 会员首页</a><a href="javascript:;"> > 评价管理</a></div>
+        <div class="content_collection towp clear">
+            <div class="content_left">
+                <include file="Member/member_menu"/>
+            </div>
+            <div class="content_right">
+                <h2>我的收藏</h2>
+                <div class="my_box clear">
+                    <notempty name="favorlist">
+                        <ul class="my clear">
+                            <volist name="favorlist" id="fo" key="k" empty='没有收藏商品'>
+                                <li>
+                                    <a class="det" href="javascript:delcollect({$fo.id});" ></a>
+                                    <a href="{:U('Goods/detail',array('channelname'=>$fo['channelname'],'id'=>$fo['id']) )}">
+                                        <img src="{$fo['pics_img'][$fo['cover_id']]}"/></a>
+                                    <p>{$fo.title}</p>
+                                    <p><em>￥{$fo.price}</em><em>￥{$fo.marketprice}</em></p>
+                                    <div class="operation clear">
+                                        <!--<a href="javascript:addfavortable(this ,{$fo.id});" class="addfavortable"></a>-->
+                                        <a href="javascript:addcart('{$fo.id}',1,'{$fo.price}','');" class="addcartbutton"></a></div>
+                                </li>
+                            </volist>
+                        </ul>		
+                        <else/>
+                        <div class="no_data">
+                            <h3>
+                                <i class=""> <img src="__IMG__/confirmGoods/ts.png"/> </i> 没有收藏商品哟！
+                            </h3>						        	
+                        </div>
+                    </notempty>
+                    <div class="page_box clear">
+                        {$_page}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>
+<block name='script'>
+<script type="text/javascript">
+var delcollect_url = '{:U("Favortable/delcollect")}';
+</script>
+</block>

@@ -1,0 +1,75 @@
+<div class="members_box" style="display: none;">
+    <div class="members clear">
+
+        <div class="tx_box"><a name='agentpostion' class="tx" href="javascript:;"><span>编辑</span></a></div>
+        <div class="information">
+            <p>温柔豢养123</p>
+            <p><span><em>v1</em>会员</span><span>资深</span></p>
+            <ul class="security clear">
+                <li>安全等级:</li>
+                <li></li>
+                <li>中</li>
+                <li><a href="javascript:;">提升</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="invitation">
+        <h3>邀请</h3>
+        <ul class="clear">
+            <li>
+                <div class="code"><label for="">服务码：</label><input type="tel" name="" placeholder="输入服务码" /></div>
+                <input type="button" name="" id="" value="发送短信" />
+            </li>
+            <li>
+                <span><img src="__IMG__/agencyManage/qrCode.jpg"/></span>
+                <div class="btn">
+                    <a href="javascript:;">更改</a>
+                    <a href="javascript:;">导出</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="members_box">
+    <div class="members members2 clear">
+        <div class="tx_box"><a class="tx" href="{:U('member/cut',array('id'=>$memberinfo['uid']))}"><span>编辑</span></a></div>
+        <div class="user_grade user_grade{$memberinfo.levelInfo.level}">						
+        </div>
+        <div class="information">
+            <p class="user2"><span><span>{$memberinfo.levelInfo.level_n}</span></p>
+            <p>{$memberinfo.nickname}</p>						
+            <!--<ul class="security clear">
+                    <li>安全等级:</li>
+                    <li></li>
+                    <li>中</li>
+                    <li><a href="javascript:;">提升</a></li>
+            </ul>-->
+        </div>
+    </div>
+    <div class="user_code">
+        <img src="/Uploads/code/{$memberinfo.uid}/code.png?r=1466153682" />
+        <p>门店服务码  {$memberinfo.code}</p>
+    </div>
+    <div class="my_money">
+        <p class="money1"> <i class="bg"></i> ￥{$total} 可体现金额 </p>
+        <p class="money2"> <i class="bg"></i> ￥{$total_log} 已提现金额 </p>
+    </div>
+<!--    <div class="state state2">
+        <ul class="clear">
+            <li><a href="javascript:;"> <p>待付款<span>(1)</span></p> </a></li>
+            <li><a href="javascript:;"> <p>待发货<span>(1)</span></p> </a></li>					
+        </ul>
+    </div>-->
+</div>
+
+<style>
+
+    .options_box .tab ul li a{
+        display: block;
+        text-align: center;
+    }
+    .settlement, .order, .member, .commodity{
+        display: block;
+    }
+
+</style>

@@ -1,0 +1,65 @@
+<extend name="Public/base"/>
+<block name="body">
+	<!-- 标题 -->
+	<div class="main-title">
+		<h2>
+		标签列表 [
+		<eq name="types" value="">全部标签<else /><a href="{:U('Tags/index')}">全部标签</a></eq>
+		<eq name="types" value="1">问答标签<else /><a href="{:U('Tags/index',array('types'=>1))}">问答标签</a></eq>
+		<eq name="types" value="2">百科标签<else /><a href="{:U('Tags/index',array('types'=>2))}">百科标签</a></eq>
+		] 
+		</h2>
+	</div>
+
+	<!-- 按钮工具栏 -->
+	<div class="cf">
+		<div class="fl">
+			<div class="btn-group">
+			    <if condition="$types">
+			    <a href="{:U('Tags/add',array('types'=>$types))}" class="btn">新 增 </a>
+			    </if>
+			</div> 
+			<button class="btn ajax-post" target-form="ids" url='{:U("Tags/setStatus",array("status"=>1))}'>启 用</button>
+			<button class="btn ajax-post" target-form="ids" url='{:U("Tags/setStatus",array("status"=>0))}'>禁 用</button> 
+			<button class="btn ajax-post confirm" target-form="ids" url='{:U("Tags/setStatus",array("status"=>-1))}'>删 除</button> 
+		</div> 
+	</div>
+
+	<!-- 数据表格 -->
+	<div class="data-table">
+	    <table>
+		<!-- 表头 -->
+		<thead>
+		    <tr>
+			<th class="row-selected row-selected">
+			    <input class="check-all" type="checkbox">
+			</th> 
+			<th>标签</th>
+			<th>是否热门</th>
+			<th>操作</th> 
+		    </tr>
+		</thead>
+    
+		<!-- 列表 -->
+		<tbody>
+		    <volist name="list" id="data">
+			<tr>
+			    <td><input class="ids" type="checkbox" value="{$data['id']}" name="ids[]"></td>
+			    <td>{$data["keywords"]}</td>
+			    <td><if condition="$data['ishot'] eq 1">是<else />否</if></td> 
+			    <td>
+				<a title="编辑" href="{:U('edit?id='.$data['id'] )}">编辑</a>
+				<a href="{:U('setStatus?ids='.$data['id'].'&status='.abs(1-$data['status']))}" class="ajax-get">{$data.status|show_status_op}</a>
+				<a class="confirm ajax-get" title="删除" href="{:U('del?id='.$data['id'])}">删除</a> 
+			    </td>
+			</tr>
+		    </volist>
+		</tbody>
+	    </table>
+	</div>
+	    <!-- 分页 -->
+	<div class="page">
+	    {$_page}
+	</div>
+</div> 
+</block> 

@@ -1,0 +1,21 @@
+<volist name="favorlist" id="fo" key="k" empty='没有收藏商品'>
+    <li>
+        <input name="" type="checkbox" class="chk flow_checkbox" value="" checked='checked'>
+        <a href=" {:U('Goods/detail',array('channelname'=>$fo['channelname'],'id'=>$fo['id']) )}">
+            <img src="{$fo['pics_img'][$fo['cover_id']]}" />
+            <div class="pro_info">
+                <h3><a href="javascript" >{$fo.title}</a></h3>
+                <p class="pric">
+                    <span>￥<span class="font36">{$fo.price}</span>
+                    </span>
+                    <i>&yen;{$fo.marketprice}</i>
+                    <a href="javascript:addfavortable(this ,{$fo.id});" class="addfavortable"></a>
+                    <a href="javascript:addcart('{$fo.id}',1,'{$fo.price}','');" class="addcartbutton"></a>
+                </p>
+            </div>
+            <!--<div class="to_shop_car">
+                    <a href="flow.html" class=""><img src="__IMG__/shopcar.png" /></a>
+            </div>-->
+        </a>
+    </li>
+</volist>

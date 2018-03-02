@@ -1,0 +1,29 @@
+<extend name="Public/base" />
+<!-- 子导航 -->
+<block name="sidebar">
+    <include file="sidemenu" />
+</block> 
+<block name="body">
+    <div class="main-title cf">
+	<h2>{$info.title}-广告位配置&nbsp;&nbsp;(<font style="font-size: 13px;color:red">点击图片中广告阴影区域编辑或新增对应位置的广告</font>)&nbsp;&nbsp;<a href="{:U('AdvertisingPage/index',array('domainid'=>$info['domainid']))}">返回图片列表</a></h2>
+    </div>
+    <div class="upload-img-box" style="position: relative;text-align: center;">
+	<notempty name="info.imgs"> 
+	    <img src="{:__UPLOADS__}Adimgpage/{$info.domainid}/{$info.imgs}" <present name="info.content"> usemap="#Map" </present> />
+	    <if condition="$info['content']">
+		<map name="Map" id="Map"> 
+		    <volist name="info.content" id="advss">
+			<div class="form-item cf">
+			    <area shape="rect" coords="{$advss['map']}" href="{:U('Advs/index',array('domainid'=>$info['domainid'],'imgpageid'=>$info['id'],'mark'=>$advss['icon']))}" /> 
+			</div>
+		    </volist>
+		    
+		</map>
+	    </if>
+	    
+	</notempty> 
+    </div>
+</block>
+
+<block name="script"> 
+</block>

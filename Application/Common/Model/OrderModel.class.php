@@ -136,4 +136,165 @@ class OrderModel extends CommonModel{
         return $goods_list;
     }
 
+    /**
+     * 更新订单数据
+     * @param int $id 订单ID
+     * @param array $data 更新的数据
+     * @return bool
+     */
+    public function updateOrder($id,$data=array()){
+        return $this->where(array('id'=>$id))->save($data);
+    }
+
+
+    /**
+     * 取消订单
+     * @param array $order_info 订单数据
+     */
+    public function cancelOrder($order_info)
+    {
+        $data = array();
+        M()->startTrans();
+        // 未付款，直接取消订单
+        if ($order_info['ispay'] == 1 && $order_info['order_status'] == -1) {
+            $data['status'] = -2;
+            $data['cancel_time'] = NOW_TIME;
+            if(!$this->updateOrder($order_info['id'],$data)){
+                M()->rollback();
+                return false;
+            }
+            //添加订单日志记录
+            $msg = $order_info['msg'] ? : get_username() . '取消了订单';
+            if($this->addOrderLog($order_info['id'], array('msg' => $msg, 'status' => -2))){
+                M()->rollback();
+                return false;
+            }
+            // 库存还原，销量还原
+            if ($this->orginGoodsStock($order_info)) {
+                M()->commit();
+                return true;
+            } else {
+                M()->rollback();
+                return false;
+            }
+        } elseif ($order_info['order_status'] == 1) {  // 已付款，生成退款单，未发货
+            $data['status'] = -3;
+            $data['cancel_time'] = NOW_TIME;
+            if(!$this->updateOrder($order_info['id'],$data)){
+                M()->rollback();
+                return false;
+            }
+            //生成退款单
+            $refunddata = array(
+                'order_id' => $order_info['id'],
+                'store_id' => $order_info['store_id'],
+                'order_sn' => $order_info['tag'],
+                'uid' => $order_info['uid'],
+                'user_name' => get_username($order_info['uid']),
+                'refund_type' => 1,
+                'refund_state' => 0,
+                'refund_sn' => $this->makePaySn(NOW_TIME . $order_info['id']), // 生成退款单号
+                'refund_amount' => $order_info['pricetotal'], //$order_info['total'], // 商品金额
+                'order_goods_type' => $order_info['order_type'],
+                'add_time' => NOW_TIME,
+            );
+            if(!D('OrderRefund')->create($refunddata)){
+                M()->rollback();
+                return false;
+            }
+            if(!D('OrderRefund')->add($refunddata)){
+                M()->rollback();
+                return false;
+            }
+
+
+            // 库存还原，销量还原
+            $this->orginGoodsStock($order_info);
+
+
+            $this->model->addOrderLog($order_info['id'], array('msg' => get_username() . '取消了订单', 'status' => -2));
+            $this->model->addOrderLog($order_info['id'], array('msg' => '系统生成了退款单号：' . $refunddata['refund_sn'] . '，请注意查看', 'status' => -2));
+            if ($re && $ref) {
+                return array('success' => true, 'msg' => '订单取消成功,并生成了退款单号');
+            } else {
+                return array('error' => true, 'msg' => '订单取消失败2');
+            }
+        } else {
+            $this->error = '订单状态错误';
+            return false;
+        }
+    }
+
+    /**
+     * 还原订单商品库存
+     * @param array $order_info
+     * @return bool
+     */
+    private function orginGoodsStock($order_info) {
+        $res = true;
+        //获取订单商品数据
+        $ordergooods = M('order_goods')->where(array('orderid' => $order_info['id']))->select();
+        foreach ($ordergooods as $key => $value) {
+            //判断是活动商品还是普通商品
+            if($ordergooods['group_type'] > 0 && $ordergooods['group_type'] == 1){ //团购或者抢购活动商品
+                $save_data = array(
+                    'group_num' => array('exp',"`group_num`+{$value['num']}"),
+                    'sale_num' => array('exp',"`sale_num`-{$value['num']}")
+                );
+                $res = M('groups_goods')->where(array("id" => $value["group_gid"]))->save(array($save_data));
+                if(false === $res){
+                    break;
+                }
+            }else{
+                //修改商品总库存数量
+                $save_data = array(
+                    'goods_number' => array('exp',"`goods_number`+{$value['num']}"),
+                    'salenum' => array('exp',"`salenum`+{$value['num']}"),
+                );
+                $res = M('good')->where(array("id" => $value["goods_id"]))->save(array($save_data));
+
+                //判断该商品是否有属性
+                if($ordergooods['goods_attr_id'] > 0){
+                    //修改商品属性库存数量
+                    $save_data = array(
+                        'attr_num' => array('exp',"`attr_num`+{$value['num']}"),
+                        'sale_num' => array('exp',"`sale_num`-{$value['num']}")
+                    );
+                    $res = M('good_attr')->where(array("id" => $value["goods_attr_id"]))->save(array($save_data));
+                }
+                if(false === $res){
+                    break;
+                }
+            }
+        }
+        return $res;
+    }
+
+    /**
+     * 添加订单日志
+     * @param int $orderid 订单ID
+     * @param array $data 提交的数据
+     * @return mixed
+     */
+    public function addOrderLog($orderid, $data) {
+        $order_log_data = array();
+        $order_log = M("order_log");
+
+        $order_log_data['order_id'] = $orderid;
+        $order_log_data['log_msg'] = $data['msg'];
+        $order_log_data['log_time'] = NOW_TIME;
+        $order_log_data['log_role'] = $data['roleid'] ? :UID;
+        $order_log_data['log_user'] = $data['uid'] ? : UID;
+        $order_log_data['log_orderstate'] = $this->status ? : $data['status'];
+        $order_log->add($order_log_data);
+    }
+
+    /**
+     * 获取订单日志列表
+     * @param int $orderid 订单ID
+     * @return array
+     */
+    public function getOrderLog($orderid) {
+        return M("order_log")->where(array('order_id' => $orderid))->order("log_id desc")->select();
+    }
 }

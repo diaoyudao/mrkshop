@@ -44,7 +44,7 @@ function is_login() {
 
             if ($autologinvalue == $hash) {
                 $Member = D("Member");
-                $ba = $Member->login($uid);
+                $Member->login($uid);
                 return $uid;
             } else {
                 return 0;
@@ -912,40 +912,6 @@ function get_good_tuanprice($id) {
 function get_good_price($id) {
     $row = M('document')->getbyId($id);
     return $row['price'];
-}
-
-/*
- * 获取会员折扣价格
- */
-
-function get_goods_MemberPirce($goods) {
-    if (is_login()) {
-        //$level_id = session('memberinfo.member_level_id');
-        $uid = session('memberinfo.uid');
-        $level_id = M('member')->where(array('uid' => $uid))->getField('member_level_id');
-//        $discount = M('member_level')->where(array('id' => $level_id))->getField('discount');
-//        $discount = floatval($discount);
-//        if ($discount <= 0) {
-//            $discount = 0;
-//        } elseif ($discount > 100) {
-//            $discount = 50;
-//        }
-//        $rate = 1 - $discount / 100; // 折扣
-//        $discount_amount = $goods['org_price'] * $rate;
-//        $member_price = ($goods['org_price'] - $discount_amount) > 0 ? ($goods['org_price'] - $discount_amount) : $goods['org_price'];
-        // 最新计算会员价
-        $goods_member_level_price = unserialize($goods['member_level_price']);
-        if($level_id && !empty($goods_member_level_price)){
-           $tmp_price = unserialize($goods['member_level_price']);
-           $member_price =  $tmp_price[$level_id] ? : $goods['org_price'];
-        }else{
-            $member_price = $goods['org_price'];
-        }
-    } else {
-        //echo 111;
-        $member_price = $goods['org_price'];
-    }
-    return $member_price;
 }
 
 /* 商品市场价 */

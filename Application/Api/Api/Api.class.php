@@ -8,6 +8,7 @@
 // +----------------------------------------------------------------------
 
 namespace Api\Api;
+
 define('UC_CLIENT_PATH', dirname(dirname(__FILE__)));
 
 //载入配置文件

@@ -2,7 +2,6 @@
 
 namespace Wap\Controller;
 
-use Wap\Controller\HomeController;
 use Api\Api\IndexApi;
 
 class IndexController extends HomeController {
@@ -11,7 +10,7 @@ class IndexController extends HomeController {
         parent::_initialize();
 //        $this->assign('menu_local', '首页');
         $menus = $this->_initializeMenus(2);
-         $this->assign('menulist', $menus);
+        $this->assign('menulist', $menus);
     }
 
     public function index() {

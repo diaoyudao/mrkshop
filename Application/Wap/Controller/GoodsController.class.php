@@ -6,7 +6,6 @@
 
 namespace Wap\Controller;
 
-use Wap\Controller\HomeController;
 use Api\Api\GoodsApi;
 
 class GoodsController extends HomeController {

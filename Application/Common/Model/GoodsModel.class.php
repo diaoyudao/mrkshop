@@ -108,6 +108,9 @@ class GoodsModel extends CommonModel {
                 $list[$key]['goods_thums_url'] = $val['url'] ? $val['url'] : __PICURL__ . $val['path'];
                 //获取商品属性
                 $list[$key]['attr_arr'] = $this->getAttr($val['id']);
+                if($list[$key]['attr_arr']['pro']){
+                    $list[$key]['stock_num'] = $this->getProStock($val['id']);
+                }
             }
         }
 
@@ -145,6 +148,9 @@ class GoodsModel extends CommonModel {
         $goods_info['pics_img'] = $pic_list;
         //获取属性规格
         $goods_info['attr_arr'] = $this->getAttr($id);
+        if($goods_info['attr_arr']['pro']){
+            $goods_info['stock_num'] = $this->getProStock($id);
+        }
 
         return $goods_info;
     }
@@ -219,7 +225,7 @@ class GoodsModel extends CommonModel {
         );
         /* 获得商品的属性和规格 */
         $attr_list = M('goods_attr')
-            ->field('a.id attr_id,a.name attr_name,a.inputtypes input_type,a.types attr_type,g.id goods_attr_id,g.attr_value,g.attr_price,g.attr_img,g.attr_thumb,g.attr_num')
+            ->field('a.id attr_id,a.name attr_name,a.inputtypes input_type,a.types attr_type,g.id goods_attr_id,g.attr_value,g.attr_price,g.attr_img,g.attr_thumb')
             ->join('g LEFT JOIN __GOODS_ATTRIBUTE__ a ON a.id=g.attr_id AND a.showdetial=1 AND a.status=1')
             ->where(array('g.goods_id'=>$id,'g.status'=>1))
             ->order('a.sort,g.id')
@@ -241,14 +247,32 @@ class GoodsModel extends CommonModel {
                         'id' => $val['goods_attr_id'],
                         'price' => number_format($val['attr_price'], 2, '.', ''),
                         'attr_img' => get_pic_url($val['attr_img']),
-                        'attr_thumb' => get_pic_url($val['attr_thumb']),
-                        'attr_num'=>$val['attr_num']
+                        'attr_thumb' => get_pic_url($val['attr_thumb'])
                     );
                 }
             }
 
         }
         return $arr;
+    }
+
+    /**
+     * 添加商品货品属性数据
+     * @param array $data
+     */
+    public function addGoodsProducts($data=array()){
+        return M('goods_products')->add($data);
+    }
+
+    /**
+     * 获取指定商品的属性数量总库存
+     * @param $goods_id
+     * @return int
+     */
+    public function getProStock($goods_id) {
+        //仓库库存
+        $stock = M('goods_products')->where(array('goods_id'=>$goods_id,'status'=>1))->sum('product_number');
+        return intval($stock);
     }
 
     /**
@@ -290,8 +314,6 @@ class GoodsModel extends CommonModel {
                     $attr_price = floatval($_POST['attr_price_list'][$key]);
                     $attr_img = intval($_POST['attr_img_list'][$key]);
                     $attr_thumb = intval($_POST['attr_thumb_list'][$key]);
-                    $attr_num = intval($_POST['attr_num_list'][$key]);
-//                    $attr_types = $_POST['attr_types_list'][$key];
 
                     if (!empty($attr_value) && $attr_value!="undefined" &&  $attr_value!="false")
                     {
@@ -306,8 +328,6 @@ class GoodsModel extends CommonModel {
                                 $data["attr_price"] = $attr_price;
                                 $data["attr_img"] = $attr_img;
                                 $data["attr_thumb"] = $attr_thumb;
-                                $data["attr_num"] = $attr_num;
-
                                 //更新属性
                                 M("goods_attr")->save($data);
                                 unset($date_delete[$gattrid]);
@@ -322,7 +342,6 @@ class GoodsModel extends CommonModel {
                             $data["attr_price"] = $attr_price;
                             $data["attr_img"] = $attr_img;
                             $data["attr_thumb"] = $attr_thumb;
-                            $data["attr_num"] = $attr_num;
                             $data_insert[]=$data;
                         }
                     }

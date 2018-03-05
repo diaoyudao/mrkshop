@@ -39,7 +39,7 @@ class MemberModel extends Model{
         $info = $Api->info($uid);
         if(!$user){ //未注册
             /* 在当前应用中注册用户 */ 
-            $user = $this->create(array("nickname" => $info['username'], "status" => 1));
+            $user = $this->create(array("shop_id"=>session('shop_id'),"nickname" => $info['username'], "status" => 1,'member_level_id'=>1));
             $user["uid"] = $uid; 
             if(!$this->add($user)){
                 $this->error = "前台用户信息注册失败，请重试！";
@@ -93,23 +93,20 @@ class MemberModel extends Model{
         );
         $this->save($data);
 
-        /* 记录登录SESSION和COOKIES */
-        if(empty($user['face'])){ 
-            $user['face']= 0;
-                //M('picture')->where('id='.$user['face'])->getField('path');
-        }else{
-            $user['face'] = 1;
-        }
+        /* 获取会员等级相关数据（类型、等级折扣和提成比例）*/
+        $level_info = M('member_level')->where(array('shop_id'=>session('shop_id'),'level'=>$user['member_level_id']))->find();
         $auth = array(
             "uid"             	=> $user["uid"],
             "username"		=> $user["nickname"],
             "last_login_time" 	=> $user["last_login_time"],
-            "face" 		=> $user['face']
+            "face" 		=> $user['face'],
+            "level_info" => $level_info
         );
+
+        /* 记录登录SESSION和COOKIES */
         session("user_auth", $auth);
         session("uid", $auth["uid"]);
         session("user_auth_sign", data_auth_sign($auth));
-
     }
   
 public  function uid() {

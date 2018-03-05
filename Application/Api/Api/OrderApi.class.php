@@ -6,9 +6,9 @@
 
 namespace Api\Api;
 
-use Api\Api\Api;
-use Common\Model\TreeModel;
-use Api\Api\GoodsApi;
+
+//use Common\Model\TreeModel;
+use Common\Model\OrderModel;
 
 class OrderApi extends Api {
 
@@ -20,7 +20,7 @@ class OrderApi extends Api {
      */
 
     protected function _init() {
-        $this->model = new TreeModel();
+        $this->model = new OrderModel();
     }
 
     /**
@@ -96,7 +96,7 @@ class OrderApi extends Api {
                  // 更改提成日志状态
                 M('affiliate_log')->where(array('order_sn'=>$orderid))->setField('status',3);
                 action_log('update_order', 'order', $orderid, UID);
-                $this->addOrderLog($id, array('msg' => $order_info['msg'] ? : '确认收货成功', 'status' => 3, 'roleid' => is_login(), 'uid' => $order_info['uid']));
+                $this->model->addOrderLog($id, array('msg' => $order_info['msg'] ? : '确认收货成功', 'status' => 3, 'roleid' => is_login(), 'uid' => $order_info['uid']));
                 return array('success' => true, 'msg' => $order_info['msg'] ? : '确认收货成功，您可以返回评价商品', 'url' => Cookie('__forward__'));
             } else {
                 return array('error' => true, 'msg' => '确认收货失败' . $orderid);
@@ -126,7 +126,7 @@ class OrderApi extends Api {
                 action_log('update_order', 'order', $orderid, UID);
                  // 更改提成日志状态
                 M('affiliate_log')->where(array('order_sn'=>$orderid))->setField('status',3);
-                $this->addOrderLog($id, array('msg' => $order_info['msg'] ? : '确认收货成功', 'status' => 3, 'roleid' => is_login(), 'uid' => $order_info['uid']));
+                $this->model->addOrderLog($id, array('msg' => $order_info['msg'] ? : '确认收货成功', 'status' => 3, 'roleid' => is_login(), 'uid' => $order_info['uid']));
                 return array('success' => true, 'msg' => $order_info['msg'] ? : '确认收货成功，您可以返回评价商品', 'url' => Cookie('__forward__'));
             } else {
                 return array('error' => true, 'msg' => '确认收货失败' . $orderid);
@@ -146,7 +146,7 @@ class OrderApi extends Api {
              M("order_delivery")->where(array('order_id' => $order_info['id']))->data(array('status' => 1, 'update_time' => NOW_TIME))->save();
             //记录行为
             action_log('update_order', 'order', $order_info['orderid'], UID);
-            $this->addOrderLog($order_info['id'], array('msg' => $order_info['msg'] ? : '订单付款成功', 'status' => 1, 'roleid' => is_login(), 'uid' => $order_info['uid']));
+            $this->model->addOrderLog($order_info['id'], array('msg' => $order_info['msg'] ? : '订单付款成功', 'status' => 1, 'roleid' => is_login(), 'uid' => $order_info['uid']));
             return array('success' => true, 'msg' => $order_info['msg'] ? : '订单付款成功', 'url' => Cookie('__forward__'));
         } else {
             return array('error' => true, 'msg' => '订单付款失败' . $order_info['orderid']);
@@ -164,7 +164,7 @@ class OrderApi extends Api {
         if ($result) {
             //记录行为
             action_log('update_order', 'order', $order_info['orderid'], UID);
-            $this->addOrderLog($order_info['id'], array('msg' => $order_info['msg'] ? : '订单发货成功', 'status' => 1, 'roleid' => is_login(), 'uid' => $order_info['uid']));
+            $this->model->addOrderLog($order_info['id'], array('msg' => $order_info['msg'] ? : '订单发货成功', 'status' => 1, 'roleid' => is_login(), 'uid' => $order_info['uid']));
             return array('success' => true, 'msg' => $order_info['msg'] ? : '订单发货成功', 'url' => Cookie('__forward__'));
         } else {
             return array('error' => true, 'msg' => '订单发货失败' . $order_info['orderid']);
@@ -185,7 +185,7 @@ class OrderApi extends Api {
         if ($sum == $iscomment) {
             $res = M('order')->where(array('id' => $ordergoods['orderid']))->setField('iscomment', 1);
         }
-        $this->addOrderLog($ordergoods['orderid'], array('msg' => $ordergoods['msg'] ? : '您评论了订单中的商品', 'status' => 4));
+        $this->model->addOrderLog($ordergoods['orderid'], array('msg' => $ordergoods['msg'] ? : '您评论了订单中的商品', 'status' => 4));
 
         return array('success' => true, 'msg' => '您评论订单商品成功');
     }
@@ -220,8 +220,8 @@ class OrderApi extends Api {
         $ref = $this->CreateOrderRefund($refunddata);
         $res = M('order')->where(array('id' => $ordergoods['id']))->save(array('refund_status' => 1));             // 订单已退回
         $re = M('shoplist')->where(array('id' => $ordergoods['order_goods_id']))->save(array('status' => 3, 'uid' => $refunddata['uid'], 'roleid' => is_login()));  // 退货状态
-        $this->addOrderLog($ordergoods['id'], array('msg' => get_username() . '退货了订单商品', 'status' => 5, 'uid' => $refunddata['uid'], 'roleid' => is_login()));  //
-        $this->addOrderLog($ordergoods['id'], array('msg' => '系统生成了退货单号：' . $refunddata['refund_sn'] . '，请注意查看', 'status' => 5));
+        $this->model->addOrderLog($ordergoods['id'], array('msg' => get_username() . '退货了订单商品', 'status' => 5, 'uid' => $refunddata['uid'], 'roleid' => is_login()));  //
+        $this->model->addOrderLog($ordergoods['id'], array('msg' => '系统生成了退货单号：' . $refunddata['refund_sn'] . '，请注意查看', 'status' => 5));
         if ($ref) {
             return array('success' => true, 'msg' => '订单退货成功,并生成了退货单号');
         } else {
@@ -234,13 +234,22 @@ class OrderApi extends Api {
      * @param type $order_info
      */
     private function _cancelOrder($order_info) {
+        if($order_info['status'] == 0){
+            return array('error' => true, 'msg' => '订单已被删除');
+        }
+        $res = $this->model->cancelOrder($order_info);
+        if ($res) {
+            return array('success' => true, 'msg' => '订单取消成功');
+        } else {
+            return array('error' => true, 'msg' => '订单取消失败');
+        }
 
-        if ($order_info['ispay'] == 1 && $order_info['status'] == -1) {  // 未付款，直接取消订单
+        /*if ($order_info['ispay'] == 1 && $order_info['status'] == -1) {  // 未付款，直接取消订单
             $data['status'] = -2;
             $data['cancel_time'] = NOW_TIME;
             $res = M('order')->where(array('id' => $order_info['id']))->save($data);
             $msg = $order_info['msg'] ? : get_username() . '取消了订单';
-            $this->addOrderLog($order_info['id'], array('msg' => $msg, 'status' => -2));
+            $this->model->addOrderLog($order_info['id'], array('msg' => $msg, 'status' => -2));
             // 库存还原，销量还原
             $this->orgin_goods_stock($order_info);
             if ($res) {
@@ -271,8 +280,8 @@ class OrderApi extends Api {
             $this->orgin_goods_stock($order_info);
 
 
-            $this->addOrderLog($order_info['id'], array('msg' => get_username() . '取消了订单', 'status' => -2));
-            $this->addOrderLog($order_info['id'], array('msg' => '系统生成了退款单号：' . $refunddata['refund_sn'] . '，请注意查看', 'status' => -2));
+            $this->model->addOrderLog($order_info['id'], array('msg' => get_username() . '取消了订单', 'status' => -2));
+            $this->model->addOrderLog($order_info['id'], array('msg' => '系统生成了退款单号：' . $refunddata['refund_sn'] . '，请注意查看', 'status' => -2));
             if ($re && $ref) {
                 return array('success' => true, 'msg' => '订单取消成功,并生成了退款单号');
             } else {
@@ -280,7 +289,7 @@ class OrderApi extends Api {
             }
         } else {
             return array('error' => true, 'msg' => '非法操作');
-        }
+        }*/
     }
 
     /**
@@ -335,7 +344,7 @@ class OrderApi extends Api {
         } else {    // 新增
             $result = $storegoodsModel->data($goodsData)->add();
         }
-        $this->addOrderLog($goodsInfo['orderid'], array('uid' => $goodsInfo['uid'], 'roleid' => is_login(), 'msg' => '采购商品 数量为：' . $goodsInfo['num']));
+        $this->model->addOrderLog($goodsInfo['orderid'], array('uid' => $goodsInfo['uid'], 'roleid' => is_login(), 'msg' => '采购商品 数量为：' . $goodsInfo['num']));
         return $result;
     }
 
@@ -358,7 +367,7 @@ class OrderApi extends Api {
         } else {    // 新增
             $result = $storegoodsModel->data($goodsData)->add();
         }
-        $this->addOrderLog($goodsInfo['orderid'], array('uid' => $goodsInfo['uid'], 'roleid' => is_login(), 'msg' => '采购商品 数量为：' . $goodsInfo['num'] . '采购成功'));
+        $this->model->addOrderLog($goodsInfo['orderid'], array('uid' => $goodsInfo['uid'], 'roleid' => is_login(), 'msg' => '采购商品 数量为：' . $goodsInfo['num'] . '采购成功'));
         return $result;
     }
 
@@ -1102,32 +1111,6 @@ class OrderApi extends Api {
         $order_refund = M('order_refund');
         $result = $order_refund->data($data)->add();
         return $result;
-    }
-
-    /**
-     * 订单日志
-     * @param type $orderid
-     * @param type $data
-     */
-    public function addOrderLog($orderid, $data) {
-        $order_log = M("order_log");
-        $order_log->create();
-        $order_log->order_id = $orderid;
-        $order_log->log_msg = $data['msg'];
-        $order_log->log_time = NOW_TIME;
-        $order_log->log_role = $data['roleid'] ? : $this->uid;
-        $order_log->log_user = $data['uid'] ? : $this->uid;
-        $order_log->log_orderstate = $this->status ? : $data['status'];
-        $order_log->add();
-    }
-
-    /**
-     * 获取订单日志
-     * @param type $orderid
-     */
-    public function getOrderLog($orderid) {
-        $log_list = M("order_log")->where(array('order_id' => $orderid))->order("log_id desc")->select();
-        return $log_list;
     }
 
     /**

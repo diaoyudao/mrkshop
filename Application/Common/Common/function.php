@@ -478,41 +478,15 @@ function get_regmobile($uid = 0) {
 }
 
 function get_username($uid = 0) {
-    static $list;
-
-    $name = '';
-    if (!($uid && is_numeric($uid))) { //获取当前登录用户名
-        $name = session('user_auth.username');
-    } else {
-        /* 获取缓存数据 */
-        if (empty($list)) {
-            $list = S('sys_active_user_list');
-        }
-
+    if(is_login()){
+        $user_info = session('user_auth');
+        $name = $user_info['username'];
+    }else{
         /* 查找用户信息 */
-        $key = "u{$uid}";
-        if (isset($list[$key])) { //已缓存，直接使用
-            $name = $list[$key];
-        } else { //调用接口获取用户信息
-            $User = new User\Api\UserApi();
-            $info = $User->info($uid);
-            if ($info) {
-                $name = $list[$key] = $info['username'];
-                /* 缓存用户 */
-                $count = count($list);
-                $max = C('USER_MAX_CACHE');
-                while ($count-- > $max) {
-                    array_shift($list);
-                }
-                S('sys_active_user_list', $list);
-            } else {
-                $name = '';
-            }
-        }
+        $User = new User\Api\UserApi();
+        $info = $User->info($uid);
+        $name = $info['username'];
     }
-    //用户名为手机号时，手机号中添加星号
-    $name = set_start_phone($name);
-
     return $name;
 }
 

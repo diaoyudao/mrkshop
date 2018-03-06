@@ -187,14 +187,14 @@ class OrderModel extends CommonModel{
             //生成退款单
             $refunddata = array(
                 'order_id' => $order_info['id'],
-                'store_id' => $order_info['store_id'],
-                'order_sn' => $order_info['tag'],
+                'shop_id' => $order_info['shop_id'],
+                'order_sn' => $order_info['order_sn'],
                 'uid' => $order_info['uid'],
                 'user_name' => get_username($order_info['uid']),
                 'refund_type' => 1,
                 'refund_state' => 0,
                 'refund_sn' => $this->makePaySn(NOW_TIME . $order_info['id']), // 生成退款单号
-                'refund_amount' => $order_info['pricetotal'], //$order_info['total'], // 商品金额
+                'refund_amount' => $order_info['pricetotal'],//订单实际总额
                 'order_goods_type' => $order_info['order_type'],
                 'add_time' => NOW_TIME,
             );
@@ -207,22 +207,35 @@ class OrderModel extends CommonModel{
                 return false;
             }
 
-
             // 库存还原，销量还原
-            $this->orginGoodsStock($order_info);
-
-
-            $this->model->addOrderLog($order_info['id'], array('msg' => get_username() . '取消了订单', 'status' => -2));
-            $this->model->addOrderLog($order_info['id'], array('msg' => '系统生成了退款单号：' . $refunddata['refund_sn'] . '，请注意查看', 'status' => -2));
-            if ($re && $ref) {
-                return array('success' => true, 'msg' => '订单取消成功,并生成了退款单号');
-            } else {
-                return array('error' => true, 'msg' => '订单取消失败2');
+            if(!$this->orginGoodsStock($order_info)){
+                M()->rollback();
+                return false;
             }
+
+            //添加日志
+            $this->addOrderLog($order_info['id'], array('msg' => get_username() . '取消了订单', 'status' => -2));
+            $this->addOrderLog($order_info['id'], array('msg' => '系统生成了退款单号：' . $refunddata['refund_sn'] . '，请注意查看', 'status' => -2));
+
+            M()->commit();
+            return true;
         } else {
             $this->error = '订单状态错误';
             return false;
         }
+    }
+
+    /**
+     * 生成订单单编号(两位随机 + 从2000-01-01 00:00:00 到现在的秒数+微秒+会员ID%1000)
+     * 长度 =2位 + 10位 + 3位 + 3位  = 18位
+     * 1000个会员同一微秒提订单，重复机率为1/100
+     * @return string
+     */
+    public function makePaySn($member_id) {
+        return mt_rand(10, 99)
+        . sprintf('%010d', time() - 946656000)
+        . sprintf('%03d', (float) microtime() * 1000)
+        . sprintf('%03d', (int) $member_id % 1000);
     }
 
     /**
@@ -254,13 +267,13 @@ class OrderModel extends CommonModel{
                 $res = M('good')->where(array("id" => $value["goods_id"]))->save(array($save_data));
 
                 //判断该商品是否有属性
-                if($ordergooods['goods_attr_id'] > 0){
+                if($value['product_id'] > 0){
                     //修改商品属性库存数量
                     $save_data = array(
-                        'attr_num' => array('exp',"`attr_num`+{$value['num']}"),
-                        'sale_num' => array('exp',"`sale_num`-{$value['num']}")
+                        'product_number' => array('exp',"`product_number`+{$value['num']}"),
+                        'sale_number' => array('exp',"`sale_number`-{$value['num']}")
                     );
-                    $res = M('good_attr')->where(array("id" => $value["goods_attr_id"]))->save(array($save_data));
+                    $res = M('goods_products')->where(array("id" => $value['product_id']))->save(array($save_data));
                 }
                 if(false === $res){
                     break;

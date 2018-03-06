@@ -6,7 +6,7 @@
 
 namespace Api\Api;
 
-use Common\Model\TreeModel;
+use Common\Model\ShopcartModel;
 
 class CheckoutApi extends Api {
 
@@ -22,15 +22,15 @@ class CheckoutApi extends Api {
      * 构造方法，实例化操作模型
      */
     protected function _init() {
-        $this->model = new TreeModel();
+        $this->model = new ShopcartModel();
         $this->goodsapi = new GoodsApi();
         $this->orderapi = new OrderApi();
     }
 
     /**
      * 加入商品到购物车
-     * @param type $params
-     * @return type
+     * @param array $params
+     * @return array
      */
     public function addCartItem($params) {
         $goodsid = $params['goodsid'];  // 如果商品ID不存在 则返回false

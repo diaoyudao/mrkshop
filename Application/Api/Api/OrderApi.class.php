@@ -243,77 +243,6 @@ class OrderApi extends Api {
         } else {
             return array('error' => true, 'msg' => '订单取消失败');
         }
-
-        /*if ($order_info['ispay'] == 1 && $order_info['status'] == -1) {  // 未付款，直接取消订单
-            $data['status'] = -2;
-            $data['cancel_time'] = NOW_TIME;
-            $res = M('order')->where(array('id' => $order_info['id']))->save($data);
-            $msg = $order_info['msg'] ? : get_username() . '取消了订单';
-            $this->model->addOrderLog($order_info['id'], array('msg' => $msg, 'status' => -2));
-            // 库存还原，销量还原
-            $this->orgin_goods_stock($order_info);
-            if ($res) {
-                return array('success' => true, 'msg' => '订单取消成功');
-            } else {
-                return array('error' => true, 'msg' => '订单取消失败');
-            }
-        } elseif ($order_info['status'] == 1) {  // 已付款，生成退款单，未发货
-            $data['status'] = -3;
-            $data['cancel_time'] = NOW_TIME;
-            $re = M('order')->where(array('id' => $order_info['id']))->save($data);
-            $refunddata = array(
-                'order_id' => $order_info['id'],
-                'store_id' => $order_info['store_id'],
-                'order_sn' => $order_info['tag'],
-                'uid' => $order_info['uid'],
-                'user_name' => get_username($order_info['uid']),
-                'refund_type' => 1,
-                'refund_state' => 0,
-                'refund_sn' => $this->makePaySn(NOW_TIME . $order_info['id']), // 生成退款单号
-                'refund_amount' => $order_info['pricetotal'], //$order_info['total'], // 商品金额
-                'order_goods_type' => $order_info['order_type'],
-                'add_time' => NOW_TIME,
-            );
-            $ref = $this->CreateOrderRefund($refunddata);
-
-            // 库存还原，销量还原
-            $this->orgin_goods_stock($order_info);
-
-
-            $this->model->addOrderLog($order_info['id'], array('msg' => get_username() . '取消了订单', 'status' => -2));
-            $this->model->addOrderLog($order_info['id'], array('msg' => '系统生成了退款单号：' . $refunddata['refund_sn'] . '，请注意查看', 'status' => -2));
-            if ($re && $ref) {
-                return array('success' => true, 'msg' => '订单取消成功,并生成了退款单号');
-            } else {
-                return array('error' => true, 'msg' => '订单取消失败2');
-            }
-        } else {
-            return array('error' => true, 'msg' => '非法操作');
-        }*/
-    }
-
-    /**
-     * 还原订单商品库存
-     * @param type $order_info
-     */
-    public function orgin_goods_stock($order_info) {
-        $ordergooods = M('shoplist')->where(array('orderid' => $order_info['id']))->select();
-        foreach ($ordergooods as $key => $value) {
-            // 修改库存
-            if ($value['proid']) {
-                $re = M('p_xianshi_goods')->where("goods_id=" . $value["goodid"] . " and xianshi_id = '" . $value["proid"] . "'")->setInc('xianshi_stock', $value["num"]);
-            }
-            if ($value['store_id'] > 0) {   // 门店iD大于0  则修改 门店商品库存/销量
-                $re = M('store_goods')->where(array("goods_id" => $value["goodid"], 'store_id' => $value['store_id']))->setInc('stock', $value["num"]);   // 增加库存
-                $re = M('store_goods')->where(array("goods_id" => $value["goodid"], 'store_id' => $value['store_id']))->setDec('sales_num', $value["num"]);   // 减少销量
-            } else {    // 否则修改 平台商品库存销量
-                $re = M('document_product')->where("id=" . $value["goodid"])->setInc('stock', $value["num"]);
-                //记录销售数量 并修改缓存
-                $re = M('document')->where("id=" . $value["goodid"])->setDec('sales', $value["num"]);
-                $re = M('document_product')->where("id=" . $value["goodid"])->setDec('totalsales', $value["num"]);
-            }
-        }
-        return $re;
     }
 
     /**
@@ -1328,19 +1257,6 @@ class OrderApi extends Api {
         $result['current_step'] = $current_step;
         $result['status_txt'] = $statusstring;
         return $result;
-    }
-
-    /**
-     * 生成支付单编号(两位随机 + 从2000-01-01 00:00:00 到现在的秒数+微秒+会员ID%1000)，该值会传给第三方支付接口
-     * 长度 =2位 + 10位 + 3位 + 3位  = 18位
-     * 1000个会员同一微秒提订单，重复机率为1/100
-     * @return string
-     */
-    public function makePaySn($member_id) {
-        return mt_rand(10, 99)
-                . sprintf('%010d', time() - 946656000)
-                . sprintf('%03d', (float) microtime() * 1000)
-                . sprintf('%03d', (int) $member_id % 1000);
     }
 
     /**

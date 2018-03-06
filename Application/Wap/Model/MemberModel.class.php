@@ -38,8 +38,8 @@ class MemberModel extends Model{
         $Api = new UserApi();
         $info = $Api->info($uid);
         if(!$user){ //未注册
-            /* 在当前应用中注册用户 */ 
-            $user = $this->create(array("nickname" => $info['username'], "status" => 1));
+            /* 在当前应用中注册用户 */
+            $user = $this->create(array("shop_id"=>session('shop_id'),"nickname" => $info['username'], "status" => 1,'member_level_id'=>1));
             $user["uid"] = $uid; 
             if(!$this->add($user)){
                 $this->error = "前台用户信息注册失败，请重试！";
